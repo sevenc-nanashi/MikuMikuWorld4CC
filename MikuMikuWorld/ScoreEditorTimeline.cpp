@@ -12,7 +12,6 @@
 
 namespace MikuMikuWorld
 {
-	int zPerLayer = 3;
 	ScoreEditorTimeline* timelineInstance = nullptr;
 
 	void scrollTimeline(ScoreContext& context, const int tick)
@@ -1700,7 +1699,7 @@ namespace MikuMikuWorld
 			float xr2 = easeFunc(startX2, endX2, percent2) + 2;
 
 			int z = (selectedLayer == -1 || ((y < steps / 2) ? n1 : n2).layer == selectedLayer)
-			            ? zPerLayer
+			            ? (int)ZIndex::zCount
 			            : 0;
 
 			if (y2 <= 0)
@@ -1895,9 +1894,9 @@ namespace MikuMikuWorld
 							}
 
 							int z = (selectedLayer == -1
-							             ? zPerLayer
-							             : (n3.layer == selectedLayer ? zPerLayer : 0)) +
-							        1;
+							             ? (int)ZIndex::zCount
+							             : (n3.layer == selectedLayer ? (int)ZIndex::zCount : 0)) +
+							        3;
 
 							renderer->drawSprite(pos, 0.0f, nodeSz, AnchorType::MiddleCenter, tex,
 							                     s.getX(), s.getX() + s.getWidth(), s.getY(),
@@ -2014,7 +2013,7 @@ namespace MikuMikuWorld
 			         getNoteYPosFromTick(note.tick) };
 		Vector2 nodeSz{ notesHeight - 5, notesHeight - 5 };
 
-		int z = (selectedLayer ? zPerLayer : 0) + 1;
+		int z = (selectedLayer ? (int)ZIndex::zCount : 0) + 4;
 
 		renderer->drawSprite(pos, 0.0f, nodeSz, AnchorType::MiddleCenter, tex, s.getX(),
 		                     s.getX() + s.getWidth(), s.getY(), s.getY() + s.getHeight(), tint, z);
@@ -2107,21 +2106,23 @@ namespace MikuMikuWorld
 		const int left = s.getX() + noteCutoffX;
 		const int right = s.getX() + s.getWidth() - noteCutoffX;
 
+		const int z = (selectedLayer ? (int)ZIndex::zCount : 0) + (int)ZIndex::Note;
+
 		// left slice
 		renderer->drawSprite(pos, 0.0f, sliceSz, anchor, tex, left, left + noteSliceWidth, s.getY(),
-		                     s.getY() + s.getHeight(), tint, 1);
+		                     s.getY() + s.getHeight(), tint, z);
 		pos.x += sliceSz.x;
 
 		// Middle
 		renderer->drawSprite(pos, 0.0f, midSz, anchor, tex, left + noteSliceWidth,
 		                     left + noteSliceWidth + 1, s.getY(), s.getY() + s.getHeight(), tint,
-		                     (int)ZIndex::Note);
+		                     z);
 
 		pos.x += midLen;
 
 		// right slice
 		renderer->drawSprite(pos, 0.0f, sliceSz, anchor, tex, right - noteSliceWidth, right,
-		                     s.getY(), s.getY() + s.getHeight(), tint, 1);
+		                     s.getY(), s.getY() + s.getHeight(), tint, z);
 
 		if (note.friction)
 		{
@@ -2138,7 +2139,7 @@ namespace MikuMikuWorld
 				renderer->drawSprite(
 				    pos, 0.0f, nodeSz, AnchorType::MiddleCenter, tex, frictionSpr.getX(),
 				    frictionSpr.getX() + frictionSpr.getWidth(), frictionSpr.getY(),
-				    frictionSpr.getY() + frictionSpr.getHeight(), tint, 1);
+				    frictionSpr.getY() + frictionSpr.getHeight(), tint, z + 1);
 			}
 		}
 
@@ -2173,7 +2174,7 @@ namespace MikuMikuWorld
 		const int left = s.getX() + noteCutoffX;
 		const int right = s.getX() + s.getWidth() - noteCutoffX;
 
-		const int z = (selectedLayer ? zPerLayer : 0) + 1;
+		const int z = (selectedLayer ? (int)ZIndex::zCount : 0) + 1;
 
 		// left slice
 		renderer->drawSprite(pos, 0.0f, sliceSz, anchor, tex, left, left + noteSliceWidth, s.getY(),
@@ -2204,7 +2205,7 @@ namespace MikuMikuWorld
 				renderer->drawSprite(
 				    pos, 0.0f, nodeSz, AnchorType::MiddleCenter, tex, frictionSpr.getX(),
 				    frictionSpr.getX() + frictionSpr.getWidth(), frictionSpr.getY(),
-				    frictionSpr.getY() + frictionSpr.getHeight(), tint, z);
+				    frictionSpr.getY() + frictionSpr.getHeight(), tint, z + 1);
 			}
 		}
 
