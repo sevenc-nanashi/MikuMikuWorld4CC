@@ -16,6 +16,7 @@ namespace MikuMikuWorld
 		MultiInputBinding shrinkUp = { "shrink_up", {} };
 		MultiInputBinding connectHolds = { "connect_holds", {} };
 		MultiInputBinding splitHold = { "split_hold", {} };
+		MultiInputBinding lerpHiSpeeds = { "lerp_hispeeds", {} };
 		MultiInputBinding openHelp = { "help", {ImGuiKey_F1} };
 		MultiInputBinding openSettings = { "settings", {ImGuiKey_Comma, ImGuiModFlags_Ctrl} };
 		MultiInputBinding deleteSelection = { "delete", {ImGuiKey_Delete} };
@@ -132,6 +133,7 @@ namespace MikuMikuWorld
 		&config.input.shrinkUp,
 		&config.input.connectHolds,
 		&config.input.splitHold,
+		&config.input.lerpHiSpeeds,
 		&config.input.selectAll,
 
 		&config.input.togglePlayback,
