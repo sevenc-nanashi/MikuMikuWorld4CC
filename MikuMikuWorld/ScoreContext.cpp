@@ -1022,8 +1022,9 @@ namespace MikuMikuWorld
 		Note& patternEnd = score.notes.at(*sortedSelection.begin());
 		std::reverse(sortedSelection.begin(), sortedSelection.end());
 
-		if (patternStart.width != patternEnd.width)
-			return;
+		// TODO: Check this in ScoreEditorTimeline too (Otherwise it will become so unfriendly)
+		/* if (patternStart.width != patternEnd.width) */
+		/* 	return; */
 
 		Note& holdStart = score.notes.at(hold.start.ID);
 		Note& holdEnd = score.notes.at(hold.end);
