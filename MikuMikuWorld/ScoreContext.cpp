@@ -987,7 +987,7 @@ namespace MikuMikuWorld
 		pushHistory("Split hold", prev, score);
 	}
 
-	void ScoreContext::repeatMidsInSelection() {
+	void ScoreContext::repeatMidsInSelection(ScoreContext& context) {
 
 		if (selectedNotes.size() < 3)
 			return;
@@ -998,18 +998,18 @@ namespace MikuMikuWorld
 		if (!(note.getType() == NoteType::HoldMid || note.getType() == NoteType::Hold))
 			return;
 
-		int startIndex;
+		int holdIndex;
 
 		if (note.getType() == NoteType::HoldMid)
 		{
-			startIndex = note.parentID;
+			holdIndex = note.parentID;
 		}
 		else
 		{
-			startIndex = *selectedNotes.begin();
+			holdIndex = *selectedNotes.begin();
 		}
 		
-		HoldNote& hold = score.holdNotes[startIndex];
+		HoldNote& hold = score.holdNotes[holdIndex];
 
 		std::vector<int> sortedSelection;
 		sortedSelection.insert(sortedSelection.end(), selectedNotes.begin(), selectedNotes.end());
@@ -1020,6 +1020,9 @@ namespace MikuMikuWorld
 		std::reverse(sortedSelection.begin(), sortedSelection.end());
 		Note& patternEnd = score.notes.at(*sortedSelection.begin());
 		std::reverse(sortedSelection.begin(), sortedSelection.end());
+
+		if (patternStart.width != patternEnd.width)
+			return;
 
 		Note& holdStart = score.notes.at(hold.start.ID);
 		Note& holdEnd = score.notes.at(hold.end);
@@ -1043,20 +1046,18 @@ namespace MikuMikuWorld
 			hold.steps[endPos].ease = hold.steps[startPos].ease;
 		}
 
+		int minLane = MIN_LANE - context.score.metadata.laneExtension;
+		int maxLane = MAX_LANE + context.score.metadata.laneExtension + 1;
+
 		for (int j = 1; j < sortedSelection.size(); j++)
 		{
 			Note& currentRep = score.notes.at(sortedSelection[j]);
 			int jPos = findHoldStep(hold, currentRep.ID);
 
-			if (j == sortedSelection.size() - 1)
-			{
-				jPos = findHoldStep(hold, score.notes.at(sortedSelection[0]).ID);
-			}
-
 			for (int i = 1; i < itterations; i++)
 			{
 				int lane = std::clamp(currentRep.lane + i * (patternEnd.lane - patternStart.lane),
-				                      0, 12 - currentRep.width);
+				                      minLane, maxLane - currentRep.width);
 
 				if (j == sortedSelection.size() - 1 && i == itterations - 1)
 				{
@@ -1075,7 +1076,17 @@ namespace MikuMikuWorld
 				score.notes[nextMid.ID] = nextMid;
 
 				HoldStepType type = jPos == -1 ? hold.steps[0].type : hold.steps[jPos].type;
+
+				int temp = jPos;
+
+				if (j == sortedSelection.size() - 1)
+				{
+					jPos = findHoldStep(hold, score.notes.at(sortedSelection[0]).ID);
+				}
+
 				EaseType ease = jPos == -1 ? hold.start.ease : hold.steps[jPos].ease;
+
+				jPos = temp;
 
 				hold.steps.push_back({
 					nextMid.ID,
