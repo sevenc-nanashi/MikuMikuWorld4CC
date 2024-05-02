@@ -147,6 +147,7 @@ namespace MikuMikuWorld
 
 		void connectHoldsInSelection();
 		void splitHoldInSelection();
+		void repeatMidsInSelection();
 
 		void lerpHiSpeeds(int division);
 
