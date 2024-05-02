@@ -113,6 +113,8 @@ copy, コピー
 cut, 切り取り
 paste, ペースト
 flip_paste, 反転ペースト
+duplicate, 重複
+flip_duplicate, 反転重複
 flip, 反転
 note_width, ノーツ幅
 shrink_down, 縮める（最初に合わせる）

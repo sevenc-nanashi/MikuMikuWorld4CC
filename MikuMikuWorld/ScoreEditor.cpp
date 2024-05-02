@@ -110,6 +110,10 @@ namespace MikuMikuWorld
 				context.paste(true);
 			if (ImGui::IsAnyPressed(config.input.cancelPaste))
 				context.cancelPaste();
+			if (ImGui::IsAnyPressed(config.input.duplicate))
+				context.duplicateSelection(false);
+			if (ImGui::IsAnyPressed(config.input.flipDuplicate))
+				context.duplicateSelection(true);
 			if (ImGui::IsAnyPressed(config.input.flip))
 				context.flipSelection();
 			if (ImGui::IsAnyPressed(config.input.undo))
@@ -594,6 +598,9 @@ namespace MikuMikuWorld
 			if (ImGui::MenuItem(getString("paste"), ToShortcutString(config.input.paste)))
 				context.paste(false);
 
+			if (ImGui::MenuItem(getString("duplicate"), ToShortcutString(config.input.duplicate)))
+				context.duplicateSelection(false);
+
 			ImGui::Separator();
 			if (ImGui::MenuItem(getString("select_all"), ToShortcutString(config.input.selectAll)))
 				context.selectAll();
@@ -735,6 +742,11 @@ namespace MikuMikuWorld
 		if (UI::toolbarButton(ICON_FA_PASTE, getString("paste"),
 		                      ToShortcutString(config.input.paste)))
 			context.paste(false);
+
+		if (UI::toolbarButton(ICON_FA_CLONE, getString("duplicate"),
+		                      ToShortcutString(config.input.duplicate),
+							  context.selectedNotes.size() > 0))
+			context.duplicateSelection(false);
 
 		UI::toolbarSeparator();
 
