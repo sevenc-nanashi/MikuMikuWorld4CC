@@ -1070,6 +1070,8 @@ namespace MikuMikuWorld
 				Note nextMid = Note(NoteType::HoldMid, currentRep.tick + patternHeight * i,
 				                    lane, currentRep.width);
 
+				nextMid.critical = patternStart.critical;
+
 				nextMid.parentID = hold.start.ID;
 
 				nextMid.ID = nextID++;
