@@ -987,7 +987,8 @@ namespace MikuMikuWorld
 		pushHistory("Split hold", prev, score);
 	}
 
-	void ScoreContext::repeatMidsInSelection(ScoreContext& context) {
+	void ScoreContext::repeatMidsInSelection(ScoreContext& context)
+	{
 
 		if (selectedNotes.size() < 3)
 			return;
@@ -1008,7 +1009,7 @@ namespace MikuMikuWorld
 		{
 			holdIndex = *selectedNotes.begin();
 		}
-		
+
 		HoldNote& hold = score.holdNotes[holdIndex];
 
 		std::vector<int> sortedSelection;
@@ -1067,8 +1068,8 @@ namespace MikuMikuWorld
 					continue;
 				}
 
-				Note nextMid = Note(NoteType::HoldMid, currentRep.tick + patternHeight * i,
-				                    lane, currentRep.width);
+				Note nextMid = Note(NoteType::HoldMid, currentRep.tick + patternHeight * i, lane,
+				                    currentRep.width);
 
 				nextMid.critical = patternStart.critical;
 
@@ -1090,11 +1091,7 @@ namespace MikuMikuWorld
 
 				jPos = temp;
 
-				hold.steps.push_back({
-					nextMid.ID,
-					type,
-					ease
-				});
+				hold.steps.push_back({ nextMid.ID, type, ease });
 			}
 		}
 
@@ -1103,7 +1100,7 @@ namespace MikuMikuWorld
 		pushHistory("Repeat hold mids", prev, score);
 	}
 
-	void ScoreContext::lerpHiSpeeds(int division) 
+	void ScoreContext::lerpHiSpeeds(int division)
 	{
 		if (selectedHiSpeedChanges.size() < 2)
 			return;
@@ -1111,17 +1108,16 @@ namespace MikuMikuWorld
 		Score prev = score;
 
 		std::vector<int> sortedSelection;
-		sortedSelection.insert(sortedSelection.end(), selectedHiSpeedChanges.begin(), selectedHiSpeedChanges.end());
+		sortedSelection.insert(sortedSelection.end(), selectedHiSpeedChanges.begin(),
+		                       selectedHiSpeedChanges.end());
 		std::sort(sortedSelection.begin(), sortedSelection.end(),
 		          [this](int a, int b)
-		          { 
-					return score.hiSpeedChanges[a].tick < score.hiSpeedChanges[b].tick;
-		          });
+		          { return score.hiSpeedChanges[a].tick < score.hiSpeedChanges[b].tick; });
 
 		for (int i = 0; i < sortedSelection.size() - 1; i++)
 		{
-			auto &first = score.hiSpeedChanges[sortedSelection[i]];
-			auto &second = score.hiSpeedChanges[sortedSelection[i+1]];
+			auto& first = score.hiSpeedChanges[sortedSelection[i]];
+			auto& second = score.hiSpeedChanges[sortedSelection[i + 1]];
 
 			int currentDivision = TICKS_PER_BEAT / (division / 4);
 
@@ -1129,7 +1125,7 @@ namespace MikuMikuWorld
 			for (int tick = firstDivisionTick; tick < second.tick; tick += currentDivision)
 			{
 				float t = ((float)tick - (float)first.tick) /
-				          ((float)second.tick - (float)first.tick);						 // inverse lerp
+				          ((float)second.tick - (float)first.tick); // inverse lerp
 				float speed =
 				    (float)first.speed + t * ((float)second.speed - (float)first.speed); // lerp
 				// remapping the current tick to the speed
