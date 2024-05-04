@@ -598,7 +598,8 @@ namespace MikuMikuWorld
 			if (ImGui::MenuItem(getString("paste"), ToShortcutString(config.input.paste)))
 				context.paste(false);
 
-			if (ImGui::MenuItem(getString("duplicate"), ToShortcutString(config.input.duplicate)))
+			if (ImGui::MenuItem(getString("duplicate"), ToShortcutString(config.input.duplicate), 
+								false, context.selectedNotes.size()))
 				context.duplicateSelection(false);
 
 			ImGui::Separator();

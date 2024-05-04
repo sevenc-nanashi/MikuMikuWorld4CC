@@ -247,12 +247,11 @@ namespace MikuMikuWorld
 				context.paste(true);
 
 			if (ImGui::MenuItem(getString("duplicate"), ToShortcutString(config.input.duplicate),
-			                    !context.selectedNotes.empty()))
+			                    false, !context.selectedNotes.empty()))
 				context.duplicateSelection(false);
 
-			if (ImGui::MenuItem(getString("flip_duplicate"),
-			                    ToShortcutString(config.input.flipDuplicate),
-			                    !context.selectedNotes.empty()))
+			if (ImGui::MenuItem(getString("flip_duplicate"), ToShortcutString(config.input.flipDuplicate),
+			                    false, !context.selectedNotes.empty()))
 				context.duplicateSelection(true);
 
 			if (ImGui::MenuItem(getString("flip"), ToShortcutString(config.input.flip), false,
