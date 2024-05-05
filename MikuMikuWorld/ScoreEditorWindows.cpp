@@ -133,9 +133,9 @@ namespace MikuMikuWorld
 					UI::addFloatProperty(getString("beat"), beat, "%.3f");
 					note.tick = std::floor(beat * TICKS_PER_BEAT);
 
-					// Temporary
-					UI::addIntProperty(getString("layer"), note.layer, 0);
-					context.selectedLayer = note.layer;
+					// TODO: Make this a drop-down menu
+					// UI::addIntProperty(getString("layer"), note.layer, 0);
+					// context.selectedLayer = note.layer;
 
 					UI::endPropertyColumns();
 					if (ImGui::CollapsingHeader(
@@ -173,9 +173,9 @@ namespace MikuMikuWorld
 					UI::addFloatProperty(getString("beat"), beat, "%.3f");
 					note.tick = std::floor(beat * TICKS_PER_BEAT);
 
-					// Temporary
-					UI::addIntProperty(getString("layer"), note.layer, 0);
-					context.selectedLayer = note.layer;
+					// TODO: Make this a drop-down menu
+					// UI::addIntProperty(getString("layer"), note.layer, 0);
+					// context.selectedLayer = note.layer;
 
 					UI::endPropertyColumns();
 					if (ImGui::CollapsingHeader(
