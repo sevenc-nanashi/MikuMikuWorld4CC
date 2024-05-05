@@ -195,6 +195,7 @@ namespace MikuMikuWorld
 		{ "edit_fever", "Edit FEVER Trigger" },
 		{ "edit_none", "Edit" },
 		{ "edit_event", "Edit Event" },
+		{ "beat", "Beat" },
 		{ "lane", "Lane" },
 		{ "width", "Width" },
 		{ "advanced", "Advanced" },
