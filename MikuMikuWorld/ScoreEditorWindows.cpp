@@ -133,19 +133,31 @@ namespace MikuMikuWorld
 					UI::addFloatProperty(getString("beat"), beat, "%.3f");
 					note.tick = std::floor(beat * TICKS_PER_BEAT);
 
-					// TODO: Make this a drop-down menu
-					// UI::addIntProperty(getString("layer"), note.layer, 0);
-					// context.selectedLayer = note.layer;
+					if (config.showTickInProperties)
+					{
+						UI::addIntProperty(getString("tick"), note.tick);
+					}
+					
+					ImGui::Text(getString("layer"));
+					ImGui::NextColumn();
+					ImGui::SetNextItemWidth(-1);
+					const std::string layer_name = context.score.layers[note.layer].name;
+					if (ImGui::BeginCombo(IO::concat("##", getString("layer")).c_str(),
+					                      layer_name.c_str()))
+					{
+						for (int i = 0; i < context.score.layers.size(); i++)
+						{
+							auto& layer = context.score.layers[i];
+							bool selected = note.layer == i;
+							if (ImGui::Selectable(layer.name.c_str(), selected))
+							{
+								note.layer = i;
+							}
+						}
+						ImGui::EndCombo();
+					}
 
 					UI::endPropertyColumns();
-					if (ImGui::CollapsingHeader(
-					        IO::concat(ICON_FA_COGS, getString("advanced"), " ").c_str(),
-					        ImGuiTreeNodeFlags_DefaultOpen))
-					{
-						UI::beginPropertyColumns();
-						UI::addIntProperty(getString("tick"), note.tick);
-						UI::endPropertyColumns();
-					}
 				}
 				if (ImGui::CollapsingHeader(
 				        IO::concat(ICON_FA_COG, getString("note_properties"), " ").c_str(),
@@ -158,6 +170,7 @@ namespace MikuMikuWorld
 					UI::addCheckboxProperty(getString("trace"), note.friction);
 
 					UI::addFlickSelectPropertyWithNone(getString("flick"), note.flick, flickTypes, 4);
+	
 					UI::endPropertyColumns();
 				}
 			}
@@ -173,18 +186,31 @@ namespace MikuMikuWorld
 					UI::addFloatProperty(getString("beat"), beat, "%.3f");
 					note.tick = std::floor(beat * TICKS_PER_BEAT);
 
-					// TODO: Make this a drop-down menu
-					// UI::addIntProperty(getString("layer"), note.layer, 0);
-					// context.selectedLayer = note.layer;
+					if (config.showTickInProperties)
+					{
+						UI::addIntProperty(getString("tick"), note.tick);
+					}
+
+					ImGui::Text(getString("layer"));
+					ImGui::NextColumn();
+					ImGui::SetNextItemWidth(-1);
+					const std::string layer_name = context.score.layers[note.layer].name;
+					if (ImGui::BeginCombo(IO::concat("##", getString("layer")).c_str(),
+					                      layer_name.c_str()))
+					{
+						for (int i = 0; i < context.score.layers.size(); i++)
+						{
+							auto& layer = context.score.layers[i];
+							bool selected = note.layer == i;
+							if (ImGui::Selectable(layer.name.c_str(), selected))
+							{
+								note.layer = i;
+							}
+						}
+						ImGui::EndCombo();
+					}
 
 					UI::endPropertyColumns();
-					if (ImGui::CollapsingHeader(
-					        IO::concat(ICON_FA_COGS, getString("advanced"), " ").c_str()))
-					{
-						UI::beginPropertyColumns();
-						UI::addIntProperty(getString("tick"), note.tick);
-						UI::endPropertyColumns();
-					}
 				}
 				if (ImGui::CollapsingHeader(
 				        IO::concat(ICON_FA_FAST_FORWARD, getString("hi_speed_properties"), " ").c_str(),
@@ -1147,6 +1173,12 @@ namespace MikuMikuWorld
 						UI::addPercentSliderProperty(getString("lanes_opacity"),
 						                             config.laneOpacity);
 						UI::endPropertyColumns();
+					}
+
+					if (ImGui::CollapsingHeader(getString("advanced"), ImGuiTreeNodeFlags_DefaultOpen))
+					{
+						UI::addCheckboxProperty(getString("show_tick_in_properties"),
+						                        config.showTickInProperties);
 					}
 
 					ImGui::EndTabItem();
