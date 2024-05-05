@@ -770,6 +770,20 @@ namespace MikuMikuWorld
 		doPasteData(json::parse(clipboardData.substr(strlen(clipboardSignature))), flip);
 	}
 
+	void ScoreContext::duplicateSelection(bool flip)
+	{
+		const char* clipboardDataPtr = ImGui::GetClipboardText();
+		if (clipboardDataPtr == nullptr)
+			return;
+
+		std::string clipboardData(clipboardDataPtr);
+
+		copySelection();
+		paste(flip);
+
+		ImGui::SetClipboardText(clipboardData.c_str());
+	}
+
 	void ScoreContext::shrinkSelection(Direction direction)
 	{
 		if ((selectedNotes.size() + selectedHiSpeedChanges.size()) < 2)
@@ -990,8 +1004,19 @@ namespace MikuMikuWorld
 	void ScoreContext::repeatMidsInSelection(ScoreContext& context)
 	{
 
-		if (selectedNotes.size() < 3)
+		int selectedTickNum = 0;
+		for (const auto& noteId : context.selectedNotes)
+		{
+			auto& note = context.score.notes.at(noteId);
+			if (note.hasEase())
+			{
+				selectedTickNum += 1;
+			}
+		}
+		if (selectedTickNum < 3)
+		{
 			return;
+		}
 
 		Score prev = score;
 
@@ -1013,7 +1038,15 @@ namespace MikuMikuWorld
 		HoldNote& hold = score.holdNotes[holdIndex];
 
 		std::vector<int> sortedSelection;
-		sortedSelection.insert(sortedSelection.end(), selectedNotes.begin(), selectedNotes.end());
+
+		for (const auto& noteId : context.selectedNotes)
+		{
+			auto& note = context.score.notes.at(noteId);
+			if (note.hasEase())
+			{
+				sortedSelection.push_back(noteId);
+			}
+		}
 		std::sort(sortedSelection.begin(), sortedSelection.end(),
 		          [this](int a, int b) { return score.notes[a].tick < score.notes[b].tick; });
 
