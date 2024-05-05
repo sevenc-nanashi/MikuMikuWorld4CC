@@ -199,6 +199,7 @@ namespace MikuMikuWorld
 		{ "width", "Width" },
 		{ "advanced", "Advanced" },
 		{ "hi_speed_properties", "Hi-Speed Properties" },
+		{ "hold_note_properties", "Hold Note Properties" },
 
 		// Presets
 		{ "presets", "Presets" },

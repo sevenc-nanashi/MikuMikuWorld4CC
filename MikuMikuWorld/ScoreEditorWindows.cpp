@@ -165,13 +165,93 @@ namespace MikuMikuWorld
 				{
 					UI::beginPropertyColumns();
 					UI::addFloatProperty(getString("lane"), note.lane, "%.2f");
-					UI::addFloatProperty(getString("width"), note.width, "%.2f");
-					UI::addCheckboxProperty(getString("critical"), note.critical);
+					float newWidth = note.width;
+					UI::addFloatProperty(getString("width"), newWidth, "%.2f");
 					UI::addCheckboxProperty(getString("trace"), note.friction);
+					if (note.getType() == NoteType::Hold || note.getType() == NoteType::HoldMid ||
+					    note.getType() == NoteType::HoldEnd)
+					{
+						int holdIndex;
+						if (note.getType() == NoteType::Hold)
+						{
+							holdIndex = *context.selectedNotes.begin();
+						}
+						else
+						{
+							holdIndex = note.parentID;
+						}
 
-					UI::addFlickSelectPropertyWithNone(getString("flick"), note.flick, flickTypes, 4);
+						auto& holdStart = context.score.holdNotes.at(holdIndex);
+						auto& hold = context.score.holdNotes.at(holdStart.start.ID);
+
+						bool isGuide = hold.isGuide();
+						if (!isGuide)
+							newWidth = std::max(0.5f, newWidth);
+						else
+							newWidth = std::abs(newWidth);
+
+						if (note.getType() == NoteType::HoldEnd)
+						{
+							UI::addCheckboxProperty(getString("critical"), note.critical);
+							UI::addFlickSelectPropertyWithNone(getString("flick"), note.flick, flickTypes, 4);
+						}
+					}
+					else
+					{
+						newWidth = std::max(0.5f, newWidth);
+						UI::addCheckboxProperty(getString("critical"), note.critical);
+						UI::addFlickSelectPropertyWithNone(getString("flick"), note.flick, flickTypes, 4);
+					}
+					note.width = newWidth;
 	
 					UI::endPropertyColumns();
+				}
+				if (note.getType() == NoteType::Hold || note.getType() == NoteType::HoldMid ||
+					note.getType() == NoteType::HoldEnd)
+				{
+					if (ImGui::CollapsingHeader(
+					        IO::concat(ICON_FA_COG, getString("hold_note_properties"), " ").c_str(),
+					        ImGuiTreeNodeFlags_DefaultOpen))
+					{
+						int holdIndex;
+						if (note.getType() == NoteType::Hold)
+						{
+							holdIndex = *context.selectedNotes.begin();
+						}
+						else
+						{
+							holdIndex = note.parentID;
+						}
+
+						auto& holdStart = context.score.holdNotes.at(holdIndex);
+						auto& hold = context.score.holdNotes.at(holdStart.start.ID);
+
+						int stepIndex = findHoldStep(hold, note.ID);
+
+						UI::beginPropertyColumns();
+						if (note.getType() != NoteType::HoldEnd)
+						{
+							if (stepIndex == -1)
+							{
+								HoldStep& step = hold.start;
+								UI::addSelectProperty(getString("ease_type"), step.ease, easeTypes, 5);
+
+								UI::addSelectProperty(getString("hold_type"), hold.startType, holdTypes, 2);
+							}
+							else
+							{
+								HoldStep& step = hold.steps.at(stepIndex);
+								UI::addSelectProperty(getString("ease_type"), step.ease, easeTypes, 5);
+								
+								UI::addSelectProperty(getString("step_type"), step.type, stepTypes, 3);
+							}
+						}
+						else
+						{
+							UI::addSelectProperty(getString("hold_type"), hold.endType, holdTypes, 2);
+						}
+						UI::endPropertyColumns();
+					}
 				}
 			}
 			else
