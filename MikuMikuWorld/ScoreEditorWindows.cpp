@@ -116,6 +116,88 @@ namespace MikuMikuWorld
 		}
 	}
 
+	void ScoreNotePropertiesWindow::update(ScoreContext& context)
+	{
+		if (context.selectedNotes.size() + context.selectedHiSpeedChanges.size() == 1)
+		{
+			if (context.selectedNotes.size() == 1)
+			{
+				Note& note = context.score.notes.at(*context.selectedNotes.begin());
+				if (ImGui::CollapsingHeader(
+				        IO::concat(ICON_FA_COG, getString("general"), " ").c_str(),
+				        ImGuiTreeNodeFlags_DefaultOpen))
+				{
+					UI::beginPropertyColumns();
+
+					float beat = note.tick / static_cast<float>(TICKS_PER_BEAT);
+					UI::addFloatProperty(getString("beat"), beat, "%.3f");
+					note.tick = std::floor(beat * TICKS_PER_BEAT);
+
+					// Temporary
+					UI::addIntProperty(getString("layer"), note.layer, 0);
+					context.selectedLayer = note.layer;
+
+					UI::endPropertyColumns();
+					if (ImGui::CollapsingHeader(
+					        IO::concat(ICON_FA_COGS, getString("advanced"), " ").c_str(),
+					        ImGuiTreeNodeFlags_DefaultOpen))
+					{
+						UI::beginPropertyColumns();
+						UI::addIntProperty(getString("tick"), note.tick);
+						UI::endPropertyColumns();
+					}
+				}
+				if (ImGui::CollapsingHeader(
+				        IO::concat(ICON_FA_COG, getString("note_properties"), " ").c_str(),
+				        ImGuiTreeNodeFlags_DefaultOpen))
+				{
+					UI::beginPropertyColumns();
+					UI::addFloatProperty(getString("lane"), note.lane, "%.2f");
+					UI::addFloatProperty(getString("width"), note.width, "%.2f");
+					UI::addCheckboxProperty(getString("critical"), note.critical);
+					UI::addCheckboxProperty(getString("trace"), note.friction);
+
+					UI::addFlickSelectPropertyWithNone(getString("flick"), note.flick, flickTypes, 4);
+					UI::endPropertyColumns();
+				}
+			}
+			else
+			{
+				HiSpeedChange& note = context.score.hiSpeedChanges.at(*context.selectedHiSpeedChanges.begin());
+				if (ImGui::CollapsingHeader(
+				        IO::concat(ICON_FA_COG, getString("general"), " ").c_str(),
+				        ImGuiTreeNodeFlags_DefaultOpen))
+				{
+					UI::beginPropertyColumns();
+					float beat = note.tick / static_cast<float>(TICKS_PER_BEAT);
+					UI::addFloatProperty(getString("beat"), beat, "%.3f");
+					note.tick = std::floor(beat * TICKS_PER_BEAT);
+
+					// Temporary
+					UI::addIntProperty(getString("layer"), note.layer, 0);
+					context.selectedLayer = note.layer;
+
+					UI::endPropertyColumns();
+					if (ImGui::CollapsingHeader(
+					        IO::concat(ICON_FA_COGS, getString("advanced"), " ").c_str()))
+					{
+						UI::beginPropertyColumns();
+						UI::addIntProperty(getString("tick"), note.tick);
+						UI::endPropertyColumns();
+					}
+				}
+				if (ImGui::CollapsingHeader(
+				        IO::concat(ICON_FA_FAST_FORWARD, getString("hi_speed_properties"), " ").c_str(),
+				        ImGuiTreeNodeFlags_DefaultOpen))
+				{
+					UI::beginPropertyColumns();
+					UI::addFloatProperty(getString("hi_speed"), note.speed, "%.3f");
+					UI::endPropertyColumns();
+				}
+			}
+		}
+	}
+
 	void ScoreOptionsWindow::update(ScoreContext& context, EditArgs& edit, TimelineMode currentMode)
 	{
 		UI::beginPropertyColumns();

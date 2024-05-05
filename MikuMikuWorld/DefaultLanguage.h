@@ -92,6 +92,7 @@ namespace MikuMikuWorld
 
 		// Score editor
 		{ "chart_properties", "Chart Properties" },
+		{ "note_properties", "Note Properties" },
 		{ "notes_timeline", "Notes Timeline" },
 		{ "options", "Options" },
 		{ "select", "Select" },
@@ -194,6 +195,10 @@ namespace MikuMikuWorld
 		{ "edit_fever", "Edit FEVER Trigger" },
 		{ "edit_none", "Edit" },
 		{ "edit_event", "Edit Event" },
+		{ "lane", "Lane" },
+		{ "width", "Width" },
+		{ "advanced", "Advanced" },
+		{ "hi_speed_properties", "Hi-Speed Properties" },
 
 		// Presets
 		{ "presets", "Presets" },
