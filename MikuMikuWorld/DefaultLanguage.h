@@ -44,8 +44,7 @@ namespace MikuMikuWorld
 		{ "save_changes", "Save Changes" },
 		{ "discard_changes", "Discard Changes" },
 		{ "update_available", "New version available!" },
-		{ "update_available_description",
-		  "%s is available. Do you want to open in the browser?" },
+		{ "update_available_description", "%s is available. Do you want to open in the browser?" },
 		{ "score_file", "Score file" },
 		{ "error", "Error" },
 		{ "error_load_score_file", "An error occurred while reading the score file" },
@@ -199,8 +198,11 @@ namespace MikuMikuWorld
 		{ "lane", "Lane" },
 		{ "width", "Width" },
 		{ "advanced", "Advanced" },
-		{ "hi_speed_properties", "Hi-Speed Properties" },
-		{ "hold_note_properties", "Hold Note Properties" },
+		{ "note_properties_note", "Note Properties" },
+		{ "note_properties_hi_speed", "Hi-Speed Properties" },
+		{ "note_properties_hold_note", "Hold Note Properties" },
+		{ "note_properties_not_selected", "No notes or hi-speeds are selected" },
+		{ "note_properties_many_selected", "Multiple notes or hi-speeds are selected" },
 
 		// Presets
 		{ "presets", "Presets" },
