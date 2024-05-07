@@ -3,7 +3,7 @@
 
 # translation by ruii (@mi.honesta.reaccion)
 
-# menu bar
+# menu bar / barra de menú
 file, Archivo
 new, Nuevo
 open, Abrir
@@ -85,9 +85,12 @@ lanes_opacity, Opacidad del editor
 video, Video
 vsync_enable, VSync
 notes_se, Efecto de sonido de las notas
+advanced, Avanzado
+show_tick_in_properties, Mostrar tick en las propiedades
 
-# score editor
+# score editor / editor de partitura
 chart_properties, Propiedades de la partitura
+note_properties, Propiedades de la nota
 notes_timeline, Editor de notas
 options, Opciones
 select, Seleccionar
@@ -110,7 +113,7 @@ right, Derecha
 normal, Normal
 hidden, Escondido
 skip, Skip
-linear, Linear
+linear, Lineal
 ease_in, Curva hacia adentro
 ease_out, Curva hacia afuera
 ease_in_out, Curva adentro-afuera
@@ -146,7 +149,7 @@ music_file, Archivo de audio
 music_offset, Compensación del audio
 volume_master, Volumen general
 volume_bgm, Volumen de la música
-volume_se, Volumen de los efectos de sonido
+volume_se, Volumen de SE
 statistics, Estadísticas
 taps, Taps
 flicks, Flicks
@@ -156,8 +159,8 @@ traces, Traces
 total, Total
 combo, Combo
 goto_measure, Ir al compás
-division, %d División
-division_affix, División en %d
+division, División en %d
+division_affix, %d División
 custom, personalizada
 custom_division, División personalizada
 zoom, Zoom
@@ -191,8 +194,17 @@ edit_skill, Editar Trigger de Habilidad
 edit_fever,　Editar Trigger de Fiebre
 edit_none,　Editar
 edit_event,　Editar evento
+beat, Tiempo
+lane, Posición
+width, Ancho
+advanced, Avanzado
+note_properties_note, Propiedades de la nota
+note_properties_hi_speed, Propiedades de Hi-speed
+note_properties_hold_note, Propiedades de Hold
+note_properties_not_selected, No hay notas o hi-speeds seleccionadas
+note_properties_many_selected, Hay muchas propiedades de las notas o hi-speeds seleccionadas
 
-# preset manager
+# preset manager / editor de presets
 presets, Presets
 no_presets, No hay presets registrados.
 name, Nombre
@@ -201,7 +213,7 @@ create_preset, Crear preset
 search, Buscar...
 confirm, Confirmar
 
-# layer manager
+# layer manager / editor de capas
 layers, Capas
 name, Nombre
 create_layer, Crear capa
@@ -213,13 +225,13 @@ layer_down, Mover hacia abajo
 layer_merge, Mezclar capa
 layer_delete, Eliminar capa
 
-# waypoint manager
-waypoints, Marcador
+# waypoint manager / editor de marcadores
+waypoints, Marcadores
 create_waypoint, Crear marcador
 edit_waypoint, Editar marcador
 waypoint_name, Nombre
 
-# commands
+# commands / comandos
 action, Acción
 keys, Teclas
 add, Agregar
