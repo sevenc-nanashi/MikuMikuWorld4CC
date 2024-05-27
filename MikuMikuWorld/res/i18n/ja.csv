@@ -152,8 +152,8 @@ traces, トレース
 total, 合計
 combo, コンボ
 goto_measure, 小節に移動
-division, 小節の分割
-division_suffix, 分音符
+division, %d分音符
+division_affix, %d分音符
 custom, カスタム：
 custom_division, カスタム分割
 zoom, ズーム
@@ -194,6 +194,7 @@ advanced, 高度
 note_properties_note, ノーツ
 note_properties_hi_speed, ハイスピード
 note_properties_hold_note, スライド
+note_properties_guide, ガイド
 note_properties_not_selected, ノーツ、またはハイスピードを選択してください。
 note_properties_many_selected, 複数のノーツまたはハイスピードが選択されています。
 
