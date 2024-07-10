@@ -24,8 +24,11 @@ jobs:
                   cd build
                   mkdir MikuMikuWorld
                   cp -r ../x64/Release/* MikuMikuWorld
+                  rm ./MikuMikuWorld/*.pdb
 
                   7z a MikuMikuWorld.zip MikuMikuWorld
+
+                  cp ./x64/Release/MikuMikuWorld.pdb ./build/MikuMikuWorld.pdb
 
             - name: Check version
               id: version
@@ -33,13 +36,17 @@ jobs:
               with:
                   script: |
                       if ("${{ github.ref }}".split("/").pop().match(/^v\d+\.\d+\.\d+.\d+$/)) {
-                          core.setOutput("prerelease", false);
+                        core.setOutput("prerelease", false);
                       } else {
-                          core.setOutput("prerelease", true);
+                        core.setOutput("prerelease", true);
                       }
 
             - name: Upload
               uses: softprops/action-gh-release@v1
               with:
                   prerelease: ${{ steps.version.outputs.prerelease }}
-                  files: build/MikuMikuWorld.zip
+                  body: |
+                    Download "MikuMikuWorld.zip", **not `Source Code` nor `MikuMikuWorld.pdb`**.
+                  files: |
+                    build/MikuMikuWorld.zip
+                    build/MikuMikuWorld.pdb
