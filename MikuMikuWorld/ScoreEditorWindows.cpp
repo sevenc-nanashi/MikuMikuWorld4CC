@@ -1578,7 +1578,7 @@ namespace MikuMikuWorld
 						                      ImGui::GetStyleColorVec4(ImGuiCol_ButtonActive));
 					}
 					if (ImGui::Button(layer.name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x -
-					                                                 UI::btnSmall.x * 4 - 2.0f * 5,
+					                                                 UI::btnSmall.x * 5 - 2.0f * 6,
 					                                             layersButtonHeight)))
 						context.selectedLayer = index;
 					if (isSelected)
