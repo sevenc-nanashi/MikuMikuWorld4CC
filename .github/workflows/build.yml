@@ -24,11 +24,11 @@ jobs:
                   cd build
                   mkdir MikuMikuWorld
                   cp -r ../x64/Release/* MikuMikuWorld
+                  cp ./x64/Release/MikuMikuWorld.pdb ./build/__DEBUG__ONLY__MikuMikuWorld.pdb
                   rm ./MikuMikuWorld/*.pdb
 
                   7z a MikuMikuWorld.zip MikuMikuWorld
 
-                  cp ./x64/Release/MikuMikuWorld.pdb ./build/MikuMikuWorld.pdb
 
             - name: Check version
               id: version
@@ -49,4 +49,4 @@ jobs:
                     Download "MikuMikuWorld.zip", **not `Source Code` nor `MikuMikuWorld.pdb`**.
                   files: |
                     build/MikuMikuWorld.zip
-                    build/MikuMikuWorld.pdb
+                    build/__DEBUG__ONLY__MikuMikuWorld.pdb
