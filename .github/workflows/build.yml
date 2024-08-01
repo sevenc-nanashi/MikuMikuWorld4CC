@@ -24,7 +24,7 @@ jobs:
                   cd build
                   mkdir MikuMikuWorld
                   cp -r ../x64/Release/* MikuMikuWorld
-                  cp ../x64/Release/MikuMikuWorld.pdb ./build/__DEBUG__ONLY__MikuMikuWorld.pdb
+                  cp ../x64/Release/MikuMikuWorld.pdb ./__DEBUG__ONLY__MikuMikuWorld.pdb
                   rm ./MikuMikuWorld/*.pdb
 
                   7z a MikuMikuWorld.zip MikuMikuWorld
