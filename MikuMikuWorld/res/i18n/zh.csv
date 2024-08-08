@@ -161,9 +161,9 @@ division_affix,%d 分音符
 custom,自定义
 custom_division,指定分音符
 snap_mode,捕捉模式
-snap_mode_relative,相对捕捉模式
-snap_mode_absolute,绝对捕捉模式
-snap_mode_individual_absolute,单独绝对捕捉缩放
+snap_mode_relative,相对捕捉模式 (Relative Snap)
+snap_mode_absolute,绝对捕捉模式 (Absolute Snap)
+snap_mode_individual_absolute,单独绝对捕捉模式 (Individual Absolute Snap)
 zoom,缩放
 show_step_outlines,显示 HOLD STEP 轮廓
 draw_waveform,显示音频波形
@@ -248,17 +248,17 @@ cancel_paste,取消粘贴
 stop,停止
 previous_tick,上一刻度
 next_tick,下一刻度
-timeline_select,切换为 选择
-timeline_tap,切换为 TAP
-timeline_hold,切换为 HOLD
-timeline_hold_step,切换为 HOLD STEP
-timeline_flick,切换为 FLICK
-timeline_critical,切换为 CRITICAL
-timeline_trace,切换为 TRACE
-timeline_guide,切换为 GUIDE
-timeline_damage,切换为 DAMAGE
-timeline_bpm,切换为 更改 BPM
-timeline_time_signature,切换为 更改拍号
-timeline_hi_speed,切换为 更改高速
+timeline_select,时间轴 - 切换为 选择
+timeline_tap,时间轴 - 切换为 TAP
+timeline_hold,时间轴 - 切换为 HOLD
+timeline_hold_step,时间轴 - 切换为 HOLD STEP
+timeline_flick,时间轴 - 切换为 FLICK
+timeline_critical,时间轴 - 切换为 CRITICAL
+timeline_trace,时间轴 - 切换为 TRACE
+timeline_guide,时间轴 - 切换为 GUIDE
+timeline_damage,时间轴 - 切换为 DAMAGE
+timeline_bpm,时间轴 - 切换为 更改 BPM
+timeline_time_signature,时间轴 - 切换为 更改拍号
+timeline_hi_speed,时间轴 - 切换为 更改高速
 zoom_in,放大
 zoom_out,缩小
