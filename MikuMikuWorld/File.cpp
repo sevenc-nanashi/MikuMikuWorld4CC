@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <ctime>
 #include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 #include <filesystem>
 #include <chrono>
@@ -32,14 +33,15 @@ namespace IO
 			close();
 
 		stream = _wfopen(filename.c_str(), mode);
+		if (!stream)
+			std::wcerr << L"Failed to open file: " << filename << std::endl;
 	}
 
 	void File::open(const std::string& filename, const char* mode)
 	{
-		if (stream)
-			close();
-
-		stream = fopen(filename.c_str(), mode);
+		std::wstring wFileName = mbToWideStr(filename);
+		std::wstring wMode(mode, mode + strlen(mode));
+		open(wFileName, wMode.c_str());
 	}
 
 	void File::close()
