@@ -61,6 +61,7 @@ Var StartMenuFolder
 
 ;-------------------------------------------------------------------------------
 ; Languages
+!insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "Japanese"
 
 ;-------------------------------------------------------------------------------
