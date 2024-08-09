@@ -97,6 +97,7 @@ namespace MikuMikuWorld
 
 		// settings
 		bool minifyUsc;
+		bool showSusExport;
 		int timelineWidth;
 		int notesHeight;
 		bool matchNotesSizeToTimeline;

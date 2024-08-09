@@ -109,7 +109,7 @@ namespace MikuMikuWorld
 
 	void UI::propertyLabel(const char* label)
 	{
-		ImGui::Text(label);
+		ImGui::Text("%s", label);
 		ImGui::NextColumn();
 		ImGui::SetNextItemWidth(-1);
 	}
@@ -285,7 +285,7 @@ namespace MikuMikuWorld
 			ImGui::SetNextWindowSize(ImVec2(std::min(txtWidth, 250.0f), -1));
 			ImGui::BeginTooltipEx(ImGuiTooltipFlags_OverridePreviousTooltip,
 			                      ImGuiWindowFlags_NoResize);
-			ImGui::TextWrapped(label);
+			ImGui::TextWrapped("%s", label);
 			ImGui::EndTooltip();
 		}
 	}

@@ -1305,12 +1305,11 @@ namespace MikuMikuWorld
 						UI::endPropertyColumns();
 					}
 
-					if (ImGui::CollapsingHeader(getString("file"),
-					                            ImGuiTreeNodeFlags_DefaultOpen))
+					if (ImGui::CollapsingHeader(getString("file"), ImGuiTreeNodeFlags_DefaultOpen))
 					{
 						UI::beginPropertyColumns();
-						UI::addCheckboxProperty(getString("minify_usc"),
-						                        config.minifyUsc);
+						UI::addCheckboxProperty(getString("minify_usc"), config.minifyUsc);
+						UI::addCheckboxProperty(getString("show_sus_export"), config.showSusExport);
 						UI::endPropertyColumns();
 					}
 

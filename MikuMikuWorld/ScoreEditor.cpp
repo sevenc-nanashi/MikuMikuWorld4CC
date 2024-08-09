@@ -1,4 +1,5 @@
 // Put httplib first otherwise the compiler will throw an error
+#include <corecrt_math.h>
 #define CPPHTTPLIB_OPENSSL_SUPPORT 1
 #include <cpp-httplib/httplib.h>
 
@@ -654,19 +655,54 @@ namespace MikuMikuWorld
 			if (ImGui::MenuItem(getString("save_as"), ToShortcutString(config.input.saveAs)))
 				saveAs();
 
-			bool canExportSus = context.score.metadata.laneExtension <= 12;
-			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, !canExportSus);
-			if (!canExportSus)
-				ImGui::PushStyleColor(ImGuiCol_Text,
-				                      ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
-			if (ImGui::MenuItem(getString("export_sus"), ToShortcutString(config.input.exportSus)))
-				exportSus();
-			if (!canExportSus)
-				ImGui::PopStyleColor();
-			ImGui::PopItemFlag();
-
 			if (ImGui::MenuItem(getString("export_usc"), ToShortcutString(config.input.exportUsc)))
 				exportUsc();
+
+			if (config.showSusExport)
+			{
+
+				bool canExportSus = context.score.metadata.laneExtension == 0;
+				if (canExportSus)
+				{
+					for (auto& [_, hold] : context.score.holdNotes)
+					{
+						if (hold.guideColor == GuideColor::Green ||
+						    hold.guideColor == GuideColor::Yellow)
+						{
+							continue;
+						}
+
+						canExportSus = false;
+						break;
+					}
+				}
+				if (canExportSus)
+				{
+					for (auto& [_, note] : context.score.notes)
+					{
+						if (floor(note.width) == note.width && floor(note.lane) == note.lane)
+						{
+							continue;
+						}
+
+						canExportSus = false;
+						break;
+					}
+				}
+
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, !canExportSus);
+				if (!canExportSus)
+					ImGui::PushStyleColor(ImGuiCol_Text,
+					                      ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
+				if (ImGui::MenuItem(getString("export_sus"),
+				                    ToShortcutString(config.input.exportSus)))
+					exportSus();
+				if (!canExportSus)
+				{
+					ImGui::PopStyleColor();
+				}
+				ImGui::PopItemFlag();
+			}
 
 			ImGui::Separator();
 			if (ImGui::MenuItem(getString("exit"),

@@ -52,6 +52,7 @@ general,General
 key_config,Key Config
 language,Language
 minify_usc,Minify USC
+show_sus_export,Enable SUS Export
 auto,Auto
 auto_save,Auto Save
 auto_save_enable,Auto Save Enabled
