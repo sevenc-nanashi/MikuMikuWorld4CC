@@ -69,7 +69,8 @@ namespace MikuMikuWorld
 	void ScoreEditor::fetchUpdate()
 	{
 
-		std::wstring updateFlagPath = IO::mbToWideStr(Application::getAppDir() + "latest_version.txt");
+		std::wstring updateFlagPath =
+		    IO::mbToWideStr(Application::getAppDir() + "latest_version.txt");
 		bool shouldFetchUpdate = true;
 		std::string latestVersionString;
 		if (IO::File::exists(updateFlagPath))
@@ -586,7 +587,7 @@ namespace MikuMikuWorld
 				std::wstring wFilename = IO::mbToWideStr(fileDialog.outputFilename);
 				IO::File uscfile(wFilename, L"w");
 
-				uscfile.write(usc.dump(4));
+				uscfile.write(usc.dump(config.minifyUsc ? -1 : 4));
 				uscfile.flush();
 				uscfile.close();
 			}

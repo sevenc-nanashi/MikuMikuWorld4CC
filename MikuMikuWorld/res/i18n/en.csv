@@ -51,6 +51,7 @@ cancel,Cancel
 general,General
 key_config,Key Config
 language,Language
+minify_usc,Minify USC
 auto,Auto
 auto_save,Auto Save
 auto_save_enable,Auto Save Enabled

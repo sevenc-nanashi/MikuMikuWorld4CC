@@ -50,6 +50,7 @@ cancel, キャンセル
 general, 一般
 key_config, キーコンフィグ
 language, 言語
+minify_usc, USCを圧縮
 auto, 自動
 auto_save, オートセーブ
 auto_save_enable, オートセーブ

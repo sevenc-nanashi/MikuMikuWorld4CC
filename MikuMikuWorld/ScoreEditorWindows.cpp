@@ -610,7 +610,7 @@ namespace MikuMikuWorld
 				if (!presetManager.presets.size())
 				{
 					ImGui::PushStyleVar(ImGuiStyleVar_Alpha, 0.5f);
-					ImGui::TextWrapped(getString("no_presets"));
+					ImGui::TextWrapped("%s", getString("no_presets"));
 					ImGui::PopStyleVar();
 				}
 				else
@@ -690,11 +690,11 @@ namespace MikuMikuWorld
 			float xPos = padding.x;
 			float yPos = ImGui::GetWindowSize().y - UI::btnSmall.y - 2.0f - (padding.y * 2);
 
-			ImGui::Text(getString("name"));
+			ImGui::Text("%s", getString("name"));
 			ImGui::SetNextItemWidth(-1);
 			ImGui::InputText("##preset_name", &presetName);
 
-			ImGui::Text(getString("description"));
+			ImGui::Text("%s", getString("description"));
 			ImGui::InputTextMultiline(
 			    "##preset_desc", &presetDesc,
 			    { -1, ImGui::GetContentRegionAvail().y - UI::btnSmall.y - 10.0f - padding.y });
@@ -752,7 +752,7 @@ namespace MikuMikuWorld
 		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
 		if (ImGui::BeginPopupModal(MODAL_TITLE("file_not_found"), NULL, ImGuiWindowFlags_NoResize))
 		{
-			ImGui::TextWrapped(dialogText.c_str());
+			ImGui::TextWrapped("%s", dialogText.c_str());
 
 			// New line to move the buttons a bit down
 			ImGui::Text("\n");
@@ -795,8 +795,8 @@ namespace MikuMikuWorld
 		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
 		if (ImGui::BeginPopupModal(MODAL_TITLE("unsaved_changes"), NULL, ImGuiWindowFlags_NoResize))
 		{
-			ImGui::Text(getString("ask_save"));
-			ImGui::Text(getString("warn_unsaved"));
+			ImGui::Text("%s", getString("ask_save"));
+			ImGui::Text("%s", getString("warn_unsaved"));
 
 			ImVec2 padding = ImGui::GetStyle().WindowPadding;
 			ImVec2 spacing = ImGui::GetStyle().ItemSpacing;
@@ -1107,7 +1107,7 @@ namespace MikuMikuWorld
 
 				ImGui::PopID();
 				ImGui::TableSetColumnIndex(1);
-				ImGui::Text(ToFullShortcutsString(*bindings[i]).c_str());
+				ImGui::Text("%s", ToFullShortcutsString(*bindings[i]).c_str());
 			}
 			ImGui::EndTable();
 		}
@@ -1123,7 +1123,7 @@ namespace MikuMikuWorld
 			const float btnHeight = ImGui::GetFrameHeight();
 
 			UI::beginPropertyColumns();
-			ImGui::Text(getString(bindings[selectedBindingIndex]->name));
+			ImGui::Text("%s", getString(bindings[selectedBindingIndex]->name));
 			ImGui::NextColumn();
 
 			if (!canAdd)
@@ -1305,6 +1305,15 @@ namespace MikuMikuWorld
 						UI::endPropertyColumns();
 					}
 
+					if (ImGui::CollapsingHeader(getString("file"),
+					                            ImGuiTreeNodeFlags_DefaultOpen))
+					{
+						UI::beginPropertyColumns();
+						UI::addCheckboxProperty(getString("minify_usc"),
+						                        config.minifyUsc);
+						UI::endPropertyColumns();
+					}
+
 					if (ImGui::CollapsingHeader(getString("auto_save"),
 					                            ImGuiTreeNodeFlags_DefaultOpen))
 					{
@@ -1324,7 +1333,7 @@ namespace MikuMikuWorld
 						                      (int)BaseTheme::BASE_THEME_MAX);
 						UI::endPropertyColumns();
 
-						ImGui::TextWrapped(getString("accent_color_help"));
+						ImGui::TextWrapped("%s", getString("accent_color_help"));
 						ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing,
 						                    ImVec2(ImGui::GetStyle().ItemSpacing.x + 3, 15));
 						ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.5f);
@@ -1358,7 +1367,7 @@ namespace MikuMikuWorld
 						static ColorDisplay displayMode = ColorDisplay::HEX;
 
 						ImGui::Separator();
-						ImGui::Text(getString("select_accent_color"));
+						ImGui::Text("%s", getString("select_accent_color"));
 						UI::beginPropertyColumns();
 						UI::propertyLabel(getString("display_mode"));
 						if (ImGui::BeginCombo("##color_display_mode",
