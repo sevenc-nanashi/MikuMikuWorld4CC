@@ -1,52 +1,44 @@
 name: Build on push with tag
 
 on:
-    push:
-        tags:
-            - "v*"
+  push:
+    tags:
+      - "v*"
 
 jobs:
-    build:
-        runs-on: windows-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-              with:
-                  submodules: true
-            - name: Add msbuild to PATH
-              uses: microsoft/setup-msbuild@v1
-            - name: Build
-              run: msbuild /p:Configuration=Release /p:Platform=x64
-            - name: Pack
-              shell: bash
-              run: |
-                  mkdir build
-                  cd build
-                  mkdir MikuMikuWorld
-                  cp -r ../x64/Release/* MikuMikuWorld
-                  cp ../x64/Release/MikuMikuWorld.pdb ./__DEBUG__ONLY__MikuMikuWorld.pdb
-                  rm ./MikuMikuWorld/*.pdb
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+      - name: Build
+        run: |
+          rake build
 
-                  7z a MikuMikuWorld.zip MikuMikuWorld
+      - name: Check version
+        id: version
+        uses: actions/github-script@v7
+        with:
+          script: |
+            if ("${{ github.ref }}".split("/").pop().match(/^v\d+\.\d+\.\d+.\d+$/)) {
+              core.setOutput("prerelease", false);
+            } else {
+              core.setOutput("prerelease", true);
+            }
 
-
-            - name: Check version
-              id: version
-              uses: actions/github-script@v7
-              with:
-                  script: |
-                      if ("${{ github.ref }}".split("/").pop().match(/^v\d+\.\d+\.\d+.\d+$/)) {
-                        core.setOutput("prerelease", false);
-                      } else {
-                        core.setOutput("prerelease", true);
-                      }
-
-            - name: Upload
-              uses: softprops/action-gh-release@v1
-              with:
-                  prerelease: ${{ steps.version.outputs.prerelease }}
-                  body: |
-                    Download "MikuMikuWorld.zip", **not `Source Code` nor `MikuMikuWorld.pdb`**.
-                  files: |
-                    build/MikuMikuWorld.zip
-                    build/__DEBUG__ONLY__MikuMikuWorld.pdb
+      - name: Upload
+        uses: softprops/action-gh-release@v1
+        with:
+          prerelease: ${{ steps.version.outputs.prerelease }}
+          body: |
+            Download "-setup.exe".
+          files: |
+            ./build/*.*
