@@ -129,9 +129,9 @@ namespace MikuMikuWorld
 	void PresetManager::savePresets(const std::string& path)
 	{
 		namespace fs = std::filesystem;
-		fs::path libPath{ path };
 
 		std::wstring wPath = IO::mbToWideStr(path);
+		fs::path libPath{ wPath };
 		if (!std::filesystem::exists(wPath))
 			std::filesystem::create_directory(wPath);
 
@@ -153,7 +153,7 @@ namespace MikuMikuWorld
 				              // we will add the extension later after determining what the final
 				              // filename should be
 				              std::string filename =
-				                  (libPath / fixFilename(preset.getName())).string();
+				                  (libPath / fixFilename(preset.getName())).u8string();
 				              preset.write(filename, false);
 			              }
 		              });
