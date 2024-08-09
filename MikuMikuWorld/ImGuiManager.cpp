@@ -193,7 +193,7 @@ namespace MikuMikuWorld
 		rangeBuilder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesKorean());
 		rangeBuilder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesCyrillic());
 		rangeBuilder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesVietnamese());
-		// rangeBuilder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesChineseFull());
+		rangeBuilder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesChineseFull());
 		// rangeBuilder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesThai());
 		// rangeBuilder.AddRanges(ImGui::GetIO().Fonts->GetGlyphRangesGreek());
 		rangeBuilder.BuildRanges(&ranges);

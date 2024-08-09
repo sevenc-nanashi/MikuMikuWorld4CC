@@ -20,6 +20,8 @@ If you want to contribute a translation, please see [the guide](./TRANSLATION.md
 - Español (Spanish) by @mi.honesta.reaccion
 - Русский (Russian) by @\_notfallen\_
 - Tiếng Việt (Vietnamese) by @uwulovecrosshand
+- 한국어 (Korean) by @fjordic
+- 简体中文 (Simplified Chinese) by @GuangChen2333
 
 ## Requirements:
 - 64-bit Windows 10 or higher*.
