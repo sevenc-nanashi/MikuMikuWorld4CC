@@ -77,10 +77,20 @@ Section "MikuMikuWorld for Chart Cyanvas" Mmw4cc
     CreateShortcut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\mmw4cc" \
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\mmw4cc" \
                    "DisplayName" "MikuMikuWorld for Chart Cyanvas"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\mmw4cc" \
+  WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\mmw4cc" \
                    "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+
+  WriteRegStr HKCU "Software\Classes\.usc" "" "MikuMikuWorld.usc"
+  WriteRegStr HKCU "Software\Classes\MikuMikuWorld.usc" "" "Universal Sekai Chart File"
+  WriteRegStr HKCU "Software\Classes\MikuMikuWorld.usc\DefaultIcon" "" "$INSTDIR\MikuMikuWorld.exe"
+  WriteRegStr HKCU "Software\Classes\MikuMikuWorld.usc\shell\open\command" "" "$INSTDIR\MikuMikuWorld.exe $\"%1$\""
+
+  WriteRegStr HKCU "Software\Classes\.ccmmws" "" "MikuMikuWorld.ccmmws"
+  WriteRegStr HKCU "Software\Classes\MikuMikuWorld.ccmmws" "" "MMW4CC Chart File"
+  WriteRegStr HKCU "Software\Classes\MikuMikuWorld.ccmmws\DefaultIcon" "" "$INSTDIR\MikuMikuWorld.exe"
+  WriteRegStr HKCU "Software\Classes\MikuMikuWorld.ccmmws\shell\open\command" "" "$INSTDIR\MikuMikuWorld.exe $\"%1$\""
 SectionEnd
 
 ;-------------------------------------------------------------------------------
@@ -88,8 +98,11 @@ SectionEnd
 Section "Uninstall"
 	RMDir /r "$INSTDIR"
   Delete "$INSTDIR\Uninstall.exe"
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\mmw4cc"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Uninstall\mmw4cc"
+  DeleteRegKey HKCU "Software\Classes\.usc"
+  DeleteRegKey HKCU "Software\Classes\MikuMikuWorld.usc"
+  DeleteRegKey HKCU "Software\Classes\.ccmmws"
+  DeleteRegKey HKCU "Software\Classes\MikuMikuWorld.ccmmws"
 
-  Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
-  RMDir "$SMPROGRAMS\$StartMenuFolder"
+  RMDir /r "$SMPROGRAMS\$StartMenuFolder"
 SectionEnd
