@@ -1,11 +1,11 @@
 **English** / [日本語](./README.ja.md)
 
 # MikuMikuWorld for Chart Cyanvas
-[![](https://byob.yarr.is/RubbaBoy/Example/coverage-en)](./MikuMikuWorld/res/i18n/en.csv)
-[![](https://byob.yarr.is/RubbaBoy/Example/coverage-ja)](./MikuMikuWorld/res/i18n/ja.csv)
-[![](https://byob.yarr.is/RubbaBoy/Example/coverage-es)](./MikuMikuWorld/res/i18n/es.csv)
-[![](https://byob.yarr.is/RubbaBoy/Example/coverage-ru)](./MikuMikuWorld/res/i18n/ru.csv)
-[![](https://byob.yarr.is/RubbaBoy/Example/coverage-vi)](./MikuMikuWorld/res/i18n/vi.csv)
+[![](https://byob.yarr.is/sevenc-nanashi/MikuMikuWorld4CC/coverage-en)](./MikuMikuWorld/res/i18n/en.csv)
+[![](https://byob.yarr.is/sevenc-nanashi/MikuMikuWorld4CC/coverage-ja)](./MikuMikuWorld/res/i18n/ja.csv)
+[![](https://byob.yarr.is/sevenc-nanashi/MikuMikuWorld4CC/coverage-es)](./MikuMikuWorld/res/i18n/es.csv)
+[![](https://byob.yarr.is/sevenc-nanashi/MikuMikuWorld4CC/coverage-ru)](./MikuMikuWorld/res/i18n/ru.csv)
+[![](https://byob.yarr.is/sevenc-nanashi/MikuMikuWorld4CC/coverage-vi)](./MikuMikuWorld/res/i18n/vi.csv)
 
 Fork of [MikuMikuWorld](https://github.com/crash5band/MikuMikuWorld) for [Chart Cyanvas](https://github.com/sevenc-nanashi/chart_cyanvas).
 
