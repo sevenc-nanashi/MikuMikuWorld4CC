@@ -86,6 +86,8 @@ lanes_opacity, レーンの不透明度
 video, 画面
 vsync_enable, VSync（垂直同期）
 notes_se, ノーツのSE
+show_tick_in_properties, プロパティにTickを表示
+translation_by, 翻訳：%s
 
 # score editor
 options, オプション
@@ -228,6 +230,8 @@ layer_up, 上に移動
 layer_down, 下に移動
 layer_merge, 一つ下と結合
 layer_delete, 削除
+layer_hide, 非表示
+layer_show, 表示
 
 # waypoint manager
 waypoints,しおり
