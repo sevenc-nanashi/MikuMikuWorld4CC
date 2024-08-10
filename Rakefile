@@ -69,6 +69,7 @@ task "check:translation" do
     coverages[file.split(".")[0]] = coverage
   end
   if (output_file = ENV["GITHUB_OUTPUT"])
+    puts "Writing to GITHUB_OUTPUT"
     coverages.each do |lang, coverage|
       File.write(output_file, "coverage_#{lang}=#{coverage}\n", mode: "a+")
     end
