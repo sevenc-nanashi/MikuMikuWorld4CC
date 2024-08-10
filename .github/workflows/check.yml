@@ -45,7 +45,7 @@ jobs:
           NAME: coverage-en
           LABEL: 'English'
           STATUS: ${{ steps.check.output.coverage_en }}%
-          COLOR: ${{ steps.check.output.coverage_en == '100' && 'success' || 'failure' }}
+          COLOR: ${{ steps.check.output.coverage_en == '100' && 'success' || 'important' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Translation Coverage: ja"
         uses: RubbaBoy/BYOB@v1.3.0
@@ -53,7 +53,7 @@ jobs:
           NAME: coverage-ja
           LABEL: 'Japanese'
           STATUS: ${{ steps.check.output.coverage_ja }}%
-          COLOR: ${{ steps.check.output.coverage_ja == '100' && 'success' || 'failure' }}
+          COLOR: ${{ steps.check.output.coverage_ja == '100' && 'success' || 'important' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Translation Coverage: es"
         uses: RubbaBoy/BYOB@v1.3.0
@@ -61,7 +61,7 @@ jobs:
           NAME: coverage-es
           LABEL: 'Spanish'
           STATUS: ${{ steps.check.output.coverage_es }}%
-          COLOR: ${{ steps.check.output.coverage_es == '100' && 'success' || 'failure' }}
+          COLOR: ${{ steps.check.output.coverage_es == '100' && 'success' || 'important' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Translation Coverage: kr"
         uses: RubbaBoy/BYOB@v1.3.0
@@ -69,7 +69,7 @@ jobs:
           NAME: coverage-kr
           LABEL: 'Korean'
           STATUS: ${{ steps.check.output.coverage_kr }}%
-          COLOR: ${{ steps.check.output.coverage_kr == '100' && 'success' || 'failure' }}
+          COLOR: ${{ steps.check.output.coverage_kr == '100' && 'success' || 'important' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Translation Coverage: ru"
         uses: RubbaBoy/BYOB@v1.3.0
@@ -77,7 +77,7 @@ jobs:
           NAME: coverage-ru
           LABEL: 'Russian'
           STATUS: ${{ steps.check.output.coverage_ru }}%
-          COLOR: ${{ steps.check.output.coverage_ru == '100' && 'success' || 'failure' }}
+          COLOR: ${{ steps.check.output.coverage_ru == '100' && 'success' || 'important' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "Translation Coverage: vi"
         uses: RubbaBoy/BYOB@v1.3.0
@@ -85,6 +85,6 @@ jobs:
           NAME: coverage-vi
           LABEL: 'Vietnamese'
           STATUS: ${{ steps.check.output.coverage_vi }}%
-          COLOR: ${{ steps.check.output.coverage_vi == '100' && 'success' || 'failure' }}
+          COLOR: ${{ steps.check.output.coverage_vi == '100' && 'success' || 'important' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
