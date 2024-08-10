@@ -2,8 +2,8 @@ name: Check many things
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
 
 jobs:
   build:
