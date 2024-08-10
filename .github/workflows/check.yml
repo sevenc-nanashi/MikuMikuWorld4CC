@@ -85,6 +85,6 @@ jobs:
           NAME: coverage-vi
           LABEL: 'Vietnamese'
           STATUS: ${{ steps.check.outputs.coverage_vi }}%
-          COLOR: ${{ steps.check.outputs.coverage_vi == '100' && 'success' || 'important' }}
+          COLOR: ${{ steps.check.outputs.coverage_vi == '100.0' && 'green' || 'orange' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
