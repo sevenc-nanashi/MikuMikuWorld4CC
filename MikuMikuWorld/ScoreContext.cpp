@@ -667,6 +667,10 @@ namespace MikuMikuWorld
 				else if (note.flick == FlickType::Right)
 					note.flick = FlickType::Left;
 			}
+			for (auto& [_, note] : pasteData.damages)
+			{
+				note.lane = MAX_LANE - note.lane - note.width + 1;
+			}
 		}
 
 		pasteData.pasting = !(pasteData.notes.empty() && pasteData.damages.empty() &&
