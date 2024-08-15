@@ -1,0 +1,264 @@
+# code: zh
+# key,value
+
+language_name,简体中文
+translator,Guang_Chen_
+
+# menu bar
+file,文件
+new,新建
+open,打开
+open_recent,最近的文件
+clear,清空
+save,保存
+save_as,另存为
+export_sus,导出 SUS
+export_usc,导出 USC
+exit,退出
+edit,编辑
+undo,撤销
+redo,重做
+select_all,全选
+view,视图
+settings,设置
+window,窗口
+vsync,垂直同步 (VSync)
+show_fps,显示 FPS
+debug,调试模式
+create_auto_save,创建自动保存
+help,帮助
+about,关于
+
+# dialogs
+file_not_found,未找到文件
+file_not_found_msg1,未找到
+file_not_found_msg2,文件
+remove_recent_file_not_found,您是否要将其从最近的文件列表中删除?
+yes,是
+no,否
+unsaved_changes,存在未保存的更改
+ask_save,是否保存当前更改?
+warn_unsaved,任何未保存的更改都将丢失。
+save_changes,保存更改
+discard_changes,放弃更改
+update_available,新版本可用!
+update_available_description,新版本 %s 可用。您是否要在浏览器中打开?
+score_file,谱面文件
+error,错误
+error_load_score_file,读取谱面文件时出错!
+error_load_music_file,无法打开音乐文件!
+cancel,取消
+general,常规
+key_config,按键配置
+language,语言
+auto,自动
+auto_save,自动保存
+auto_save_enable,启用自动保存
+auto_save_interval,自动保存间隔 (分钟)
+auto_save_count,最大自动保存条目数
+accent_color,强调色
+accent_color_help,请选择要应用的强调色。选择最左侧的选项以在下面的设置中进行自定义颜色。
+select_accent_color,自定义颜色
+display_mode,颜色显示方式
+theme,主题
+base_theme,基本主题
+theme_light,亮色
+theme_dark,暗色
+custom_color,自定义颜色
+timeline,时间轴
+match_notes_size_to_timeline,音符大小匹配时间轴
+lane_width,轨道宽度
+notes_height,音符高度
+scrolling,滚动
+scroll_speed_normal,默认滚动速度
+scroll_speed_shift,Shift 键滚动速度
+use_smooth_scroll,启用平滑滚动
+smooth_scroll_time,平滑滚动时间
+return_to_last_tick,暂停时返回上一个刻度
+cursor_auto_scroll,跟随光标滚动
+cursor_auto_scroll_amount,跟随光标滚动数量
+background,背景
+background_image,背景图
+draw_background,绘制背景图
+background_brightnes,背景亮度
+lanes_opacity,轨道透明度
+video,视频
+notes_se,音符音效
+show_tick_in_properties,在属性栏中显示刻度
+translation_by,译者: %s
+
+# score editor
+options,选项
+chart_properties,谱面属性
+note_properties,音符属性
+notes_timeline,音符时间轴
+select,选择
+tap,TAP
+hold,HOLD
+hold_step,HOLD STEP
+flick,FLICK
+critical,CRITICAL
+trace,TRACE
+guide,GUIDE
+damage,DAMAGE
+bpm,更改 BPM
+time_signature,更改拍号
+none,无
+default,默认
+left,左
+right,右
+normal,默认
+hidden,隐藏
+skip,跳过
+linear,线性
+ease_in,渐入
+ease_out,渐出
+ease_in_out,渐入渐出
+ease_out_in,渐出渐入
+delete,删除
+copy,复制
+cut,剪切
+paste,粘贴
+flip_paste,粘贴 (镜像)
+duplicate,重复
+flip_duplicate,重复 (镜像)
+flip,镜像翻转
+note_width,音符宽度
+shrink_down,向下缩小
+shrink_up,向上缩小
+connect_holds,连接 HOLDS
+split_hold,拆分 HOLD
+lerp_hispeeds,插值高速 (Interpolate Hi-Speeds)
+repeat_hold_mids,重复 HOLD STEP
+step_type,HOLD STEP 类型
+ease_type,方向渐变类型
+flick_type,FLICK 类型
+hold_type,HOLD 类型
+fade_type,渐变类型
+metadata,元数据
+title,标题
+designer,设计者
+artist,歌手
+jacket,封面
+lane_extension,拓展轨道
+audio,音频
+music_file,音频文件
+music_offset,音频偏移量
+volume_master,主音量
+volume_bgm,背景音乐音量
+volume_se,音效音量
+statistics,统计
+taps,TAP 数
+flicks,FLICK 数
+holds,HOLD 数
+steps,HOLD STEP 数
+traces,TRACE 数
+total,总计
+combo,COMBO
+goto_measure,跳转到小节
+division,%d 分音符
+division_affix,%d 分音符
+custom,自定义
+custom_division,指定分音符
+snap_mode,捕捉模式
+snap_mode_relative,相对捕捉模式 (Relative Snap)
+snap_mode_absolute,绝对捕捉模式 (Absolute Snap)
+snap_mode_individual_absolute,单独绝对捕捉模式 (Individual Absolute Snap)
+zoom,缩放
+show_step_outlines,显示 HOLD STEP 轮廓
+draw_waveform,显示音频波形
+edit_bpm,编辑节拍 (BPM)
+tick,刻度
+remove,移除
+edit_time_signature,编辑拍号
+measure,小节
+skill,技能
+increase_note_size,增加音符大小
+decrease_note_size,减小音符大小
+hi_speed,高速
+edit_hi_speed,编辑高速
+hi_speed_speed,速度
+fade_none,无渐变效果
+fade_in,渐入
+fade_out,渐出
+guide_color,GUIDE 颜色
+guide_neutral,中性色
+guide_red,红色
+guide_blue,蓝色
+guide_green,绿色
+guide_yellow,黄色
+guide_purple,紫色
+guide_cyan,青色
+guide_black,黑色
+layer,图层
+edit_skill,编辑技能触发
+edit_fever,编辑 Fever 触发
+edit_none,编辑
+edit_event,编辑事件
+beat,节拍
+lane,轨道
+width,宽度
+advanced,高级
+note_properties_note,音符属性
+note_properties_hi_speed,高速属性
+note_properties_hold_note,HOLD 属性
+note_properties_guide,GUIDE 属性
+note_properties_not_selected,未选择音符或高速
+note_properties_many_hold_notes,选择了多个 HOLD 音符
+translated_by,译者: %s
+zoom_tooltip,Ctrl+单击 以编辑值
+
+# preset manager
+presets,预设
+no_presets,无可用预设
+name,名称
+description,描述
+create_preset,创建预设
+search,搜索...
+confirm,确认
+
+# layer manager
+layers,图层
+name,名称
+create_layer,创建图层
+confirm,确认
+show_all_layers,显示所有图层
+layer_rename,重命名
+layer_up,上移
+layer_down,下移
+layer_merge,合并
+layer_delete,删除
+layer_hide,隐藏
+layer_show,显示
+
+# waypoint manager
+waypoints,路径点
+create_waypoint,创建路径点
+edit_waypoint,编辑
+waypoint_name,名称
+
+# commands
+action,动作
+keys,键值
+add,添加
+cmd_key_listen,等待输入按键...
+new_chart,新谱面
+toggle_playback,播放 / 暂停
+cancel_paste,取消粘贴
+stop,停止
+previous_tick,上一刻度
+next_tick,下一刻度
+timeline_select,时间轴 - 切换为 选择
+timeline_tap,时间轴 - 切换为 TAP
+timeline_hold,时间轴 - 切换为 HOLD
+timeline_hold_step,时间轴 - 切换为 HOLD STEP
+timeline_flick,时间轴 - 切换为 FLICK
+timeline_critical,时间轴 - 切换为 CRITICAL
+timeline_trace,时间轴 - 切换为 TRACE
+timeline_guide,时间轴 - 切换为 GUIDE
+timeline_damage,时间轴 - 切换为 DAMAGE
+timeline_bpm,时间轴 - 切换为 更改 BPM
+timeline_time_signature,时间轴 - 切换为 更改拍号
+timeline_hi_speed,时间轴 - 切换为 更改高速
+zoom_in,放大
+zoom_out,缩小

@@ -26,11 +26,12 @@ In addition to the original features of MikuMikuWorld, the following features ar
 ## Translations:
 
 If you want to contribute a translation, please see [the guide](./TRANSLATION.md).
-
--   日本語 (Japanese) by @sevenc_nanashi
--   Español (Spanish) by @mi.honesta.reaccion
--   Русский (Russian) by @\_notfallen\_
--   Tiếng Việt (Vietnamese) by @uwulovecrosshand
+- 日本語 (Japanese) by @sevenc_nanashi
+- Español (Spanish) by @mi.honesta.reaccion
+- Русский (Russian) by @\_notfallen\_
+- Tiếng Việt (Vietnamese) by @uwulovecrosshand
+- 한국어 (Korean) by @fjordic
+- 简体中文 (Simplified Chinese) by @GuangChen2333
 
 ## Requirements:
 

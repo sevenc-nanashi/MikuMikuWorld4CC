@@ -16,9 +16,12 @@ MikuMikuWorldの元の機能に加え、以下の機能が追加されていま�
 
 ## 翻訳：
 翻訳に貢献したい場合は、[ガイド](./TRANSLATION.md)を参照してください。
-- Español（スペイン語）：@mi.honesta.reaccion
-- Русский（ロシア語）：@\_notfallen\_
-- Tiếng Việt（ベトナム語）：@uwulovecrosshand
+- 日本語 (日本語) by @sevenc_nanashi
+- Español (スペイン語) by @mi.honesta.reaccion
+- Русский (ロシア語) by @\_notfallen\_
+- Tiếng Việt (ベトナム語) by @uwulovecrosshand
+- 한국어 (韓国語) by @fjordic
+- 简体中文 (簡体字中国語) by @GuangChen2333
 
 ## 必要な環境：
 - 64bitのWindows 10以上¹
