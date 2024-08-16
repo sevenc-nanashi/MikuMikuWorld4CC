@@ -31,6 +31,7 @@ If you want to contribute a translation, please see [the guide](./TRANSLATION.md
 -   Español (Spanish) by @mi.honesta.reaccion
 -   Русский (Russian) by @\_notfallen\_
 -   Tiếng Việt (Vietnamese) by @uwulovecrosshand
+-   한글 (Korean) by @fjordic
 
 ## Requirements:
 
