@@ -935,19 +935,22 @@ namespace MikuMikuWorld
 						startNote.width = step["size"].get<float>() * 2;
 						score.notes[startNote.ID] = startNote;
 						hold.start.ID = startNote.ID;
-						if (step["ease"].get<std::string>() == "in")
+
+						std::string ease =
+							jsonIO::tryGetValue(step, "ease", std::string("linear"));
+						if (ease == "in")
 						{
 							hold.start.ease = EaseType::EaseIn;
 						}
-						else if (step["ease"].get<std::string>() == "out")
+						else if (ease == "out")
 						{
 							hold.start.ease = EaseType::EaseOut;
 						}
-						else if (step["ease"].get<std::string>() == "inout")
+						else if (ease == "inout")
 						{
 							hold.start.ease = EaseType::EaseInOut;
 						}
-						else if (step["ease"].get<std::string>() == "outin")
+						else if (ease == "outin")
 						{
 							hold.start.ease = EaseType::EaseOutIn;
 						}
@@ -982,19 +985,22 @@ namespace MikuMikuWorld
 						mid.width = step["size"].get<float>() * 2;
 						score.notes[mid.ID] = mid;
 						s.ID = mid.ID;
-						if (step["ease"].get<std::string>() == "in")
+
+						std::string ease =
+							jsonIO::tryGetValue(step, "ease", std::string("linear"));
+						if (ease == "in")
 						{
 							s.ease = EaseType::EaseIn;
 						}
-						else if (step["ease"].get<std::string>() == "out")
+						else if (ease == "out")
 						{
 							s.ease = EaseType::EaseOut;
 						}
-						else if (step["ease"].get<std::string>() == "inout")
+						else if (ease == "inout")
 						{
 							s.ease = EaseType::EaseInOut;
 						}
-						else if (step["ease"].get<std::string>() == "outin")
+						else if (ease == "outin")
 						{
 							s.ease = EaseType::EaseOutIn;
 						}
@@ -1065,19 +1071,22 @@ namespace MikuMikuWorld
 						startNote.ID = nextID++;
 						score.notes[startNote.ID] = startNote;
 						hold.start.ID = startNote.ID;
-						if (step["ease"].get<std::string>() == "in")
+
+						std::string ease =
+							jsonIO::tryGetValue(step, "ease", std::string("linear"));
+						if (ease == "in")
 						{
 							hold.start.ease = EaseType::EaseIn;
 						}
-						else if (step["ease"].get<std::string>() == "out")
+						else if (ease == "out")
 						{
 							hold.start.ease = EaseType::EaseOut;
 						}
-						else if (step["ease"].get<std::string>() == "inout")
+						else if (ease == "inout")
 						{
 							hold.start.ease = EaseType::EaseInOut;
 						}
-						else if (step["ease"].get<std::string>() == "outin")
+						else if (ease == "outin")
 						{
 							hold.start.ease = EaseType::EaseOutIn;
 						}
@@ -1133,19 +1142,22 @@ namespace MikuMikuWorld
 						mid.parentID = hold.start.ID;
 						score.notes[mid.ID] = mid;
 						s.ID = mid.ID;
-						if (step["ease"].get<std::string>() == "in")
+
+						std::string ease =
+							jsonIO::tryGetValue(step, "ease", std::string("linear"));
+						if (ease == "in")
 						{
 							s.ease = EaseType::EaseIn;
 						}
-						else if (step["ease"].get<std::string>() == "out")
+						else if (ease == "out")
 						{
 							s.ease = EaseType::EaseOut;
 						}
-						else if (step["ease"].get<std::string>() == "inout")
+						else if (ease == "inout")
 						{
 							s.ease = EaseType::EaseInOut;
 						}
-						else if (step["ease"].get<std::string>() == "outin")
+						else if (ease == "outin")
 						{
 							s.ease = EaseType::EaseOutIn;
 						}
