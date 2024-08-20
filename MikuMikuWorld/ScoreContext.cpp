@@ -894,12 +894,14 @@ namespace MikuMikuWorld
 		earlierNoteAsMid.ID = nextID++;
 		earlierNoteAsMid.critical = earlierHoldStart.critical;
 		earlierNoteAsMid.parentID = earlierHold.start.ID;
+		earlierNoteAsMid.layer = earlierHoldStart.layer;
 
 		Note laterNoteAsMid =
 		    Note(NoteType::HoldMid, laterNote.tick, laterNote.lane, laterNote.width);
 		laterNoteAsMid.ID = nextID++;
 		laterNoteAsMid.critical = earlierHoldStart.critical;
 		laterNoteAsMid.parentID = earlierHold.start.ID;
+		laterNoteAsMid.layer = earlierHoldStart.layer;
 
 		// Insert new steps to their appropriate containers
 		score.notes[earlierNoteAsMid.ID] = earlierNoteAsMid;
@@ -1046,10 +1048,8 @@ namespace MikuMikuWorld
 		std::sort(sortedSelection.begin(), sortedSelection.end(),
 		          [this](int a, int b) { return score.notes[a].tick < score.notes[b].tick; });
 
-		Note& patternStart = score.notes.at(*sortedSelection.begin());
-		std::reverse(sortedSelection.begin(), sortedSelection.end());
-		Note& patternEnd = score.notes.at(*sortedSelection.begin());
-		std::reverse(sortedSelection.begin(), sortedSelection.end());
+		Note& patternStart = score.notes.at(sortedSelection.front());
+		Note& patternEnd = score.notes.at(sortedSelection.back());
 
 		// TODO: Check this in ScoreEditorTimeline too (Otherwise it will become so unfriendly)
 		/* if (patternStart.width != patternEnd.width) */
@@ -1104,6 +1104,7 @@ namespace MikuMikuWorld
 				nextMid.critical = patternStart.critical;
 
 				nextMid.parentID = hold.start.ID;
+				nextMid.layer = currentRep.layer;
 
 				nextMid.ID = nextID++;
 				score.notes[nextMid.ID] = nextMid;
