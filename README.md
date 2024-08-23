@@ -7,6 +7,7 @@
 [![](https://byob.yarr.is/sevenc-nanashi/MikuMikuWorld4CC/coverage-kr)](./MikuMikuWorld/res/i18n/kr.csv)
 [![](https://byob.yarr.is/sevenc-nanashi/MikuMikuWorld4CC/coverage-ru)](./MikuMikuWorld/res/i18n/ru.csv)
 [![](https://byob.yarr.is/sevenc-nanashi/MikuMikuWorld4CC/coverage-vi)](./MikuMikuWorld/res/i18n/vi.csv)
+[![](https://byob.yarr.is/sevenc-nanashi/MikuMikuWorld4CC/coverage-tr)](./MikuMikuWorld/res/i18n/tr.csv)
 
 Fork of [MikuMikuWorld](https://github.com/crash5band/MikuMikuWorld) for [Chart Cyanvas](https://github.com/sevenc-nanashi/chart_cyanvas).
 
@@ -32,6 +33,7 @@ If you want to contribute a translation, please see [the guide](./TRANSLATION.md
 -   Русский (Russian) by @\_notfallen\_
 -   Tiếng Việt (Vietnamese) by @uwulovecrosshand
 -   한글 (Korean) by @fjordic
+-   Türkçe (Turkish) by @sctech-tr
 
 ## Requirements:
 
