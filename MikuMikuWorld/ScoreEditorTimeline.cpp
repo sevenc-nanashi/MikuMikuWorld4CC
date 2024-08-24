@@ -358,6 +358,14 @@ namespace MikuMikuWorld
 			                    selectedTickNum >= 3 and selectedStartNum < 2))
 				context.repeatMidsInSelection(context);
 
+			if (ImGui::BeginMenu(getString("hold_to_traces"), context.selectionHasHold())) {
+				if (ImGui::MenuItem(getString("add_traces_for_hold")))
+					context.convertHoldToTraces(division, false);
+				if (ImGui::MenuItem(getString("convert_hold_to_traces")))
+					context.convertHoldToTraces(division, true);
+				ImGui::EndMenu();
+			}
+
 			ImGui::Separator();
 			if (ImGui::MenuItem(getString("lerp_hispeeds"), NULL, false,
 			                    context.selectedHiSpeedChanges.size() >= 2))

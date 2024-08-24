@@ -125,6 +125,7 @@ namespace MikuMikuWorld
 		}
 
 		bool selectionHasEase() const;
+		bool selectionHasHold() const;
 		bool selectionHasStep() const;
 		bool selectionHasFlickable() const;
 		bool selectionCanConnect() const;

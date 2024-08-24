@@ -1296,6 +1296,12 @@ namespace MikuMikuWorld
 		                   [this](const int id) { return score.notes.at(id).hasEase(); });
 	}
 
+	bool ScoreContext::selectionHasHold() const
+	{
+		return std::any_of(selectedNotes.begin(), selectedNotes.end(),
+						   [this](int id) { return score.notes.at(id).getType() == NoteType::Hold; });
+	}
+
 	bool ScoreContext::selectionHasStep() const
 	{
 		return std::any_of(selectedNotes.begin(), selectedNotes.end(),
