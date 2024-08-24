@@ -1,0 +1,266 @@
+# code: tr
+# key, value
+
+language_name, Turkish
+translator, sctech-tr
+
+# menu bar
+file, Dosya
+new, Yeni
+open, Aç
+open_recent, Yakin zamanda düzenlenmis dosyayi aç
+clear, Temizle
+save, Kaydet
+save_as, Farkli Kaydet
+export_sus, SUS olarak disari aktar...
+export_usc, USC olarak disari aktar...
+exit, Çik
+edit, Düzenle
+undo, Geri al
+redo, Ileri al
+select_all, Hepsini seç
+view, Görüntüle
+settings, Ayarlar
+window, Pencere
+vsync, VSync
+show_fps, FPS'i göster
+debug, Hata ayiklama
+create_auto_save, Otomatik kaydet
+help, Yardim
+about, Hakkinda
+
+# dialogs
+file_not_found, Dosya bulunamadi
+file_not_found_msg1, Dosya
+file_not_found_msg2, bulunamadi
+remove_recent_file_not_found, En son açilanlar listesinden kaldirmak istiyor musunuz?
+yes, Evet
+no, Hayir
+unsaved_changes, Kaydedilmemis degisiklikler
+ask_save, Degisiklikler kaydedilsin mi?
+warn_unsaved, Kaydedilmeyen degisiklikler kaybolacaktir.
+save_changes, Degisiklikleri kaydet
+discard_changes, Degisiklikleri saklama
+update_available, Yeni bir versiyon kullanilabilir!
+update_available_description, %s mevcuttur. Tarayicinizda açmak ister misiniz?
+score_file, Puan dosyasi
+error, Hata
+error_load_score_file, Puan dosyasini okurken bir hata olustu
+error_load_music_file, Müzik dosyasi açilamiyor
+cancel, Iptal
+general, Genel
+key_config, Tus konfigurasyonu
+language, Lisan
+minify_usc, USC'yi küçültün
+show_sus_export, SUS seklinde disari aktarmaya izin verin
+auto, Otomatik
+auto_save, Otomatik kayit
+auto_save_enable, Otomatik kayit açildi
+auto_save_interval, Otomatik kayit arasi (dk)
+auto_save_count, Maksimum otomatik kayit limiti
+accent_color, Vurgu rengi
+accent_color_help, Bir vurgu rengi seçin. Ilk slot asagidaki renk kontrollerinden özellestirilebilir.
+select_accent_color, Bir vurgu rengi seçin.
+display_mode, Görünüm modu
+theme, Tema
+base_theme, Temel tema
+theme_light, Açik
+theme_dark, Koyu
+custom_color, Özel renk
+timeline, Zaman çizelgesi
+match_notes_size_to_timeline, Not boyutunu zaman çizelgesinin genisligine göre eslestir
+lane_width, Yol genisligi
+notes_height, Not yüksekligi
+scrolling, Kaydirma
+scroll_speed_normal, Kaydirma Hizi
+scroll_speed_shift, Kaydirma Hizi (Shift)
+use_smooth_scroll, Yumusak kaydirmayi kullan
+smooth_scroll_time, Yumusak kaydirma süresi
+return_to_last_tick, Duraklatildiginda Son Tikiye Dön
+cursor_auto_scroll, Imleç Otomatik Kaydirma
+cursor_auto_scroll_amount, Imleç Otomatik Kaydirma Yüzdesi
+background, Arka plan
+background_image, Arka plan resmi
+draw_background, Arka plan resmini çiz
+background_brightnes, Arka Plan Parlakligi
+lanes_opacity, Yol Opakligi
+video, Video
+notes_se, Not SE
+show_tick_in_properties, Not Özellikleri Penceresinde Tik Göster
+translation_by, Çeviren: %s
+
+# score editor
+options, Seçenekler
+chart_properties, Grafik Özellikleri
+note_properties, Nota Özellikleri
+notes_timeline, Notalar Zaman Çizelgesi
+select, Seç
+tap, Dokun
+hold, Basili Tut
+hold_step, Ortasina Basili Tut
+flick, Firlat
+critical, Kritik
+trace, Iz
+guide, Kilavuz
+damage, Hasar
+bpm, BPM
+time_signature, Zaman Imzasi
+none, Yok
+default, Varsayilan
+left, Sol
+right, Sag
+normal, Normal
+hidden, Gizli
+skip, Atlama
+linear, Lineer
+ease_in, Yavasça Gir
+ease_out, Yavasça Çik
+ease_in_out, Yavasça Gir ve Çik
+ease_out_in, Yavasça Çik ve Gir
+delete, Sil
+copy, Kopyala
+cut, Kes
+paste, Yapistir
+flip_paste, Çevir ve Yapistir
+duplicate, Kopyasini Olustur
+flip_duplicate, Çevir ve Kopyasini Olustur
+flip, Çevir
+note_width, Nota Genisligi
+shrink_down, Küçült
+shrink_up, Büyüt
+connect_holds, Basili Tutma Bagla
+split_hold, Basili Tutmayi Böl
+lerp_hispeeds, Hi-Speed'leri Arastir
+repeat_hold_mids, Basili Tutma Ortalarini Tekrarla
+step_type, Basili Tutma Türü
+ease_type, Yavaslama Türü
+flick_type, Firlatma Türü
+hold_type, Basili Tutma Türü
+fade_type, Solma Türü
+metadata, Meta veri
+title, Baslik
+designer, Tasarimci
+artist, Sanatçi
+jacket, Kapak
+lane_extension, Yol Uzantisi
+audio, Ses
+music_file, Müzik Dosyasi
+music_offset, Müzik Kaydirma
+volume_master, Ana Ses
+volume_bgm, BGM Ses
+volume_se, SE Ses
+statistics, Istatistikler
+taps, Dokunuslar
+flicks, Firlatmalar
+holds, Basili Tutmalar
+steps, Basili Tutma Ortalari
+traces, Izler
+total, Toplam
+combo, Kombinasyon
+goto_measure, Ölçüye Git
+division, %d Bölüm
+division_affix, %d Bölüm
+custom, Özellestir
+custom_division, Özellestirilmis Bölüm
+snap_mode, Snap
+snap_mode_relative, Göreceli Snap
+snap_mode_absolute, Mutlak Snap
+snap_mode_individual_absolute, Bireysel Mutlak Snap
+zoom, Yakinlastir
+show_step_outlines, Basili Tutma Ortasi Çizgilerini Göster
+draw_waveform, Dalga Formunu Göster
+edit_bpm, BPM'i Düzenle
+tick, Tik
+remove, Kaldir
+edit_time_signature, Zaman Imzasini Düzenle
+measure, Ölçü
+skill, Beceri
+increase_note_size, Nota Boyutunu Artir
+decrease_note_size, Nota Boyutunu Azalt
+hi_speed, Hi-Speed
+edit_hi_speed, Hi-Speed Düzenle
+hi_speed_speed, Hiz
+fade_none, Solma Yok
+fade_in, Solmaya Basla
+fade_out, Solmayi Bitir
+guide_color, Kilavuz Rengi
+guide_neutral, Nötr
+guide_red, Kirmizi
+guide_blue, Mavi
+guide_green, Yesil
+guide_yellow, Sari
+guide_purple, Mor
+guide_cyan, Camgöbegi
+guide_black, Siyah
+layer, Katman
+edit_skill, Beceri Tetikleyicisini Düzenle
+edit_fever, FEVER Tetikleyicisini Düzenle
+edit_none, Düzenle
+edit_event, Olayi Düzenle
+beat, Vurus
+lane, Yol
+width, Genislik
+advanced, Gelismis
+note_properties_note, Nota Özellikleri
+note_properties_hi_speed, Hi-Speed Özellikleri
+note_properties_hold_note, Basili Tutma Nota Özellikleri
+note_properties_guide, Kilavuz Özellikleri
+note_properties_not_selected, Hi-Speed'ler veya notalar seçilmedi
+note_properties_many_hold_notes, Birden fazla basili tutma notasi seçildi
+translated_by, Çeviren: %s
+zoom_tooltip, Ctrl-tiklayarak degeri düzenleyin
+
+# preset manager
+presets, Ön Ayarlar
+no_presets, Ön ayar mevcut degil
+name, Isim
+description, Açiklama
+create_preset, Ön Ayar Olustur
+search, Ara...
+confirm, Onayla
+
+# layer manager
+layers, Katmanlar
+name, Isim
+create_layer, Katman Olustur
+confirm, Onayla
+show_all_layers, Tüm Katmanlari Göster
+layer_rename, Katmani Yeniden Adlandir
+layer_up, Yukari Tasi
+layer_down, Asagi Tasi
+layer_merge, Katmani Birlestir
+layer_delete, Katmani Sil
+layer_hide, Katmani Gizle
+layer_show, Katmani Göster
+
+# waypoint manager
+waypoints, Noktalar
+create_waypoint, Nokta Olustur
+edit_waypoint, Noktayi Düzenle
+waypoint_name, Isim
+
+# commands
+action, Eylem
+keys, Tuslar
+add, Ekle
+cmd_key_listen, Girdi bekleniyor...
+new_chart, Yeni Grafik
+toggle_playback, Oynat / Duraklat
+cancel_paste, Yapistirmayi Iptal Et
+stop, Durdur
+previous_tick, Önceki Tik
+next_tick, Sonraki Tik
+timeline_select, Zaman Çizelgesi - Seç
+timeline_tap, Zaman Çizelgesi - Dokunus Ekle
+timeline_hold, Zaman Çizelgesi - Basili Tut Ekle
+timeline_hold_step, Zaman Çizelgesi - Basili Tut Orta Ekle
+timeline_flick, Zaman Çizelgesi - Firlatma Ekle
+timeline_critical, Zaman Çizelgesi - Kritik Ekle
+timeline_trace, Zaman Çizelgesi - Iz Ekle
+timeline_guide, Zaman Çizelgesi - Kilavuz Ekle
+timeline_damage, Zaman Çizelgesi - Hasar Ekle
+timeline_bpm, Zaman Çizelgesi - BPM Ekle
+timeline_time_signature, Zaman Çizelgesi - Zaman Imzasi Ekle
+timeline_hi_speed, Zaman Çizelgesi - Hi-Speed Degisikligi Ekle
+zoom_in, Yakinlastir
+zoom_out, Uzaklastir
