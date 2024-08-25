@@ -1140,15 +1140,16 @@ namespace MikuMikuWorld
 
 		// Here, `slide` refers to a normal hold note or a guide note
 		for (int target_slide_id : selectedNotes) {
-			if (score.notes[target_slide_id].getType() != NoteType::Hold) continue;
+			if (!score.notes.count(target_slide_id)) continue;
+			if (score.notes.at(target_slide_id).getType() != NoteType::Hold) continue;
 
-			const HoldNote& target = score.holdNotes[target_slide_id];
-			const Note& hold_start = score.notes[target_slide_id];
-			int end_tick = score.notes[target.end].tick;
+			const HoldNote& target = score.holdNotes.at(target_slide_id);
+			const Note& hold_start = score.notes.at(target_slide_id);
+			int end_tick = score.notes.at(target.end).tick;
 
 			int connector_tail_index = -1;
 			EaseType connector_type(EaseType::Linear);
-			const Note* connector_head = &score.notes[target_slide_id];
+			const Note* connector_head = &score.notes.at(target_slide_id);
 			const Note* connector_tail = connector_head;
 			bool critical = connector_head->critical ||
 							(target.isGuide() && target.guideColor == GuideColor::Yellow);
@@ -1168,7 +1169,7 @@ namespace MikuMikuWorld
 					connector_type = target[connector_tail_index].ease;
 					for (connector_tail_index++; connector_tail_index < target.steps.size(); connector_tail_index++) {
 						if (target[connector_tail_index].type != HoldStepType::Skip) {
-							const Note& potential_tail = score.notes[target.id_at(connector_tail_index)];
+							const Note& potential_tail = score.notes.at(target.id_at(connector_tail_index));
 							// If the current tick is late enough, it is the new connector tail
 							if (potential_tail.tick >= tick) break;
 							// Otherwise, this is a connector head later than the previous one
@@ -1177,7 +1178,7 @@ namespace MikuMikuWorld
 						}
 					}
 					// Note that connector_tail might be the slide end
-					connector_tail = &score.notes[target.id_at(connector_tail_index)];
+					connector_tail = &score.notes.at(target.id_at(connector_tail_index));
 				}
 
 				// Calculate the trace's position and width
@@ -1190,7 +1191,7 @@ namespace MikuMikuWorld
 				new_note.ID = nextID;
 				new_note.critical = critical;
 				new_note.friction = true;
-				new_note.layer = score.notes[target_slide_id].layer;
+				new_note.layer = score.notes.at(target_slide_id).layer;
 
 				score.notes.emplace(nextID, new_note);
 				nextID++;
@@ -1198,8 +1199,8 @@ namespace MikuMikuWorld
 
 			// Delete origin slide
 			if (deleteOrigin) {
-				score.notes.erase(target.end);
 				score.notes.erase(target_slide_id);
+				score.notes.erase(target.end);
 				for (const HoldStep& step : target.steps) score.notes.erase(step.ID);
 				score.holdNotes.erase(target_slide_id);
 			}
