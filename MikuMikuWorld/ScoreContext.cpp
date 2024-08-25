@@ -1139,70 +1139,70 @@ namespace MikuMikuWorld
 		int interval = TICKS_PER_BEAT * 4 / division;
 
 		// Here, `slide` refers to a normal hold note or a guide note
-		for (int target_slide_id : selectedNotes) {
-			if (!score.notes.count(target_slide_id)) continue;
-			if (score.notes.at(target_slide_id).getType() != NoteType::Hold) continue;
+		for (int targetSlideId : selectedNotes) {
+			if (!score.notes.count(targetSlideId)) continue;
+			if (score.notes.at(targetSlideId).getType() != NoteType::Hold) continue;
 
-			const HoldNote& target = score.holdNotes.at(target_slide_id);
-			const Note& hold_start = score.notes.at(target_slide_id);
-			int end_tick = score.notes.at(target.end).tick;
+			const HoldNote& target = score.holdNotes.at(targetSlideId);
+			const Note& holdStart = score.notes.at(targetSlideId);
+			int endTick = score.notes.at(target.end).tick;
 
-			int connector_tail_index = -1;
-			EaseType connector_type(EaseType::Linear);
-			const Note* connector_head = &score.notes.at(target_slide_id);
-			const Note* connector_tail = connector_head;
-			bool critical = connector_head->critical ||
+			int connectorTailIndex = -1;
+			EaseType connectorType(EaseType::Linear);
+			const Note* connectorHead = &score.notes.at(targetSlideId);
+			const Note* connectorTail = connectorHead;
+			bool critical = connectorHead->critical ||
 							(target.isGuide() && target.guideColor == GuideColor::Yellow);
 
 			// Find the connector head and tail for each trace note
-			for (int tick = connector_head->tick; tick <= end_tick; tick += interval) {
+			for (int tick = connectorHead->tick; tick <= endTick; tick += interval) {
 				// Do not create trace notes if they will overlap with the hold start or end
 				if (!deleteOrigin) {
-					if (tick == hold_start.tick && target.startType == HoldNoteType::Normal) continue;
-					if (tick == end_tick && target.endType == HoldNoteType::Normal) continue;
+					if (tick == holdStart.tick && target.startType == HoldNoteType::Normal) continue;
+					if (tick == endTick && target.endType == HoldNoteType::Normal) continue;
 				}
 
 				// Update connector endpoints if current time goes beyond them
-				if (tick > connector_tail->tick || connector_tail_index == -1) {
+				if (tick > connectorTail->tick || connectorTailIndex == -1) {
 					// By default, the new connector head is the old connector tail
-					connector_head = connector_tail;
-					connector_type = target[connector_tail_index].ease;
-					for (connector_tail_index++; connector_tail_index < target.steps.size(); connector_tail_index++) {
-						if (target[connector_tail_index].type != HoldStepType::Skip) {
-							const Note& potential_tail = score.notes.at(target.id_at(connector_tail_index));
+					connectorHead = connectorTail;
+					connectorType = target[connectorTailIndex].ease;
+					for (connectorTailIndex++; connectorTailIndex < target.steps.size(); connectorTailIndex++) {
+						if (target[connectorTailIndex].type != HoldStepType::Skip) {
+							const Note& potentialTail = score.notes.at(target.id_at(connectorTailIndex));
 							// If the current tick is late enough, it is the new connector tail
-							if (potential_tail.tick >= tick) break;
+							if (potentialTail.tick >= tick) break;
 							// Otherwise, this is a connector head later than the previous one
-							connector_head = &potential_tail;
-							connector_type = target[connector_tail_index].ease;
+							connectorHead = &potentialTail;
+							connectorType = target[connectorTailIndex].ease;
 						}
 					}
-					// Note that connector_tail might be the slide end
-					connector_tail = &score.notes.at(target.id_at(connector_tail_index));
+					// Note that connectorTail might be the slide end
+					connectorTail = &score.notes.at(target.id_at(connectorTailIndex));
 				}
 
 				// Calculate the trace's position and width
-				float t = (float)(tick - connector_head->tick) / (connector_tail->tick - connector_head->tick);
-				auto ease_func = getEaseFunction(connector_type);
-				float left = ease_func(connector_head->lane, connector_tail->lane, t);
-				float right = ease_func(connector_head->lane+connector_head->width, connector_tail->lane+connector_tail->width, t);
+				float t = (float)(tick - connectorHead->tick) / (connectorTail->tick - connectorHead->tick);
+				auto easeFunc = getEaseFunction(connectorType);
+				float left = easeFunc(connectorHead->lane, connectorTail->lane, t);
+				float right = easeFunc(connectorHead->lane+connectorHead->width, connectorTail->lane+connectorTail->width, t);
 				// Spawn a trace note
-				Note new_note(NoteType::Tap, tick, left, right - left);
-				new_note.ID = nextID;
-				new_note.critical = critical;
-				new_note.friction = true;
-				new_note.layer = score.notes.at(target_slide_id).layer;
+				Note newNote(NoteType::Tap, tick, left, right - left);
+				newNote.ID = nextID;
+				newNote.critical = critical;
+				newNote.friction = true;
+				newNote.layer = score.notes.at(targetSlideId).layer;
 
-				score.notes.emplace(nextID, new_note);
+				score.notes.emplace(nextID, newNote);
 				nextID++;
 			}
 
 			// Delete origin slide
 			if (deleteOrigin) {
-				score.notes.erase(target_slide_id);
+				score.notes.erase(targetSlideId);
 				score.notes.erase(target.end);
 				for (const HoldStep& step : target.steps) score.notes.erase(step.ID);
-				score.holdNotes.erase(target_slide_id);
+				score.holdNotes.erase(targetSlideId);
 			}
 		}
 
