@@ -1150,7 +1150,10 @@ namespace MikuMikuWorld
 			EaseType connector_type(EaseType::Linear);
 			const Note* connector_head = &score.notes[target_slide_id];
 			const Note* connector_tail = connector_head;
-			bool critical = connector_head->critical;
+			bool critical = connector_head->critical ||
+							(target.isGuide() && target.guideColor == GuideColor::Yellow);
+
+			// Find the connector head and tail for each trace note
 			for (int tick = connector_head->tick; tick <= end_tick; tick += interval) {
 				// Do not create trace notes if they will overlap with the hold start or end
 				if (!deleteOrigin) {
