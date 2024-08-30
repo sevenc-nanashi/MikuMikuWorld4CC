@@ -54,6 +54,8 @@ cancel, Отмена
 general, Общий
 key_config, Конфигурация клавиш
 language, Язык
+minify_usc, Минифицировать USC
+show_sus_export, Включить экспортивание SUS
 auto, Авто
 auto_save, Авто-сохранение
 auto_save_enable, Авто-сохранение включено
@@ -90,6 +92,7 @@ vsync_enable, VSync
 notes_se, Звуковой эффект нот
 advanced, Продвинутое
 show_tick_in_properties, Показывать тик в характеристиках
+translation_by, Перевод от %s
 
 # score editor / Редактор уровня
 chart_properties, Характеристики чарта
@@ -166,6 +169,10 @@ division, Деление %d
 division_affix, %d Делений
 custom, Кастом
 custom_division, Кастомное деление
+snap_mode, Snapping
+snap_mode_relative, Похожий Snap
+snap_mode_absolute, Абсолютный Snap
+snap_mode_individual_absolute, Индивидуальный Абсолютный Snap
 zoom, Приблизить
 show_step_outlines, Показать контуры шагов
 draw_waveform, Показать форму волны
@@ -206,6 +213,8 @@ note_properties_hi_speed, Характеристики Hi-Speed
 note_properties_hold_note, Характеристики холд ноты
 note_properties_guide, Характеристики гайд ноты
 note_properties_not_selected, Никаких нот или Hi-Speed не было выбрано
+translated_by, Перевод от: %s
+zoom_tooltip, Ctrl-клик чтобы изменить значение
 
 # preset manager / менеджер пресетов
 presets, Пресеты
@@ -227,6 +236,8 @@ layer_up, Передвинуть вверх
 layer_down, Передвинуть вниз
 layer_merge, Соединить слой
 layer_delete, Удалить слой
+layer_hide, Спрятать слой
+layer_show, Показать слой
 
 # waypoint manager / менеджер меток
 waypoints, Метки
