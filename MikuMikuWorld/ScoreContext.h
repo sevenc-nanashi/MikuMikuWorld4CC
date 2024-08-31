@@ -125,6 +125,7 @@ namespace MikuMikuWorld
 		}
 
 		bool selectionHasEase() const;
+		bool selectionHasHold() const;
 		bool selectionHasStep() const;
 		bool selectionHasFlickable() const;
 		bool selectionCanConnect() const;
@@ -166,6 +167,12 @@ namespace MikuMikuWorld
 		void connectHoldsInSelection();
 		void splitHoldInSelection();
 		void repeatMidsInSelection(ScoreContext& context);
+		/**
+		 * @brief Convert normal holds or guide notes within selection into traces
+		 * @param division Current division. Used to determine the ticks between two trace notes
+		 * @param deleteOrigin Delete the original hold notes or not
+		 */
+		void convertHoldToTraces(int division, bool deleteOrigin);
 
 		void lerpHiSpeeds(int division);
 

@@ -130,6 +130,9 @@ shrink_down, 縮める（最初に合わせる）
 shrink_up, 縮める（最後に合わせる）
 connect_holds, 連結
 split_hold, 切断
+hold_to_traces, トレースに変換
+add_traces_for_hold, トレースを追加
+convert_hold_to_traces, トレースに変換
 lerp_hispeeds, ハイスピードを補間
 repeat_hold_mids, 中継点を繰り返す
 step_type, 中継点の種類

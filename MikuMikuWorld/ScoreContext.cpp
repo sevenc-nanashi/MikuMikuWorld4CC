@@ -1131,6 +1131,85 @@ namespace MikuMikuWorld
 		pushHistory("Repeat hold mids", prev, score);
 	}
 
+	void ScoreContext::convertHoldToTraces(int division, bool deleteOrigin) {
+		// Prepare history
+		Score prev = score;
+
+		// beats-per-measure hardcoded to 4
+		int interval = TICKS_PER_BEAT * 4 / division;
+
+		// Here, `slide` refers to a normal hold note or a guide note
+		for (int targetSlideId : selectedNotes) {
+			if (!score.notes.count(targetSlideId)) continue;
+			if (score.notes.at(targetSlideId).getType() != NoteType::Hold) continue;
+
+			const HoldNote& target = score.holdNotes.at(targetSlideId);
+			const Note& holdStart = score.notes.at(targetSlideId);
+			int endTick = score.notes.at(target.end).tick;
+
+			int connectorTailIndex = -1;
+			EaseType connectorType(EaseType::Linear);
+			const Note* connectorHead = &score.notes.at(targetSlideId);
+			const Note* connectorTail = connectorHead;
+			bool critical = connectorHead->critical ||
+							(target.isGuide() && target.guideColor == GuideColor::Yellow);
+
+			// Find the connector head and tail for each trace note
+			for (int tick = connectorHead->tick; tick <= endTick; tick += interval) {
+				// Do not create trace notes if they will overlap with the hold start or end
+				if (!deleteOrigin) {
+					if (tick == holdStart.tick && target.startType == HoldNoteType::Normal) continue;
+					if (tick == endTick && target.endType == HoldNoteType::Normal) continue;
+				}
+
+				// Update connector endpoints if current time goes beyond them
+				if (tick > connectorTail->tick || connectorTailIndex == -1) {
+					// By default, the new connector head is the old connector tail
+					connectorHead = connectorTail;
+					connectorType = target[connectorTailIndex].ease;
+					for (connectorTailIndex++; connectorTailIndex < target.steps.size(); connectorTailIndex++) {
+						if (target[connectorTailIndex].type != HoldStepType::Skip) {
+							const Note& potentialTail = score.notes.at(target.id_at(connectorTailIndex));
+							// If the current tick is late enough, it is the new connector tail
+							if (potentialTail.tick >= tick) break;
+							// Otherwise, this is a connector head later than the previous one
+							connectorHead = &potentialTail;
+							connectorType = target[connectorTailIndex].ease;
+						}
+					}
+					// Note that connectorTail might be the slide end
+					connectorTail = &score.notes.at(target.id_at(connectorTailIndex));
+				}
+
+				// Calculate the trace's position and width
+				float t = (float)(tick - connectorHead->tick) / (connectorTail->tick - connectorHead->tick);
+				auto easeFunc = getEaseFunction(connectorType);
+				float left = easeFunc(connectorHead->lane, connectorTail->lane, t);
+				float right = easeFunc(connectorHead->lane+connectorHead->width, connectorTail->lane+connectorTail->width, t);
+				// Spawn a trace note
+				Note newNote(NoteType::Tap, tick, left, right - left);
+				newNote.ID = nextID;
+				newNote.critical = critical;
+				newNote.friction = true;
+				newNote.layer = score.notes.at(targetSlideId).layer;
+
+				score.notes.emplace(nextID, newNote);
+				nextID++;
+			}
+
+			// Delete origin slide
+			if (deleteOrigin) {
+				score.notes.erase(targetSlideId);
+				score.notes.erase(target.end);
+				for (const HoldStep& step : target.steps) score.notes.erase(step.ID);
+				score.holdNotes.erase(targetSlideId);
+			}
+		}
+
+		selectedNotes.clear();
+		pushHistory("Convert slides into traces", prev, score);
+	}
+
 	void ScoreContext::lerpHiSpeeds(int division)
 	{
 		if (selectedHiSpeedChanges.size() < 2)
@@ -1219,6 +1298,12 @@ namespace MikuMikuWorld
 	{
 		return std::any_of(selectedNotes.begin(), selectedNotes.end(),
 		                   [this](const int id) { return score.notes.at(id).hasEase(); });
+	}
+
+	bool ScoreContext::selectionHasHold() const
+	{
+		return std::any_of(selectedNotes.begin(), selectedNotes.end(),
+						   [this](int id) { return score.notes.at(id).getType() == NoteType::Hold; });
 	}
 
 	bool ScoreContext::selectionHasStep() const
