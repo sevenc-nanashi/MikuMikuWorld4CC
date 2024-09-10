@@ -3,6 +3,7 @@
 #include "ApplicationConfiguration.h"
 #include "Constants.h"
 #include "File.h"
+#include "NoteTypes.h"
 #include "ScoreContext.h"
 #include "UI.h"
 #include "Utilities.h"
@@ -264,7 +265,13 @@ namespace MikuMikuWorld
 						{
 							auto& hold = context.score.holdNotes.at(
 							    localNote.parentID == -1 ? id : localNote.parentID);
-							if (hold.isGuide())
+							if (!((localNote.getType() == NoteType::Hold &&
+							       hold.startType == HoldNoteType::Normal) ||
+							      (localNote.getType() == NoteType::HoldMid &&
+							       hold.steps.at(findHoldStep(hold, localNote.ID)).type ==
+							           HoldStepType::Normal) ||
+							      (localNote.getType() == NoteType::HoldEnd &&
+							       hold.endType == HoldNoteType::Normal)))
 							{
 								localNote.width = std::max(0.0f, note.width);
 								continue;
