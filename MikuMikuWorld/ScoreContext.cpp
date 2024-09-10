@@ -705,7 +705,9 @@ namespace MikuMikuWorld
 		{
 			if (noteIDMap.find(oldID) != noteIDMap.end())
 				return noteIDMap[oldID];
-			return nextID++;
+			auto id = nextID++;
+			noteIDMap[oldID] = id;
+			return id;
 		};
 
 		// update IDs and copy notes
@@ -713,7 +715,7 @@ namespace MikuMikuWorld
 		{
 			note.ID = getNewID(note.ID);
 			if (note.parentID != -1)
-				note.parentID += getNewID(note.parentID);
+				note.parentID = getNewID(note.parentID);
 
 			note.lane += pasteData.offsetLane;
 			note.tick += pasteData.offsetTicks;
@@ -723,9 +725,9 @@ namespace MikuMikuWorld
 
 		for (auto& [_, note] : pasteData.damages)
 		{
-			note.ID += getNewID(note.ID);
+			note.ID = getNewID(note.ID);
 			if (note.parentID != -1)
-				note.parentID += getNewID(note.parentID);
+				note.parentID = getNewID(note.parentID);
 
 			note.lane += pasteData.offsetLane;
 			note.tick += pasteData.offsetTicks;
@@ -734,17 +736,17 @@ namespace MikuMikuWorld
 		}
 		for (auto& [_, hold] : pasteData.holds)
 		{
-			hold.start.ID += getNewID(hold.start.ID);
-			hold.end += getNewID(hold.end);
+			hold.start.ID = getNewID(hold.start.ID);
+			hold.end = getNewID(hold.end);
 			for (auto& step : hold.steps)
-				step.ID += getNewID(step.ID);
+				step.ID = getNewID(step.ID);
 
 			score.holdNotes[hold.start.ID] = hold;
 		}
 
 		for (auto& [_, hsc] : pasteData.hiSpeedChanges)
 		{
-			hsc.ID += nextHiSpeedID;
+			hsc.ID = nextHiSpeedID++;
 			hsc.layer = selectedLayer;
 			hsc.tick += pasteData.offsetTicks;
 			score.hiSpeedChanges[hsc.ID] = hsc;
@@ -763,7 +765,6 @@ namespace MikuMikuWorld
 		               std::inserter(selectedHiSpeedChanges, selectedHiSpeedChanges.end()),
 		               [this](const auto& it) { return it.second.ID; });
 
-		nextHiSpeedID += pasteData.hiSpeedChanges.size();
 		pasteData.pasting = false;
 		pushHistory("Paste notes", prev, score);
 	}
