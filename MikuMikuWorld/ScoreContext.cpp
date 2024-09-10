@@ -4,6 +4,7 @@
 #include "UI.h"
 #include "Utilities.h"
 #include <stdio.h>
+#include <unordered_map>
 #include <vector>
 
 using json = nlohmann::json;
@@ -458,11 +459,9 @@ namespace MikuMikuWorld
 		if (!selectedNotes.empty())
 		{
 			minTick = score.notes
-			              .at(*std::min_element(selectedNotes.begin(), selectedNotes.end(),
-			                                    [this](int id1, int id2) {
-				                                    return score.notes.at(id1).tick <
-				                                           score.notes.at(id2).tick;
-			                                    }))
+			              .at(*std::min_element(
+			                  selectedNotes.begin(), selectedNotes.end(), [this](int id1, int id2)
+			                  { return score.notes.at(id1).tick < score.notes.at(id2).tick; }))
 			              .tick;
 		}
 		if (!selectedHiSpeedChanges.empty())
@@ -700,12 +699,21 @@ namespace MikuMikuWorld
 	{
 		Score prev = score;
 
+		std::unordered_map<int, int> noteIDMap;
+
+		auto getNewID = [this, &noteIDMap](int oldID) -> int
+		{
+			if (noteIDMap.find(oldID) != noteIDMap.end())
+				return noteIDMap[oldID];
+			return nextID++;
+		};
+
 		// update IDs and copy notes
 		for (auto& [_, note] : pasteData.notes)
 		{
-			note.ID += nextID;
+			note.ID = getNewID(note.ID);
 			if (note.parentID != -1)
-				note.parentID += nextID;
+				note.parentID += getNewID(note.parentID);
 
 			note.lane += pasteData.offsetLane;
 			note.tick += pasteData.offsetTicks;
@@ -715,9 +723,9 @@ namespace MikuMikuWorld
 
 		for (auto& [_, note] : pasteData.damages)
 		{
-			note.ID += nextID;
+			note.ID += getNewID(note.ID);
 			if (note.parentID != -1)
-				note.parentID += nextID;
+				note.parentID += getNewID(note.parentID);
 
 			note.lane += pasteData.offsetLane;
 			note.tick += pasteData.offsetTicks;
@@ -726,10 +734,10 @@ namespace MikuMikuWorld
 		}
 		for (auto& [_, hold] : pasteData.holds)
 		{
-			hold.start.ID += nextID;
-			hold.end += nextID;
+			hold.start.ID += getNewID(hold.start.ID);
+			hold.end += getNewID(hold.end);
 			for (auto& step : hold.steps)
-				step.ID += nextID;
+				step.ID += getNewID(step.ID);
 
 			score.holdNotes[hold.start.ID] = hold;
 		}
@@ -755,7 +763,6 @@ namespace MikuMikuWorld
 		               std::inserter(selectedHiSpeedChanges, selectedHiSpeedChanges.end()),
 		               [this](const auto& it) { return it.second.ID; });
 
-		nextID += pasteData.notes.size() + pasteData.damages.size();
 		nextHiSpeedID += pasteData.hiSpeedChanges.size();
 		pasteData.pasting = false;
 		pushHistory("Paste notes", prev, score);
@@ -1220,8 +1227,7 @@ namespace MikuMikuWorld
 		std::vector<int> sortedSelection;
 		sortedSelection.insert(sortedSelection.end(), selectedHiSpeedChanges.begin(),
 		                       selectedHiSpeedChanges.end());
-		std::sort(sortedSelection.begin(), sortedSelection.end(),
-		          [this](int a, int b)
+		std::sort(sortedSelection.begin(), sortedSelection.end(), [this](int a, int b)
 		          { return score.hiSpeedChanges[a].tick < score.hiSpeedChanges[b].tick; });
 
 		for (int i = 0; i < sortedSelection.size() - 1; i++)
@@ -1308,8 +1314,7 @@ namespace MikuMikuWorld
 
 	bool ScoreContext::selectionHasStep() const
 	{
-		return std::any_of(selectedNotes.begin(), selectedNotes.end(),
-		                   [this](const int id)
+		return std::any_of(selectedNotes.begin(), selectedNotes.end(), [this](const int id)
 		                   { return score.notes.at(id).getType() == NoteType::HoldMid; });
 	}
 
