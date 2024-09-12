@@ -136,6 +136,7 @@ namespace MikuMikuWorld
 			if (latestVersionPart > currentVersionPart)
 			{
 				std::cout << "Update available" << std::endl;
+				updateAvailableDialog.latestVersion = latestVersionString;
 				updateAvailableDialog.open = true;
 				return;
 			}
