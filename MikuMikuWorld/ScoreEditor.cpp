@@ -230,6 +230,8 @@ namespace MikuMikuWorld
 				context.shrinkSelection(Direction::Down);
 			if (ImGui::IsAnyPressed(config.input.shrinkUp))
 				context.shrinkSelection(Direction::Up);
+			if (ImGui::IsAnyPressed(config.input.compressSelection))
+				context.compressSelection();
 			if (ImGui::IsAnyPressed(config.input.connectHolds))
 				context.connectHoldsInSelection();
 			if (ImGui::IsAnyPressed(config.input.splitHold))
