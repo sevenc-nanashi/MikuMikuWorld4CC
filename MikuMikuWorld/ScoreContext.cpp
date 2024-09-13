@@ -4,6 +4,7 @@
 #include "UI.h"
 #include "Utilities.h"
 #include <stdio.h>
+#include <map>
 #include <unordered_map>
 #include <vector>
 
@@ -851,6 +852,98 @@ namespace MikuMikuWorld
 			sortHoldSteps(score, score.holdNotes.at(hold));
 
 		pushHistory("Shrink notes", prev, score);
+	}
+
+	void ScoreContext::compressSelection()
+	{
+		enum class Type
+		{
+			Note,
+			HiSpeed
+		};
+
+		Score prev = score;
+
+		std::map<int, std::vector<std::pair<Type, int>>> selection;
+		for (auto noteID : selectedNotes)
+		{
+			int tick = score.notes.at(noteID).tick;
+			selection[tick].push_back({ Type::Note, noteID });
+		}
+		for (auto hscID : selectedHiSpeedChanges)
+		{
+			int tick = score.hiSpeedChanges.at(hscID).tick;
+			selection[tick].push_back({ Type::HiSpeed, hscID });
+		}
+
+		if (selection.size() < 2)
+			return;
+
+		// TODO: Get the starting hi-speed
+		float initialHiSpeed = 1.0;
+		float currentHiSpeed = initialHiSpeed;
+		auto it = selection.begin();
+		int firstTick = it->first;
+		for (size_t i = 0; i < selection.size(); i++)
+		{
+			auto elements = &(it->second);
+			auto next = std::next(it);
+			int newTick = firstTick + i;
+			// Shrink notes
+			for (size_t j = 0; j < elements->size(); j++)
+			{
+				if (elements->at(j).first == Type::Note)
+				{
+					Note& note = score.notes.at(elements->at(j).second);
+					note.tick = newTick;
+				}
+				else
+				{
+					// Handle the Hi-Speed change
+					HiSpeedChange& hsc = score.hiSpeedChanges.at(elements->at(j).second);
+					currentHiSpeed = hsc.speed;
+
+				}
+			}
+			// Add Hi-Speed
+			auto id = ++nextHiSpeedID;
+			this->score.hiSpeedChanges[id].ID = id;
+			this->score.hiSpeedChanges[id].tick = newTick;
+			if (elements->front().first == Type::Note)
+			{
+				Note& note = score.notes.at(elements->front().second);
+				this->score.hiSpeedChanges[id].layer = note.layer;
+			}
+			else
+			{
+				HiSpeedChange& hsc = score.hiSpeedChanges.at(elements->front().second);
+				this->score.hiSpeedChanges[id].layer = hsc.layer;
+			}
+			if (i == selection.size() - 1)
+				this->score.hiSpeedChanges[id].speed = initialHiSpeed;
+
+			else
+				this->score.hiSpeedChanges[id].speed = (next->first - it->first) * currentHiSpeed;
+
+			// Erase other Hi-Speed changes
+			for (size_t j = 0; j < elements->size(); j++)
+			{
+				if (elements->at(j).first == Type::HiSpeed)
+				{
+					// Erase the Hi-Speed change and deselect it
+					score.hiSpeedChanges.erase(elements->at(j).second);
+					selectedHiSpeedChanges.erase(elements->at(j).second);
+				}
+			}
+
+			it = next;
+		}
+
+		const std::unordered_set<int> holds = getHoldsFromSelection();
+		for (const auto& hold : holds)
+			sortHoldSteps(score, score.holdNotes.at(hold));
+
+		pushHistory("Compress notes", prev, score);
 	}
 
 	void ScoreContext::connectHoldsInSelection()
