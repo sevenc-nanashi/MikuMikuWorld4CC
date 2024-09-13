@@ -132,6 +132,7 @@ flip_duplicate, Duplicar volteado
 note_width, Ancho de la nota
 shrink_down, Contraer abajo
 shrink_up, Contraer arriba
+compress_selection, Comprimir seleccionadas
 connect_holds, Conectar holds
 split_hold, Separar holds
 lerp_hispeeds, Interpolar hispeeds
