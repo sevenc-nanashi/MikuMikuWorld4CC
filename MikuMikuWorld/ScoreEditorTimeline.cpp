@@ -333,6 +333,9 @@ namespace MikuMikuWorld
 			if (ImGui::MenuItem(getString("shrink_down"), NULL, false, canShrink))
 				context.shrinkSelection(Direction::Down);
 
+			if (ImGui::MenuItem(getString("compress_selection"), NULL, false, canShrink))
+				context.compressSelection();
+
 			ImGui::Separator();
 			if (ImGui::MenuItem(getString("connect_holds"), NULL, false,
 			                    context.selectionCanConnect()))
