@@ -920,7 +920,7 @@ namespace MikuMikuWorld
 				}
 			}
 			// Add Hi-Speed
-			auto id = ++nextHiSpeedID;
+			int id = nextHiSpeedID++;
 			this->score.hiSpeedChanges[id].ID = id;
 			this->score.hiSpeedChanges[id].tick = newTick;
 			if (elements->front().first == Type::Note)
