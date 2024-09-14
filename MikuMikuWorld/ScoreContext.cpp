@@ -878,12 +878,26 @@ namespace MikuMikuWorld
 
 		if (selection.size() < 2)
 			return;
-
-		// TODO: Get the starting hi-speed
-		float initialHiSpeed = 1.0;
-		float currentHiSpeed = initialHiSpeed;
 		auto it = selection.begin();
+		auto selectedLayer = selectedNotes.size() + selectedHiSpeedChanges.size() >= 1
+		                         ? score.notes.at(*selectedNotes.begin()).layer
+		                         : score.hiSpeedChanges.at(*selectedHiSpeedChanges.begin()).layer;
 		int firstTick = it->first;
+		float hiSpeedAtStart = 1.0;
+		int latestHiSpeedTick = -1;
+		for (auto [id, hsc] : score.hiSpeedChanges)
+		{
+			if (hsc.layer != selectedLayer || hsc.tick > firstTick)
+			{
+				continue;
+			}
+			if (hsc.tick > latestHiSpeedTick)
+			{
+				latestHiSpeedTick = hsc.tick;
+				hiSpeedAtStart = hsc.speed;
+			}
+		}
+		float currentHiSpeed = 1.0;
 		for (size_t i = 0; i < selection.size(); i++)
 		{
 			auto elements = &(it->second);
@@ -920,7 +934,7 @@ namespace MikuMikuWorld
 				this->score.hiSpeedChanges[id].layer = hsc.layer;
 			}
 			if (i == selection.size() - 1)
-				this->score.hiSpeedChanges[id].speed = initialHiSpeed;
+				this->score.hiSpeedChanges[id].speed = hiSpeedAtStart;
 
 			else
 				this->score.hiSpeedChanges[id].speed = (next->first - it->first) * currentHiSpeed;
@@ -935,6 +949,8 @@ namespace MikuMikuWorld
 					selectedHiSpeedChanges.erase(elements->at(j).second);
 				}
 			}
+
+			selectedHiSpeedChanges.insert(id);
 
 			it = next;
 		}
