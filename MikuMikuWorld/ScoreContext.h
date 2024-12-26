@@ -163,6 +163,7 @@ namespace MikuMikuWorld
 		void cancelPaste();
 		void confirmPaste();
 		void shrinkSelection(Direction direction);
+		void compressSelection();
 
 		void connectHoldsInSelection();
 		void splitHoldInSelection();

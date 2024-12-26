@@ -128,6 +128,7 @@ flip,Flip
 note_width,Note Width
 shrink_down,Shrink Down
 shrink_up,Shrink Up
+compress_selection,Compress Selection
 connect_holds,Connect Holds
 split_hold,Split Hold
 lerp_hispeeds,Interpolate Hi-Speeds
