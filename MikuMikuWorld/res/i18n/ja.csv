@@ -128,6 +128,7 @@ flip, 反転
 note_width, ノーツ幅
 shrink_down, 縮める（最初に合わせる）
 shrink_up, 縮める（最後に合わせる）
+compress_selection, 選択範囲を圧縮
 connect_holds, 連結
 split_hold, 切断
 hold_to_traces, トレースに変換
