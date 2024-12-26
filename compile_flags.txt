@@ -1,5 +1,7 @@
 -xc++
 -std=c++17
+-DUNICODE
+-D_UNICODE
 -IDepends
 -IDepends/openssl/include
 -IDepends/glad/include

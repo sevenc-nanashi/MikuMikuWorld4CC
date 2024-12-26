@@ -358,10 +358,11 @@ namespace MikuMikuWorld
 			int selectedTickNum = selectedMidNum + selectedStartNum;
 
 			if (ImGui::MenuItem(getString("repeat_hold_mids"), NULL, false,
-			                    selectedTickNum >= 3 and selectedStartNum < 2))
+			                    selectedTickNum >= 3 && selectedStartNum < 2))
 				context.repeatMidsInSelection(context);
 
-			if (ImGui::BeginMenu(getString("hold_to_traces"), context.selectionHasHold())) {
+			if (ImGui::BeginMenu(getString("hold_to_traces"), context.selectionHasHold()))
+			{
 				if (ImGui::MenuItem(getString("add_traces_for_hold")))
 					context.convertHoldToTraces(division, false);
 				if (ImGui::MenuItem(getString("convert_hold_to_traces")))
