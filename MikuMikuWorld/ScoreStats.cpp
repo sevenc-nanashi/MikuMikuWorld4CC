@@ -13,12 +13,14 @@ namespace MikuMikuWorld
 		resetCombo();
 	}
 
-	void ScoreStats::resetCounts() { taps = flicks = holds = steps = traces = total = 0; }
+	void ScoreStats::resetCounts() { hispeeds = 1; taps = flicks = holds = steps = guides = traces = total = 0; }
 
 	void ScoreStats::resetCombo() { combo = 0; }
 
 	void ScoreStats::calculateStats(const Score& score)
 	{
+		hispeeds = score.hiSpeedChanges.size();
+
 		taps = std::count_if(score.notes.begin(), score.notes.end(),
 		                     [](const auto& n)
 		                     {
@@ -28,11 +30,20 @@ namespace MikuMikuWorld
 		                     });
 
 		holds = std::count_if(score.notes.begin(), score.notes.end(),
-		                      [](const auto& n) { return n.second.getType() == NoteType::Hold; });
+		                      [&](const auto& n) {
+			                      return n.second.getType() == NoteType::Hold &&
+			                             !score.holdNotes.at(n.first).isGuide();
+		                      });
 
 		steps =
 		    std::count_if(score.notes.begin(), score.notes.end(),
 		                  [](const auto& n) { return n.second.getType() == NoteType::HoldMid; });
+
+		guides = std::count_if(score.notes.begin(), score.notes.end(),
+		                       [&](const auto& n) {
+			                       return n.second.getType() == NoteType::Hold &&
+			                              score.holdNotes.at(n.first).isGuide();
+		                       });
 
 		flicks = std::count_if(score.notes.begin(), score.notes.end(),
 		                       [](const auto& n) { return n.second.isFlick(); });

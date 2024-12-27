@@ -106,10 +106,12 @@ namespace MikuMikuWorld
 		        ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			UI::beginPropertyColumns();
+			UI::addReadOnlyProperty(getString("hispeeds"), context.scoreStats.getHiSpeeds());
 			UI::addReadOnlyProperty(getString("taps"), context.scoreStats.getTaps());
 			UI::addReadOnlyProperty(getString("flicks"), context.scoreStats.getFlicks());
 			UI::addReadOnlyProperty(getString("holds"), context.scoreStats.getHolds());
 			UI::addReadOnlyProperty(getString("steps"), context.scoreStats.getSteps());
+			UI::addReadOnlyProperty(getString("guides"), context.scoreStats.getGuides());
 			UI::addReadOnlyProperty(getString("traces"), context.scoreStats.getTraces());
 			UI::addReadOnlyProperty(getString("total"), context.scoreStats.getTotal());
 			UI::addReadOnlyProperty(getString("combo"), context.scoreStats.getCombo());

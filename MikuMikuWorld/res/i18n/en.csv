@@ -154,10 +154,12 @@ volume_master,Master Volume
 volume_bgm,BGM Volume
 volume_se,SE Volume
 statistics,Statistics
+hispeeds,Hi-Speeds
 taps,Taps
 flicks,Flicks
 holds,Holds
 steps,Hold Mids
+guides,Guides
 traces,Traces
 total,Total
 combo,Combo
