@@ -379,6 +379,15 @@ namespace MikuMikuWorld
 					}
 					edited = true;
 				}
+				if (UI::addCheckboxProperty(getString("no_input"), note.noInput))
+				{
+					for (auto& id : context.selectedNotes)
+					{
+						auto& n = context.score.notes.at(id);
+						n.noInput = note.noInput;
+					}
+					edited = true;
+				}
 				if (UI::addFlickSelectPropertyWithNone(getString("flick"), note.flick, flickTypes,
 				                                       arrayLength(flickTypes)))
 				{

@@ -680,6 +680,7 @@ namespace MikuMikuWorld
 				obj["lane"] = note.lane - 6 + (note.width / 2.0);
 				obj["critical"] = note.critical;
 				obj["trace"] = note.friction;
+				obj["noInput"] = note.noInput;
 				if (note.flick != FlickType::None)
 				{
 					obj["direction"] = note.flick == FlickType::Default ? "up"
@@ -761,6 +762,7 @@ namespace MikuMikuWorld
 			startStep["lane"] = start.lane - 6 + (start.width / 2.0);
 			startStep["critical"] = start.critical;
 			startStep["ease"] = easeNames[(int)note.start.ease];
+			startStep["noInput"] = start.noInput;
 			startStep["judgeType"] = note.startType == HoldNoteType::Hidden ? "none"
 			                         : start.friction                       ? "trace"
 			                                                                : "normal";
@@ -775,6 +777,7 @@ namespace MikuMikuWorld
 				stepObj["beat"] = stepNote.tick / (double)TICKS_PER_BEAT;
 				stepObj["size"] = stepNote.width / 2.0;
 				stepObj["lane"] = stepNote.lane - 6 + (stepNote.width / 2.0);
+				stepObj["noInput"] = stepNote.noInput;
 				if (step.type != HoldStepType::Hidden)
 				{
 					stepObj["critical"] = stepNote.critical;
@@ -791,6 +794,7 @@ namespace MikuMikuWorld
 			endStep["size"] = end.width / 2.0;
 			endStep["lane"] = end.lane - 6 + (end.width / 2.0);
 			endStep["critical"] = end.critical;
+			endStep["noInput"] = end.noInput;
 			endStep["judgeType"] = note.endType == HoldNoteType::Hidden ? "none"
 			                       : end.friction                       ? "trace"
 			                                                            : "normal";
@@ -855,6 +859,7 @@ namespace MikuMikuWorld
 				note.lane = obj["lane"].get<float>() + 6 - obj["size"].get<float>();
 				note.critical = obj["critical"].get<bool>();
 				note.friction = obj["trace"].get<bool>();
+				note.noInput = obj["noInput"].get<bool>();
 				if (obj.contains("direction"))
 				{
 					std::string dir = obj["direction"].get<std::string>();
