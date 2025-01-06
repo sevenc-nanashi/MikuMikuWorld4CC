@@ -1,0 +1,97 @@
+name: Check many things
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-${{ hashFiles('./MikuMikuWorld.sln') }}
+          path: |
+            x64/Debug
+      - name: Build
+        run: |
+          msbuild /p:Configuration=Debug /p:Platform=x64
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+      - name: Check
+        id: check
+        run: |
+          rake check
+      - name: "Translation Coverage: en"
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage-en
+          LABEL: 'English'
+          STATUS: ${{ steps.check.outputs.coverage_en }}%
+          COLOR: ${{ steps.check.outputs.coverage_en == '100.0' && 'green' || 'orange' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Translation Coverage: ja"
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage-ja
+          LABEL: 'Japanese'
+          STATUS: ${{ steps.check.outputs.coverage_ja }}%
+          COLOR: ${{ steps.check.outputs.coverage_ja == '100.0' && 'green' || 'orange' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Translation Coverage: es"
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage-es
+          LABEL: 'Spanish'
+          STATUS: ${{ steps.check.outputs.coverage_es }}%
+          COLOR: ${{ steps.check.outputs.coverage_es == '100.0' && 'green' || 'orange' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Translation Coverage: kr"
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage-kr
+          LABEL: 'Korean'
+          STATUS: ${{ steps.check.outputs.coverage_kr }}%
+          COLOR: ${{ steps.check.outputs.coverage_kr == '100.0' && 'green' || 'orange' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Translation Coverage: ru"
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage-ru
+          LABEL: 'Russian'
+          STATUS: ${{ steps.check.outputs.coverage_ru }}%
+          COLOR: ${{ steps.check.outputs.coverage_ru == '100.0' && 'green' || 'orange' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Translation Coverage: vi"
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage-vi
+          LABEL: 'Vietnamese'
+          STATUS: ${{ steps.check.outputs.coverage_vi }}%
+          COLOR: ${{ steps.check.outputs.coverage_vi == '100.0' && 'green' || 'orange' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Translation Coverage: tr"
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage-tr
+          LABEL: 'Turkish'
+          STATUS: ${{ steps.check.outputs.coverage_tr }}%
+          COLOR: ${{ steps.check.outputs.coverage_tr == '100.0' && 'green' || 'orange' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

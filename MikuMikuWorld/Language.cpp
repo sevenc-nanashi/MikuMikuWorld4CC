@@ -1,6 +1,7 @@
 #include "Language.h"
 #include "IO.h"
 #include "File.h"
+#include <iostream>
 
 using namespace IO;
 
@@ -8,18 +9,16 @@ namespace MikuMikuWorld
 {
 	static std::string empty;
 
-	Language::Language(const char* code, std::string name, const std::string& filename)
+	Language::Language(const char* code, const std::string& filename)
 	{
 		this->code = code;
-		displayName = name;
 		read(filename);
 	}
 
-	Language::Language(const char* code, std::string name,
+	Language::Language(const char* code,
 	                   const std::unordered_map<std::string, std::string>& strings)
 	{
 		this->code = code;
-		displayName = name;
 		this->strings = strings;
 	}
 
@@ -28,7 +27,7 @@ namespace MikuMikuWorld
 		if (!File::exists(filename))
 			return;
 
-		File f(mbToWideStr(filename), L"r");
+		File f(filename, "r, ccs=UNICODE");
 		std::vector<std::string> lines = f.readAllLines();
 
 		f.close();
@@ -37,17 +36,16 @@ namespace MikuMikuWorld
 		for (auto& line : lines)
 		{
 			line = trim(line);
-			if (!line.size() || startsWith(line, "#"))
+			if (!line.size() || startsWith(line, "#") || startsWith(line, ","))
 				continue;
 
 			std::vector<std::string> values = split(line, ",");
-			strings[trim(values[0])] = trim(values[1]);
+			if (values.size() >= 2)
+				strings[trim(values[0])] = trim(values[1]);
 		}
 	}
 
 	const char* Language::getCode() const { return code.c_str(); }
-
-	const char* Language::getDisplayName() const { return displayName.c_str(); }
 
 	const bool Language::containsString(const std::string& key)
 	{

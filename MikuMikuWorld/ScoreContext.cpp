@@ -4,6 +4,8 @@
 #include "UI.h"
 #include "Utilities.h"
 #include <stdio.h>
+#include <map>
+#include <unordered_map>
 #include <vector>
 
 using json = nlohmann::json;
@@ -458,11 +460,9 @@ namespace MikuMikuWorld
 		if (!selectedNotes.empty())
 		{
 			minTick = score.notes
-			              .at(*std::min_element(selectedNotes.begin(), selectedNotes.end(),
-			                                    [this](int id1, int id2) {
-				                                    return score.notes.at(id1).tick <
-				                                           score.notes.at(id2).tick;
-			                                    }))
+			              .at(*std::min_element(
+			                  selectedNotes.begin(), selectedNotes.end(), [this](int id1, int id2)
+			                  { return score.notes.at(id1).tick < score.notes.at(id2).tick; }))
 			              .tick;
 		}
 		if (!selectedHiSpeedChanges.empty())
@@ -667,6 +667,10 @@ namespace MikuMikuWorld
 				else if (note.flick == FlickType::Right)
 					note.flick = FlickType::Left;
 			}
+			for (auto& [_, note] : pasteData.damages)
+			{
+				note.lane = MAX_LANE - note.lane - note.width + 1;
+			}
 		}
 
 		pasteData.pasting = !(pasteData.notes.empty() && pasteData.damages.empty() &&
@@ -696,12 +700,23 @@ namespace MikuMikuWorld
 	{
 		Score prev = score;
 
+		std::unordered_map<int, int> noteIDMap;
+
+		auto getNewID = [this, &noteIDMap](int oldID) -> int
+		{
+			if (noteIDMap.find(oldID) != noteIDMap.end())
+				return noteIDMap[oldID];
+			auto id = nextID++;
+			noteIDMap[oldID] = id;
+			return id;
+		};
+
 		// update IDs and copy notes
 		for (auto& [_, note] : pasteData.notes)
 		{
-			note.ID += nextID;
+			note.ID = getNewID(note.ID);
 			if (note.parentID != -1)
-				note.parentID += nextID;
+				note.parentID = getNewID(note.parentID);
 
 			note.lane += pasteData.offsetLane;
 			note.tick += pasteData.offsetTicks;
@@ -711,9 +726,9 @@ namespace MikuMikuWorld
 
 		for (auto& [_, note] : pasteData.damages)
 		{
-			note.ID += nextID;
+			note.ID = getNewID(note.ID);
 			if (note.parentID != -1)
-				note.parentID += nextID;
+				note.parentID = getNewID(note.parentID);
 
 			note.lane += pasteData.offsetLane;
 			note.tick += pasteData.offsetTicks;
@@ -722,17 +737,17 @@ namespace MikuMikuWorld
 		}
 		for (auto& [_, hold] : pasteData.holds)
 		{
-			hold.start.ID += nextID;
-			hold.end += nextID;
+			hold.start.ID = getNewID(hold.start.ID);
+			hold.end = getNewID(hold.end);
 			for (auto& step : hold.steps)
-				step.ID += nextID;
+				step.ID = getNewID(step.ID);
 
 			score.holdNotes[hold.start.ID] = hold;
 		}
 
 		for (auto& [_, hsc] : pasteData.hiSpeedChanges)
 		{
-			hsc.ID += nextHiSpeedID;
+			hsc.ID = nextHiSpeedID++;
 			hsc.layer = selectedLayer;
 			hsc.tick += pasteData.offsetTicks;
 			score.hiSpeedChanges[hsc.ID] = hsc;
@@ -751,8 +766,6 @@ namespace MikuMikuWorld
 		               std::inserter(selectedHiSpeedChanges, selectedHiSpeedChanges.end()),
 		               [this](const auto& it) { return it.second.ID; });
 
-		nextID += pasteData.notes.size() + pasteData.damages.size();
-		nextHiSpeedID += pasteData.hiSpeedChanges.size();
 		pasteData.pasting = false;
 		pushHistory("Paste notes", prev, score);
 	}
@@ -772,16 +785,8 @@ namespace MikuMikuWorld
 
 	void ScoreContext::duplicateSelection(bool flip)
 	{
-		const char* clipboardDataPtr = ImGui::GetClipboardText();
-		if (clipboardDataPtr == nullptr)
-			return;
-
-		std::string clipboardData(clipboardDataPtr);
-
 		copySelection();
 		paste(flip);
-
-		ImGui::SetClipboardText(clipboardData.c_str());
 	}
 
 	void ScoreContext::shrinkSelection(Direction direction)
@@ -849,6 +854,114 @@ namespace MikuMikuWorld
 		pushHistory("Shrink notes", prev, score);
 	}
 
+	void ScoreContext::compressSelection()
+	{
+		enum class Type
+		{
+			Note,
+			HiSpeed
+		};
+
+		Score prev = score;
+
+		std::map<int, std::vector<std::pair<Type, int>>> selection;
+		for (auto noteID : selectedNotes)
+		{
+			int tick = score.notes.at(noteID).tick;
+			selection[tick].push_back({ Type::Note, noteID });
+		}
+		for (auto hscID : selectedHiSpeedChanges)
+		{
+			int tick = score.hiSpeedChanges.at(hscID).tick;
+			selection[tick].push_back({ Type::HiSpeed, hscID });
+		}
+
+		if (selection.size() < 2)
+			return;
+		auto it = selection.begin();
+		auto selectedLayer = selectedNotes.size() + selectedHiSpeedChanges.size() >= 1
+		                         ? score.notes.at(*selectedNotes.begin()).layer
+		                         : score.hiSpeedChanges.at(*selectedHiSpeedChanges.begin()).layer;
+		int firstTick = it->first;
+		float hiSpeedAtStart = 1.0;
+		int latestHiSpeedTick = -1;
+		for (auto [id, hsc] : score.hiSpeedChanges)
+		{
+			if (hsc.layer != selectedLayer || hsc.tick > firstTick)
+			{
+				continue;
+			}
+			if (hsc.tick > latestHiSpeedTick)
+			{
+				latestHiSpeedTick = hsc.tick;
+				hiSpeedAtStart = hsc.speed;
+			}
+		}
+		float currentHiSpeed = 1.0;
+		for (size_t i = 0; i < selection.size(); i++)
+		{
+			auto elements = &(it->second);
+			auto next = std::next(it);
+			int newTick = firstTick + i;
+			// Shrink notes
+			for (size_t j = 0; j < elements->size(); j++)
+			{
+				if (elements->at(j).first == Type::Note)
+				{
+					Note& note = score.notes.at(elements->at(j).second);
+					note.tick = newTick;
+				}
+				else
+				{
+					// Handle the Hi-Speed change
+					HiSpeedChange& hsc = score.hiSpeedChanges.at(elements->at(j).second);
+					currentHiSpeed = hsc.speed;
+
+				}
+			}
+			// Add Hi-Speed
+			int id = nextHiSpeedID++;
+			this->score.hiSpeedChanges[id].ID = id;
+			this->score.hiSpeedChanges[id].tick = newTick;
+			if (elements->front().first == Type::Note)
+			{
+				Note& note = score.notes.at(elements->front().second);
+				this->score.hiSpeedChanges[id].layer = note.layer;
+			}
+			else
+			{
+				HiSpeedChange& hsc = score.hiSpeedChanges.at(elements->front().second);
+				this->score.hiSpeedChanges[id].layer = hsc.layer;
+			}
+			if (i == selection.size() - 1)
+				this->score.hiSpeedChanges[id].speed = hiSpeedAtStart;
+
+			else
+				this->score.hiSpeedChanges[id].speed = (next->first - it->first) * currentHiSpeed;
+
+			// Erase other Hi-Speed changes
+			for (size_t j = 0; j < elements->size(); j++)
+			{
+				if (elements->at(j).first == Type::HiSpeed)
+				{
+					// Erase the Hi-Speed change and deselect it
+					score.hiSpeedChanges.erase(elements->at(j).second);
+					selectedHiSpeedChanges.erase(elements->at(j).second);
+				}
+			}
+
+			selectedHiSpeedChanges.insert(id);
+
+			it = next;
+		}
+
+		const std::unordered_set<int> holds = getHoldsFromSelection();
+		for (const auto& hold : holds)
+			sortHoldSteps(score, score.holdNotes.at(hold));
+
+		pushHistory("Compress notes", prev, score);
+	}
+
 	void ScoreContext::connectHoldsInSelection()
 	{
 		if (!selectionCanConnect())
@@ -898,12 +1011,14 @@ namespace MikuMikuWorld
 		earlierNoteAsMid.ID = nextID++;
 		earlierNoteAsMid.critical = earlierHoldStart.critical;
 		earlierNoteAsMid.parentID = earlierHold.start.ID;
+		earlierNoteAsMid.layer = earlierHoldStart.layer;
 
 		Note laterNoteAsMid =
 		    Note(NoteType::HoldMid, laterNote.tick, laterNote.lane, laterNote.width);
 		laterNoteAsMid.ID = nextID++;
 		laterNoteAsMid.critical = earlierHoldStart.critical;
 		laterNoteAsMid.parentID = earlierHold.start.ID;
+		laterNoteAsMid.layer = earlierHoldStart.layer;
 
 		// Insert new steps to their appropriate containers
 		score.notes[earlierNoteAsMid.ID] = earlierNoteAsMid;
@@ -1050,10 +1165,8 @@ namespace MikuMikuWorld
 		std::sort(sortedSelection.begin(), sortedSelection.end(),
 		          [this](int a, int b) { return score.notes[a].tick < score.notes[b].tick; });
 
-		Note& patternStart = score.notes.at(*sortedSelection.begin());
-		std::reverse(sortedSelection.begin(), sortedSelection.end());
-		Note& patternEnd = score.notes.at(*sortedSelection.begin());
-		std::reverse(sortedSelection.begin(), sortedSelection.end());
+		Note& patternStart = score.notes.at(sortedSelection.front());
+		Note& patternEnd = score.notes.at(sortedSelection.back());
 
 		// TODO: Check this in ScoreEditorTimeline too (Otherwise it will become so unfriendly)
 		/* if (patternStart.width != patternEnd.width) */
@@ -1067,7 +1180,7 @@ namespace MikuMikuWorld
 
 		int patternHeight = patternEnd.tick - patternStart.tick;
 
-		int itterations = std::floor((holdEnd.tick - holdStart.tick) / patternHeight);
+		int iterations = std::floor((holdEnd.tick - holdStart.tick) / patternHeight);
 
 		int startPos = findHoldStep(hold, patternStart.ID);
 		int endPos = findHoldStep(hold, patternEnd.ID);
@@ -1089,12 +1202,12 @@ namespace MikuMikuWorld
 			Note& currentRep = score.notes.at(sortedSelection[j]);
 			int jPos = findHoldStep(hold, currentRep.ID);
 
-			for (int i = 1; i < itterations; i++)
+			for (int i = 1; i < iterations; i++)
 			{
 				float lane = std::clamp(currentRep.lane + i * (patternEnd.lane - patternStart.lane),
-				                      minLane, maxLane - currentRep.width);
+				                        minLane, maxLane - currentRep.width);
 
-				if (j == sortedSelection.size() - 1 && i == itterations - 1)
+				if (j == sortedSelection.size() - 1 && i == iterations - 1)
 				{
 					holdEnd.tick = currentRep.tick + patternHeight * i;
 					holdEnd.lane = lane;
@@ -1108,6 +1221,7 @@ namespace MikuMikuWorld
 				nextMid.critical = patternStart.critical;
 
 				nextMid.parentID = hold.start.ID;
+				nextMid.layer = currentRep.layer;
 
 				nextMid.ID = nextID++;
 				score.notes[nextMid.ID] = nextMid;
@@ -1134,6 +1248,85 @@ namespace MikuMikuWorld
 		pushHistory("Repeat hold mids", prev, score);
 	}
 
+	void ScoreContext::convertHoldToTraces(int division, bool deleteOrigin) {
+		// Prepare history
+		Score prev = score;
+
+		// beats-per-measure hardcoded to 4
+		int interval = TICKS_PER_BEAT * 4 / division;
+
+		// Here, `slide` refers to a normal hold note or a guide note
+		for (int targetSlideId : selectedNotes) {
+			if (!score.notes.count(targetSlideId)) continue;
+			if (score.notes.at(targetSlideId).getType() != NoteType::Hold) continue;
+
+			const HoldNote& target = score.holdNotes.at(targetSlideId);
+			const Note& holdStart = score.notes.at(targetSlideId);
+			int endTick = score.notes.at(target.end).tick;
+
+			int connectorTailIndex = -1;
+			EaseType connectorType(EaseType::Linear);
+			const Note* connectorHead = &score.notes.at(targetSlideId);
+			const Note* connectorTail = connectorHead;
+			bool critical = connectorHead->critical ||
+							(target.isGuide() && target.guideColor == GuideColor::Yellow);
+
+			// Find the connector head and tail for each trace note
+			for (int tick = connectorHead->tick; tick <= endTick; tick += interval) {
+				// Do not create trace notes if they will overlap with the hold start or end
+				if (!deleteOrigin) {
+					if (tick == holdStart.tick && target.startType == HoldNoteType::Normal) continue;
+					if (tick == endTick && target.endType == HoldNoteType::Normal) continue;
+				}
+
+				// Update connector endpoints if current time goes beyond them
+				if (tick > connectorTail->tick || connectorTailIndex == -1) {
+					// By default, the new connector head is the old connector tail
+					connectorHead = connectorTail;
+					connectorType = target[connectorTailIndex].ease;
+					for (connectorTailIndex++; connectorTailIndex < target.steps.size(); connectorTailIndex++) {
+						if (target[connectorTailIndex].type != HoldStepType::Skip) {
+							const Note& potentialTail = score.notes.at(target.id_at(connectorTailIndex));
+							// If the current tick is late enough, it is the new connector tail
+							if (potentialTail.tick >= tick) break;
+							// Otherwise, this is a connector head later than the previous one
+							connectorHead = &potentialTail;
+							connectorType = target[connectorTailIndex].ease;
+						}
+					}
+					// Note that connectorTail might be the slide end
+					connectorTail = &score.notes.at(target.id_at(connectorTailIndex));
+				}
+
+				// Calculate the trace's position and width
+				float t = (float)(tick - connectorHead->tick) / (connectorTail->tick - connectorHead->tick);
+				auto easeFunc = getEaseFunction(connectorType);
+				float left = easeFunc(connectorHead->lane, connectorTail->lane, t);
+				float right = easeFunc(connectorHead->lane+connectorHead->width, connectorTail->lane+connectorTail->width, t);
+				// Spawn a trace note
+				Note newNote(NoteType::Tap, tick, left, right - left);
+				newNote.ID = nextID;
+				newNote.critical = critical;
+				newNote.friction = true;
+				newNote.layer = score.notes.at(targetSlideId).layer;
+
+				score.notes.emplace(nextID, newNote);
+				nextID++;
+			}
+
+			// Delete origin slide
+			if (deleteOrigin) {
+				score.notes.erase(targetSlideId);
+				score.notes.erase(target.end);
+				for (const HoldStep& step : target.steps) score.notes.erase(step.ID);
+				score.holdNotes.erase(targetSlideId);
+			}
+		}
+
+		selectedNotes.clear();
+		pushHistory("Convert slides into traces", prev, score);
+	}
+
 	void ScoreContext::lerpHiSpeeds(int division)
 	{
 		if (selectedHiSpeedChanges.size() < 2)
@@ -1144,8 +1337,7 @@ namespace MikuMikuWorld
 		std::vector<int> sortedSelection;
 		sortedSelection.insert(sortedSelection.end(), selectedHiSpeedChanges.begin(),
 		                       selectedHiSpeedChanges.end());
-		std::sort(sortedSelection.begin(), sortedSelection.end(),
-		          [this](int a, int b)
+		std::sort(sortedSelection.begin(), sortedSelection.end(), [this](int a, int b)
 		          { return score.hiSpeedChanges[a].tick < score.hiSpeedChanges[b].tick; });
 
 		for (int i = 0; i < sortedSelection.size() - 1; i++)
@@ -1224,10 +1416,15 @@ namespace MikuMikuWorld
 		                   [this](const int id) { return score.notes.at(id).hasEase(); });
 	}
 
-	bool ScoreContext::selectionHasStep() const
+	bool ScoreContext::selectionHasHold() const
 	{
 		return std::any_of(selectedNotes.begin(), selectedNotes.end(),
-		                   [this](const int id)
+						   [this](int id) { return score.notes.at(id).getType() == NoteType::Hold; });
+	}
+
+	bool ScoreContext::selectionHasStep() const
+	{
+		return std::any_of(selectedNotes.begin(), selectedNotes.end(), [this](const int id)
 		                   { return score.notes.at(id).getType() == NoteType::HoldMid; });
 	}
 

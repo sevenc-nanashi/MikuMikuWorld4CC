@@ -2,6 +2,7 @@
 #include "NoteTypes.h"
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 namespace MikuMikuWorld
 {
@@ -75,10 +76,15 @@ namespace MikuMikuWorld
 		Note();
 
 		constexpr NoteType getType() const { return type; }
+		constexpr bool isHold() const
+		{
+			return type == NoteType::Hold || type == NoteType::HoldMid || type == NoteType::HoldEnd;
+		}
 
 		bool isFlick() const;
 		bool hasEase() const;
 		bool canFlick() const;
+		bool canTrace() const;
 	};
 
 	struct HoldStep
@@ -104,6 +110,39 @@ namespace MikuMikuWorld
 		constexpr bool isGuide() const
 		{
 			return startType == HoldNoteType::Guide || endType == HoldNoteType::Guide;
+		}
+
+		/**
+		 * @brief Retrieve HoldStep according to given `index` within `[-1, steps.size()-1]`,
+		 *        where -1 stands for the start step
+		 * @throw `std::out_of_range` if `index` is invalid
+		 * @warning Reference returned by this method can be invalidated by vector reallocation
+		 */
+		HoldStep& operator[](int index) {
+			if (index < -1 || index >= (int)steps.size())
+				throw std::out_of_range("Index out of range in HoldNote[]");
+			return index == -1 ? start : steps[index];
+		}
+		/**
+		 * @brief Retrieve HoldStep according to given `index` within `[-1, steps.size()-1]`,
+		 *        where -1 stands for the start step
+		 * @throw `std::out_of_range` if `index` is invalid
+		 * @warning Reference returned by this method can be invalidated by vector reallocation
+		 */
+		const HoldStep& operator[](int index) const {
+			if (index < -1 || index >= (int)steps.size())
+				throw std::out_of_range("Index out of range in HoldNote[]");
+			return index == -1 ? start : steps[index];
+		}
+		/**
+		 * @brief Retrieve note ID according to given `index` within `[-1, steps.size()]`,
+		 *        where -1 stands for the start note and `steps.size()` stands for the end note
+		 * @throw `std::out_of_range` if `index` is invalid
+		 */
+		int id_at(int index) const {
+			if (index < -1 || index > (int)steps.size())
+				throw std::out_of_range("Index out of range in HoldNote::id_at");
+			return (index == steps.size()) ? end : (index == -1 ? start.ID : steps[index].ID);
 		}
 	};
 

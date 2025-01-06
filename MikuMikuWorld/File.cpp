@@ -2,9 +2,12 @@
 #include "IO.h"
 #include <Windows.h>
 #include <algorithm>
+#include <ctime>
 #include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 #include <filesystem>
+#include <chrono>
 
 namespace IO
 {
@@ -20,15 +23,9 @@ namespace IO
 		open(filename, mode);
 	}
 
-	File::File()
-	{
-		stream = NULL;
-	}
+	File::File() { stream = NULL; }
 
-	File::~File()
-	{
-		close();
-	}
+	File::~File() { close(); }
 
 	void File::open(const std::wstring& filename, const wchar_t* mode)
 	{
@@ -36,14 +33,15 @@ namespace IO
 			close();
 
 		stream = _wfopen(filename.c_str(), mode);
+		if (!stream)
+			std::wcerr << L"Failed to open file: " << filename << std::endl;
 	}
 
 	void File::open(const std::string& filename, const char* mode)
 	{
-		if (stream)
-			close();
-
-		stream = fopen(filename.c_str(), mode);
+		std::wstring wFileName = mbToWideStr(filename);
+		std::wstring wMode(mode, mode + strlen(mode));
+		open(wFileName, wMode.c_str());
 	}
 
 	void File::close()
@@ -61,12 +59,21 @@ namespace IO
 			fflush(stream);
 	}
 
+	std::chrono::time_point<std::chrono::system_clock> File::getLastWriteTime() const
+	{
+		struct stat fileStat;
+		fstat(_fileno(stream), &fileStat);
+		auto time = fileStat.st_mtime;
+
+		return std::chrono::system_clock::from_time_t(time);
+	}
+
 	std::vector<uint8_t> File::readAllBytes()
 	{
 		fseek(stream, 0, SEEK_END);
 		size_t size = ftell(stream);
 		fseek(stream, 0, SEEK_SET);
-		
+
 		std::vector<uint8_t> bytes;
 		bytes.resize(size);
 		fread(&bytes[0], sizeof(uint8_t), size, stream);
@@ -122,15 +129,9 @@ namespace IO
 		return true;
 	}
 
-	void File::write(const std::string& str)
-	{
-		fwrite(str.c_str(), str.size(), 1, stream);
-	}
+	void File::write(const std::string& str) { fwrite(str.c_str(), str.size(), 1, stream); }
 
-	void File::writeLine(const std::string line)
-	{
-		write(line + "\n");
-	}
+	void File::writeLine(const std::string line) { write(line + "\n"); }
 
 	void File::writeAllLines(const std::vector<std::string>& lines)
 	{
@@ -192,6 +193,11 @@ namespace IO
 		return std::filesystem::exists(wPath);
 	}
 
+	bool File::exists(const std::wstring& path)
+	{
+		return std::filesystem::exists(path);
+	}
+
 	FileDialogResult FileDialog::showFileDialog(DialogType type, DialogSelectType selectType)
 	{
 		std::wstring wTitle = mbToWideStr(title);
@@ -204,7 +210,8 @@ namespace IO
 		ofn.nFilterIndex = filterIndex + 1;
 		ofn.nFileOffset = 0;
 		ofn.nMaxFile = MAX_PATH;
-		ofn.Flags = OFN_LONGNAMES | OFN_EXPLORER | OFN_ENABLESIZING | OFN_OVERWRITEPROMPT | OFN_HIDEREADONLY | OFN_PATHMUSTEXIST;
+		ofn.Flags = OFN_LONGNAMES | OFN_EXPLORER | OFN_ENABLESIZING | OFN_OVERWRITEPROMPT |
+		            OFN_HIDEREADONLY | OFN_PATHMUSTEXIST;
 
 		std::wstring wDefaultExtension = mbToWideStr(defaultExtension);
 		ofn.lpstrDefExt = wDefaultExtension.c_str();
@@ -213,19 +220,19 @@ namespace IO
 		ofnFilters.reserve(filters.size());
 
 		/*
-			since '\0' terminates the string,
-			we'll do a C# by using ' | ' then replacing it with '\0' when constructing the final wide string
+		    since '\0' terminates the string,
+		    we'll do a C# by using ' | ' then replacing it with '\0' when constructing the final
+		   wide string
 		*/
 		std::string filtersCombined;
 		for (const auto& filter : filters)
 		{
-			filtersCombined
-				.append(filter.filterName)
-				.append(" (")
-				.append(filter.filterType)
-				.append(")|")
-				.append(filter.filterType)
-				.append("|");
+			filtersCombined.append(filter.filterName)
+			    .append(" (")
+			    .append(filter.filterType)
+			    .append(")|")
+			    .append(filter.filterType)
+			    .append("|");
 		}
 
 		std::wstring wFiltersCombined = mbToWideStr(filtersCombined);
@@ -236,7 +243,7 @@ namespace IO
 		wchar_t ofnFilename[1024]{ 0 };
 
 		// suppress return value not used warning
-#pragma warning(suppress: 6031)
+#pragma warning(suppress : 6031)
 		lstrcpynW(ofnFilename, wInputFilename.c_str(), 1024);
 		ofn.lpstrFile = ofnFilename;
 

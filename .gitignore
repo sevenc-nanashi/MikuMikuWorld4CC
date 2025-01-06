@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 MikuMikuWorld/imgui_config.ini
 enc_temp_folder
+build
+installer.nsi

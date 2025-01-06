@@ -46,7 +46,7 @@ namespace MikuMikuWorld
 		return position.y + tickToPosition(tick) - visualOffset + size.y;
 	}
 
-	int ScoreEditorTimeline::positionToTick(float pos) const
+	int ScoreEditorTimeline::positionToTick(double pos) const
 	{
 		return roundf(pos / (unitHeight * zoom));
 	}
@@ -81,7 +81,7 @@ namespace MikuMikuWorld
 		visualOffset = offset = std::max(offset + x1 - x2, minOffset);
 	}
 
-	int ScoreEditorTimeline::snapTickFromPos(float posY) const
+	int ScoreEditorTimeline::snapTickFromPos(double posY) const
 	{
 		return snapTick(positionToTick(posY), division);
 	}
@@ -333,6 +333,9 @@ namespace MikuMikuWorld
 			if (ImGui::MenuItem(getString("shrink_down"), NULL, false, canShrink))
 				context.shrinkSelection(Direction::Down);
 
+			if (ImGui::MenuItem(getString("compress_selection"), NULL, false, canShrink))
+				context.compressSelection();
+
 			ImGui::Separator();
 			if (ImGui::MenuItem(getString("connect_holds"), NULL, false,
 			                    context.selectionCanConnect()))
@@ -357,6 +360,14 @@ namespace MikuMikuWorld
 			if (ImGui::MenuItem(getString("repeat_hold_mids"), NULL, false,
 			                    selectedTickNum >= 3 and selectedStartNum < 2))
 				context.repeatMidsInSelection(context);
+
+			if (ImGui::BeginMenu(getString("hold_to_traces"), context.selectionHasHold())) {
+				if (ImGui::MenuItem(getString("add_traces_for_hold")))
+					context.convertHoldToTraces(division, false);
+				if (ImGui::MenuItem(getString("convert_hold_to_traces")))
+					context.convertHoldToTraces(division, true);
+				ImGui::EndMenu();
+			}
 
 			ImGui::Separator();
 			if (ImGui::MenuItem(getString("lerp_hispeeds"), NULL, false,
@@ -472,7 +483,8 @@ namespace MikuMikuWorld
 			float yThreshold = (notesHeight * 0.5f) + 2.0f;
 			for (const auto& [id, note] : context.score.notes)
 			{
-				if (note.layer != context.selectedLayer && !context.showAllLayers)
+				const bool layerHidden = context.score.layers.at(note.layer).hidden;
+				if ((layerHidden || note.layer != context.selectedLayer) && !context.showAllLayers)
 					continue;
 				float x1 = laneToPosition(note.lane);
 				float x2 = laneToPosition(note.lane + note.width);
@@ -824,6 +836,15 @@ namespace MikuMikuWorld
 		UI::divisionSelect(getString("division"), division, divisions,
 		                   sizeof(divisions) / sizeof(int));
 
+		ImGui::SameLine();
+		int snapModeInt = (uint8_t)snapMode;
+		ImGui::SetNextItemWidth(125);
+		if (UI::inlineSelect(getString("snap_mode"), snapModeInt, snapModes,
+		                     (size_t)SnapMode::SnapModeMax))
+		{
+			snapMode = (SnapMode)snapModeInt;
+		}
+
 		static int gotoMeasure = 0;
 		bool activated = false;
 
@@ -937,8 +958,10 @@ namespace MikuMikuWorld
 		minNoteYDistance = INT_MAX;
 		for (auto& [id, note] : context.score.notes)
 		{
-			if (!isNoteVisible(note))
+			const bool layerHidden = context.score.layers.at(note.layer).hidden;
+			if (!isNoteVisible(note) || (layerHidden && !context.showAllLayers))
 				continue;
+
 			if (note.getType() == NoteType::Tap)
 			{
 				updateNote(context, edit, note);
@@ -963,6 +986,11 @@ namespace MikuMikuWorld
 		{
 			Note& start = context.score.notes.at(hold.start.ID);
 			Note& end = context.score.notes.at(hold.end);
+
+			const bool startLayerHidden = context.score.layers.at(start.layer).hidden;
+			const bool endLayerHidden = context.score.layers.at(end.layer).hidden;
+			if ((startLayerHidden || endLayerHidden) && !context.showAllLayers)
+				continue;
 
 			if (isNoteVisible(start))
 				updateNote(context, edit, start);
@@ -1027,7 +1055,13 @@ namespace MikuMikuWorld
 
 		// draw hold step outlines
 		for (const auto& data : drawSteps)
+		{
+			const bool layerHidden = context.score.layers.at(data.layer).hidden;
+			if (layerHidden && !context.showAllLayers)
+				continue;
+
 			drawOutline(data, context.showAllLayers ? -1 : context.selectedLayer);
+		}
 
 		drawSteps.clear();
 	}
@@ -1589,10 +1623,54 @@ namespace MikuMikuWorld
 
 				if (canMove)
 				{
-					for (int id : context.selectedNotes)
+					switch (snapMode)
 					{
-						Note& n = context.score.notes.at(id);
-						n.tick = std::max(n.tick + tickDiff, 0);
+					case SnapMode::Relative:
+					{
+						for (int id : context.selectedNotes)
+						{
+							Note& n = context.score.notes.at(id);
+							n.tick = std::max(n.tick + tickDiff, 0);
+						}
+						break;
+					}
+					case SnapMode::Absolute:
+					{
+						int grabbingNoteTick = note.tick;
+						int grabbingNoteTickSnapped =
+						    roundTickDown(grabbingNoteTick + tickDiff, division);
+						int actualDiff = grabbingNoteTickSnapped - grabbingNoteTick;
+
+						for (int id : context.selectedNotes)
+						{
+							Note& n = context.score.notes.at(id);
+							n.tick = std::max(n.tick + actualDiff, 0);
+						}
+
+						break;
+					}
+					case SnapMode::IndividualAbsolute:
+					{
+						std::vector<int> sortedSelectedNotes(context.selectedNotes.size());
+						std::copy(context.selectedNotes.begin(), context.selectedNotes.end(),
+						          sortedSelectedNotes.begin());
+						std::sort(sortedSelectedNotes.begin(), sortedSelectedNotes.end(),
+						          [&context](int a, int b) {
+							          return context.score.notes.at(a).tick <
+							                 context.score.notes.at(b).tick;
+						          });
+
+						for (int id : sortedSelectedNotes)
+						{
+							Note& n = context.score.notes.at(id);
+							auto shiftedTick = n.tick + tickDiff;
+							n.tick = std::max(roundTickDown(shiftedTick, division), 0);
+						}
+
+						break;
+					}
+					default:
+						throw std::runtime_error("Invalid snap mode (Unreachable)");
 					}
 				}
 			}
@@ -1664,7 +1742,8 @@ namespace MikuMikuWorld
 					for (int id : context.selectedNotes)
 					{
 						Note& n = context.score.notes.at(id);
-						n.width = std::clamp(n.width + diff, (float)MIN_NOTE_WIDTH, maxNoteWidth - n.lane);
+						n.width = std::clamp(n.width + diff, (float)MIN_NOTE_WIDTH,
+						                     maxNoteWidth - n.lane);
 					}
 				}
 			}
@@ -2015,8 +2094,8 @@ namespace MikuMikuWorld
 					drawType = start.critical ? StepDrawType::InvisibleHoldCritical
 					                          : StepDrawType::InvisibleHold;
 				}
-				drawSteps.push_back({ end.tick + offsetTicks, end.lane + (float)offsetLane, end.width,
-				                      drawType, end.layer });
+				drawSteps.push_back({ end.tick + offsetTicks, end.lane + (float)offsetLane,
+				                      end.width, drawType, end.layer });
 			}
 		}
 	}

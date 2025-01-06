@@ -21,8 +21,7 @@ namespace MikuMikuWorld
 	ImVec2 UI::toolbarBtnImgSize{ UI::_toolbarBtnImgSize };
 	char UI::idStr[256];
 
-	std::vector<ImVec4> UI::accentColors
-	{
+	std::vector<ImVec4> UI::accentColors{
 		ImVec4{ 0.10f, 0.10f, 0.10f, 1.00f }, // User
 		ImVec4{ 0.51f, 0.80f, 0.82f, 1.00f }, // Default : Chart Cyanvas
 		ImVec4{ 0.16f, 0.44f, 0.75f, 1.00f }, // Default : Original MMW
@@ -104,19 +103,13 @@ namespace MikuMikuWorld
 		return ImGui::IsPopupOpen("", ImGuiPopupFlags_AnyPopupId | ImGuiPopupFlags_AnyPopupLevel);
 	}
 
-	void UI::beginPropertyColumns()
-	{
-		ImGui::Columns(2);
-	}
+	void UI::beginPropertyColumns() { ImGui::Columns(2); }
 
-	void UI::endPropertyColumns()
-	{
-		ImGui::Columns(1);
-	}
+	void UI::endPropertyColumns() { ImGui::Columns(1); }
 
 	void UI::propertyLabel(const char* label)
 	{
-		ImGui::Text(label);
+		ImGui::Text("%s", label);
 		ImGui::NextColumn();
 		ImGui::SetNextItemWidth(-1);
 	}
@@ -129,35 +122,58 @@ namespace MikuMikuWorld
 		ImGui::NextColumn();
 	}
 
-	void UI::addIntProperty(const char* label, int& val, int lowerBound, int higherBound)
+	bool UI::addIntProperty(const char* label, int& val, int lowerBound, int higherBound)
 	{
-		addIntProperty(label, val, "%d", lowerBound, higherBound);
+		return addIntProperty(label, val, "%d", lowerBound, higherBound);
 	}
 
-	void UI::addIntProperty(const char* label, int& val, const char* format, int lowerBound, int higherBound)
+	bool UI::addIntProperty(const char* label, int& val, const char* format, int lowerBound,
+	                        int higherBound)
 	{
 		propertyLabel(label);
 
 		int step = 1;
-		ImGui::InputScalar(labelID(label), ImGuiDataType_S32, &val, &step, &step, format);
-		if (lowerBound != higherBound)
+		bool edited =
+		    ImGui::InputScalar(labelID(label), ImGuiDataType_S32, &val, &step, &step, format);
+		if (edited && lowerBound != higherBound)
 			val = std::clamp(val, lowerBound, higherBound);
 		ImGui::NextColumn();
+
+		return edited;
 	}
 
-	void UI::addFloatProperty(const char* label, float& val, const char* format)
+	bool UI::addFloatProperty(const char* label, float& val, const char* format, float lowerBound,
+	                          float higherBound)
 	{
 		propertyLabel(label);
 
-		ImGui::InputFloat(labelID(label), &val, 1.0f, 10.f, format);
+		bool edited = ImGui::InputFloat(labelID(label), &val, 1.0f, 10.f, format);
+		if (edited && lowerBound != higherBound)
+			val = std::clamp(val, lowerBound, higherBound);
 		ImGui::NextColumn();
+
+		return edited;
+	}
+
+	bool UI::addDoubleProperty(const char* label, double& val, const char* format,
+	                           double lowerBound, double higherBound)
+	{
+		propertyLabel(label);
+
+		bool edited = ImGui::InputDouble(labelID(label), &val, 1.0, 10.0, format);
+		if (edited && lowerBound != higherBound)
+			val = std::clamp(val, lowerBound, higherBound);
+		ImGui::NextColumn();
+
+		return edited;
 	}
 
 	void UI::addDragFloatProperty(const char* label, float& val, const char* format)
 	{
 		propertyLabel(label);
 
-		ImGui::DragFloat(labelID(label), &val, 1.0f, 0.0f, 0.0f, format, ImGuiSliderFlags_NoRoundToFormat);
+		ImGui::DragFloat(labelID(label), &val, 1.0f, 0.0f, 0.0f, format,
+		                 ImGuiSliderFlags_NoRoundToFormat);
 		ImGui::NextColumn();
 	}
 
@@ -169,7 +185,8 @@ namespace MikuMikuWorld
 		ImGui::NextColumn();
 	}
 
-	void UI::addSliderProperty(const char* label, float& val, float min, float max, const char* format)
+	void UI::addSliderProperty(const char* label, float& val, float min, float max,
+	                           const char* format)
 	{
 		propertyLabel(label);
 
@@ -194,8 +211,10 @@ namespace MikuMikuWorld
 
 		int result = 0;
 
-		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - UI::btnSmall.x - ImGui::GetStyle().ItemSpacing.x);
-		if (ImGui::InputTextWithHint(labelID(label), "n/a", &val, ImGuiInputTextFlags_EnterReturnsTrue))
+		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - UI::btnSmall.x -
+		                        ImGui::GetStyle().ItemSpacing.x);
+		if (ImGui::InputTextWithHint(labelID(label), "n/a", &val,
+		                             ImGuiInputTextFlags_EnterReturnsTrue))
 			result = 1;
 		ImGui::SameLine();
 
@@ -219,7 +238,8 @@ namespace MikuMikuWorld
 		idNumerator.append("_numerator");
 		idDenominator.append("_denominator");
 
-		float controlWidth = (ImGui::GetContentRegionAvail().x / 2.0f) - (ImGui::CalcTextSize("/").x);
+		float controlWidth =
+		    (ImGui::GetContentRegionAvail().x / 2.0f) - (ImGui::CalcTextSize("/").x);
 		bool edit = false;
 
 		ImGui::SetNextItemWidth(controlWidth);
@@ -239,12 +259,14 @@ namespace MikuMikuWorld
 		return edit;
 	}
 
-	void UI::addCheckboxProperty(const char* label, bool& val)
+	bool UI::addCheckboxProperty(const char* label, bool& val)
 	{
 		propertyLabel(label);
 
-		ImGui::Checkbox(labelID(label), &val);
+		bool edited = ImGui::Checkbox(labelID(label), &val);
 		ImGui::NextColumn();
+
+		return edited;
 	}
 
 	void UI::addMultilineString(const char* label, std::string& val)
@@ -261,8 +283,9 @@ namespace MikuMikuWorld
 		{
 			float txtWidth = ImGui::CalcTextSize(label).x + (ImGui::GetStyle().WindowPadding.x * 2);
 			ImGui::SetNextWindowSize(ImVec2(std::min(txtWidth, 250.0f), -1));
-			ImGui::BeginTooltipEx(ImGuiTooltipFlags_OverridePreviousTooltip, ImGuiWindowFlags_NoResize);
-			ImGui::TextWrapped(label);
+			ImGui::BeginTooltipEx(ImGuiTooltipFlags_OverridePreviousTooltip,
+			                      ImGuiWindowFlags_NoResize);
+			ImGui::TextWrapped("%s", label);
 			ImGui::EndTooltip();
 		}
 	}
@@ -275,7 +298,8 @@ namespace MikuMikuWorld
 		bool act = false;
 		ImGui::SetNextItemWidth(100);
 		// very low float value used to disable dragging
-		if (ImGui::DragInt("##custom_input", &value, 0.00000001f, 0, 0, getString("division_affix")))
+		if (ImGui::DragInt("##custom_input", &value, 0.00000001f, 0, 0,
+		                   getString("division_affix")))
 		{
 			value = std::clamp(value, 4, 1920);
 			act = true;
@@ -302,7 +326,8 @@ namespace MikuMikuWorld
 		{
 			for (int i = 0; i < count; ++i)
 			{
-				if (ImGui::Selectable(Utilities::getDivisionString(items[i]).c_str(), value == items[i]))
+				if (ImGui::Selectable(Utilities::getDivisionString(items[i]).c_str(),
+				                      value == items[i]))
 				{
 					value = items[i];
 					act = true;
@@ -314,6 +339,42 @@ namespace MikuMikuWorld
 
 		ImGui::PopID();
 		return act;
+	}
+
+	bool UI::inlineSelect(const char* label, int& value, const char* const* items, size_t count)
+	{
+		const char* id = labelID(label);
+		ImGui::PushID(id);
+
+		std::string curr = getString(items[value]);
+		if (!curr.size())
+			curr = items[value];
+		if (ImGui::BeginCombo(id, curr.c_str()))
+		{
+			bool act = false;
+			for (int i = 0; i < count; ++i)
+			{
+				const bool selected = value == i;
+				std::string str = getString(items[i]);
+				if (!str.size())
+					str = items[i];
+
+				if (ImGui::Selectable(str.c_str(), selected))
+				{
+					value = i;
+					act = true;
+				}
+			}
+
+			ImGui::EndCombo();
+			ImGui::NextColumn();
+			ImGui::PopID();
+			return act;
+		}
+
+		ImGui::NextColumn();
+		ImGui::PopID();
+		return false;
 	}
 
 	bool UI::zoomControl(const char* label, float& value, float min, float max, float width)
@@ -331,6 +392,7 @@ namespace MikuMikuWorld
 		ImGui::SetNextItemWidth(width);
 
 		act |= ImGui::SliderFloat(labelID(label), &value, min, max, "%.2fx");
+		tooltip(getString("zoom_tooltip"));
 		ImGui::SameLine();
 
 		if (UI::transparentButton(ICON_FA_SEARCH_PLUS, UI::btnSmall, true, value < max))
@@ -347,7 +409,8 @@ namespace MikuMikuWorld
 	{
 		propertyLabel(getString("time_signature"));
 
-		float controlWidth = (ImGui::GetContentRegionAvail().x / 2.0f) - (ImGui::CalcTextSize("/").x);
+		float controlWidth =
+		    (ImGui::GetContentRegionAvail().x / 2.0f) - (ImGui::CalcTextSize("/").x);
 		bool edit = false;
 
 		ImGui::SetNextItemWidth(controlWidth);
@@ -405,7 +468,8 @@ namespace MikuMikuWorld
 		toolbarBtnImgSize = _toolbarBtnImgSize * scale;
 	}
 
-	bool UI::toolbarButton(const char* icon, const char* label, const char* shortcut, bool enabled, bool selected)
+	bool UI::toolbarButton(const char* icon, const char* label, const char* shortcut, bool enabled,
+	                       bool selected)
 	{
 		if (!enabled)
 		{
@@ -416,7 +480,8 @@ namespace MikuMikuWorld
 		if (selected)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_TabActive]);
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::GetStyle().Colors[ImGuiCol_TabActive]);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
+			                      ImGui::GetStyle().Colors[ImGuiCol_TabActive]);
 		}
 
 		bool activated = ImGui::Button(icon, UI::toolbarBtnSize);
@@ -442,7 +507,8 @@ namespace MikuMikuWorld
 		return activated;
 	}
 
-	bool UI::toolbarImageButton(const char* img, const char* label, const char* shortcut, bool enabled, bool selected)
+	bool UI::toolbarImageButton(const char* img, const char* label, const char* shortcut,
+	                            bool enabled, bool selected)
 	{
 		std::string lblId;
 		lblId.append("##").append(img).append(label);
@@ -464,11 +530,14 @@ namespace MikuMikuWorld
 		if (selected)
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyle().Colors[ImGuiCol_TabActive]);
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImGui::GetStyle().Colors[ImGuiCol_TabActive]);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
+			                      ImGui::GetStyle().Colors[ImGuiCol_TabActive]);
 		}
 
-		bool activated = ImGui::ImageButton(lblId.c_str(), (void*)ResourceManager::textures[texIndex].getID(), UI::toolbarBtnImgSize);
-		
+		bool activated =
+		    ImGui::ImageButton(lblId.c_str(), (void*)ResourceManager::textures[texIndex].getID(),
+		                       UI::toolbarBtnImgSize);
+
 		std::string tooltipLabel = label;
 		if (shortcut && strlen(shortcut))
 			tooltipLabel.append(" (").append(shortcut).append(")");

@@ -14,15 +14,9 @@ namespace MikuMikuWorld
 		compile(source);
 	}
 
-	Shader::~Shader()
-	{
-		glDeleteProgram(ID);
-	}
+	Shader::~Shader() { glDeleteProgram(ID); }
 
-	std::string Shader::getName() const
-	{
-		return name;
-	}
+	std::string Shader::getName() const { return name; }
 
 	void Shader::compile(const std::string& source)
 	{
@@ -37,16 +31,16 @@ namespace MikuMikuWorld
 			vertexFile.open(wSource + L".vert");
 			fragmentFile.open(wSource + L".frag");
 
-			std::stringstream vertexStream, fragmnetStream;
+			std::stringstream vertexStream, fragmentStream;
 
 			vertexStream << vertexFile.rdbuf();
-			fragmnetStream << fragmentFile.rdbuf();
+			fragmentStream << fragmentFile.rdbuf();
 
 			vertexFile.close();
 			fragmentFile.close();
 
 			vertexCode = vertexStream.str();
-			fragmentCode = fragmnetStream.str();
+			fragmentCode = fragmentStream.str();
 		}
 		catch (std::ifstream::failure e)
 		{
@@ -116,10 +110,7 @@ namespace MikuMikuWorld
 		}
 	}
 
-	void Shader::use()
-	{
-		glUseProgram(ID);
-	}
+	void Shader::use() { glUseProgram(ID); }
 
 	void Shader::setBool(const std::string& name, bool value)
 	{

@@ -1,6 +1,8 @@
 # code: ja
 # key, value
 
+language_name, 日本語
+translator, 名無し｡（@sevenc_nanashi@voskey.icalo.net）
 # menu bar
 file, ファイル
 new, 新規
@@ -48,6 +50,8 @@ cancel, キャンセル
 general, 一般
 key_config, キーコンフィグ
 language, 言語
+minify_usc, USCを圧縮
+show_sus_export,SUSエクスポートを表示
 auto, 自動
 auto_save, オートセーブ
 auto_save_enable, オートセーブ
@@ -82,6 +86,8 @@ lanes_opacity, レーンの不透明度
 video, 画面
 vsync_enable, VSync（垂直同期）
 notes_se, ノーツのSE
+show_tick_in_properties, プロパティにTickを表示
+translation_by, 翻訳：%s
 
 # score editor
 options, オプション
@@ -122,8 +128,12 @@ flip, 反転
 note_width, ノーツ幅
 shrink_down, 縮める（最初に合わせる）
 shrink_up, 縮める（最後に合わせる）
+compress_selection, 選択範囲を圧縮
 connect_holds, 連結
 split_hold, 切断
+hold_to_traces, トレースに変換
+add_traces_for_hold, トレースを追加
+convert_hold_to_traces, トレースに変換
 lerp_hispeeds, ハイスピードを補間
 repeat_hold_mids, 中継点を繰り返す
 step_type, 中継点の種類
@@ -156,6 +166,10 @@ division, %d分音符
 division_affix, %d分音符
 custom, カスタム：
 custom_division, カスタム分割
+snap_mode, スナップ
+snap_mode_relative, 相対スナップ
+snap_mode_absolute, 絶対スナップ
+snap_mode_individual_absolute, 個別絶対スナップ
 zoom, ズーム
 show_step_outlines, 中継点に枠線を表示
 draw_waveform, 波形を表示
@@ -196,7 +210,9 @@ note_properties_hi_speed, ハイスピード
 note_properties_hold_note, スライド
 note_properties_guide, ガイド
 note_properties_not_selected, ノーツ、またはハイスピードを選択してください。
-note_properties_many_selected, 複数のノーツまたはハイスピードが選択されています。
+note_properties_many_hold_notes, 複数のスライドが選択されています。
+translated_by, 翻訳：%s
+zoom_tooltip,Ctrl+クリックで値を編集
 
 # preset manager
 presets, プリセット
@@ -218,6 +234,8 @@ layer_up, 上に移動
 layer_down, 下に移動
 layer_merge, 一つ下と結合
 layer_delete, 削除
+layer_hide, 非表示
+layer_show, 表示
 
 # waypoint manager
 waypoints,しおり
