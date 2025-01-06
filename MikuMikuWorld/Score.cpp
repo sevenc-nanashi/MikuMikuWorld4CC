@@ -41,7 +41,7 @@ namespace MikuMikuWorld
 
 	Note readNote(NoteType type, BinaryReader* reader, int cyanvasVersion)
 	{
-		printf("%d\n", cyanvasVersion);
+		//printf("%d\n", cyanvasVersion);
 
 		Note note(type);
 
