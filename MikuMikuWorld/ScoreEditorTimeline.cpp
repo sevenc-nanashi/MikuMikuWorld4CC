@@ -964,12 +964,13 @@ namespace MikuMikuWorld
 
 			if (note.getType() == NoteType::Tap)
 			{
+				Color tint = (context.showAllLayers || note.layer == context.selectedLayer) ? noteTint : otherLayerTint;
+
+				if (note.noInput)
+					tint.a *= 0.75;
+
 				updateNote(context, edit, note);
-				drawNote(note, renderer,
-				         (context.showAllLayers || note.layer == context.selectedLayer)
-				             ? noteTint
-				             : otherLayerTint,
-				         0, 0, context.showAllLayers || note.layer == context.selectedLayer);
+				drawNote(note, renderer, tint, 0, 0, context.showAllLayers || note.layer == context.selectedLayer);
 			}
 			if (note.getType() == NoteType::Damage)
 			{

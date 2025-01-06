@@ -13,7 +13,8 @@ namespace MikuMikuWorld
 	enum NoteFlags
 	{
 		NOTE_CRITICAL = 1 << 0,
-		NOTE_FRICTION = 1 << 1
+		NOTE_FRICTION = 1 << 1,
+		NOTE_NO_INPUT = 1 << 2
 	};
 
 	enum HoldFlags
@@ -40,7 +41,7 @@ namespace MikuMikuWorld
 
 	Note readNote(NoteType type, BinaryReader* reader, int cyanvasVersion)
 	{
-		// printf("%d\n", cyanvasVersion);
+		printf("%d\n", cyanvasVersion);
 
 		Note note(type);
 
@@ -66,6 +67,10 @@ namespace MikuMikuWorld
 		unsigned int flags = reader->readUInt32();
 		note.critical = (bool)(flags & NOTE_CRITICAL);
 		note.friction = (bool)(flags & NOTE_FRICTION);
+
+		if (cyanvasVersion >= 7)
+			note.noInput = (bool)(flags & NOTE_NO_INPUT);
+
 		return note;
 	}
 
@@ -84,6 +89,8 @@ namespace MikuMikuWorld
 			flags |= NOTE_CRITICAL;
 		if (note.friction)
 			flags |= NOTE_FRICTION;
+		if (note.noInput)
+			flags |= NOTE_NO_INPUT;
 		writer->writeInt32(flags);
 	}
 
@@ -395,7 +402,7 @@ namespace MikuMikuWorld
 		// version
 		writer.writeInt16(4);
 		// cyanvas version
-		writer.writeInt16(6);
+		writer.writeInt16(7);
 
 		// offsets address in order: metadata -> events -> taps -> holds
 		// Cyanvas extension: -> damages -> layers -> waypoints

@@ -11,19 +11,19 @@ namespace MikuMikuWorld
 
 	Note::Note(NoteType _type)
 	    : type{ _type }, parentID{ -1 }, tick{ 0 }, lane{ 0 }, width{ 3 }, critical{ false },
-	      friction{ false }
+	      friction{ false }, noInput{ false }
 	{
 	}
 
 	Note::Note(NoteType _type, int _tick, float _lane, float _width)
 	    : type{ _type }, parentID{ -1 }, tick{ _tick }, lane{ _lane }, width{ _width },
-	      critical{ false }, friction{ false }
+	      critical{ false }, friction{ false }, noInput{ false }
 	{
 	}
 
 	Note::Note()
 	    : type{ NoteType::Tap }, parentID{ -1 }, tick{ 0 }, lane{ 0 }, width{ 3 },
-	      critical{ false }, friction{ false }
+	      critical{ false }, friction{ false }, noInput{ false }
 	{
 	}
 
