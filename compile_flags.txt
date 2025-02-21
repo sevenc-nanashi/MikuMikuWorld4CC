@@ -5,6 +5,7 @@
 -IDepends
 -IDepends/openssl/include
 -IDepends/glad/include
+-IDepends/stb_image
 -IDepends/stb_vorbis
 -IDepends/miniaudio
 -IDepends/json

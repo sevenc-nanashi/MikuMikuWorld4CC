@@ -1,3 +1,6 @@
 [submodule "Depends/cpp-httplib"]
 	path = Depends/cpp-httplib
 	url = https://github.com/yhirose/cpp-httplib.git
+[submodule "Depends/WebGPU"]
+	path = Depends/WebGPU
+	url = https://github.com/eliemichel/WebGPU-distribution

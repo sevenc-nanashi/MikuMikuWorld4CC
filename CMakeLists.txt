@@ -85,4 +85,6 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # ##############################################################################
 # Sub-projects
 # ##############################################################################
+
+add_subdirectory(./Depends/WebGPU)
 add_subdirectory(MikuMikuWorld)

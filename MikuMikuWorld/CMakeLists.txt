@@ -370,6 +370,7 @@ if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
     )
 endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE "${ADDITIONAL_LIBRARY_DEPENDENCIES}")
+target_link_libraries(${PROJECT_NAME} PRIVATE "webgpu")
 
 if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
     target_link_directories(${PROJECT_NAME} PRIVATE
