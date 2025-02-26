@@ -64,7 +64,8 @@ task "check:translation" do
       puts "missing keys:"
       puts "  " + missing_keys.join(", ")
     end
-    coverage = ((1 - missing_keys.size.to_f / template_keys.size) * 100).round(2)
+    coverage =
+      ((1 - missing_keys.size.to_f / template_keys.size) * 100).round(2)
     puts "Coverage: #{coverage}%"
     coverages[file.split(".")[0]] = coverage
   end
@@ -78,3 +79,22 @@ task "check:translation" do
 end
 
 task "check" => %w[check:translation]
+
+task "update", [:version] do |t, args|
+  rc = File.read("./MikuMikuWorld/MikuMikuWorld.rc")
+
+  version_raw = args[:version]
+  version = version_raw.sub(/[^0-9.].*/, "").split(".")
+  puts "Update: v#{version_raw} (#{version.join(".")})"
+  rc.gsub!(/FILEVERSION .+/, "FILEVERSION #{version.join(",")}")
+  rc.gsub!(/PRODUCTVERSION .+/, "PRODUCTVERSION #{version.join(",")}")
+  rc.gsub!(/"FileVersion", ".+"/, %Q("FileVersion", "#{version.join(".")}"))
+  rc.gsub!(
+    /"ProductVersion", ".+"/,
+    %Q("ProductVersion", "#{version.join(".")}")
+  )
+
+  File.write("./MikuMikuWorld/MikuMikuWorld.rc", rc)
+  system %Q(git commit --allow-empty -am "release: v#{version_raw}")
+  system %Q(git tag -f v#{version_raw})
+end
