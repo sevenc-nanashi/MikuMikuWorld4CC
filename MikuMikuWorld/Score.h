@@ -8,8 +8,8 @@
 
 namespace MikuMikuWorld
 {
-	extern int nextSkillID;
-	extern int nextHiSpeedID;
+	int getNextSkillID();
+	int getNextHiSpeedID();
 
 	struct SkillTrigger
 	{

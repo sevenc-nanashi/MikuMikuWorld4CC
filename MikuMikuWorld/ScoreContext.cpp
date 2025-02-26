@@ -706,7 +706,7 @@ namespace MikuMikuWorld
 		{
 			if (noteIDMap.find(oldID) != noteIDMap.end())
 				return noteIDMap[oldID];
-			auto id = nextID++;
+			auto id = Note::getNextID();
 			noteIDMap[oldID] = id;
 			return id;
 		};
@@ -747,7 +747,7 @@ namespace MikuMikuWorld
 
 		for (auto& [_, hsc] : pasteData.hiSpeedChanges)
 		{
-			hsc.ID = nextHiSpeedID++;
+			hsc.ID = getNextHiSpeedID();
 			hsc.layer = selectedLayer;
 			hsc.tick += pasteData.offsetTicks;
 			score.hiSpeedChanges[hsc.ID] = hsc;
@@ -920,7 +920,7 @@ namespace MikuMikuWorld
 				}
 			}
 			// Add Hi-Speed
-			int id = nextHiSpeedID++;
+			int id = getNextHiSpeedID();
 			this->score.hiSpeedChanges[id].ID = id;
 			this->score.hiSpeedChanges[id].tick = newTick;
 			if (elements->front().first == Type::Note)
@@ -1008,14 +1008,14 @@ namespace MikuMikuWorld
 		// Create new steps to connect both ends
 		Note earlierNoteAsMid =
 		    Note(NoteType::HoldMid, earlierNote.tick, earlierNote.lane, earlierNote.width);
-		earlierNoteAsMid.ID = nextID++;
+		earlierNoteAsMid.ID = Note::getNextID();
 		earlierNoteAsMid.critical = earlierHoldStart.critical;
 		earlierNoteAsMid.parentID = earlierHold.start.ID;
 		earlierNoteAsMid.layer = earlierHoldStart.layer;
 
 		Note laterNoteAsMid =
 		    Note(NoteType::HoldMid, laterNote.tick, laterNote.lane, laterNote.width);
-		laterNoteAsMid.ID = nextID++;
+		laterNoteAsMid.ID = Note::getNextID();
 		laterNoteAsMid.critical = earlierHoldStart.critical;
 		laterNoteAsMid.parentID = earlierHold.start.ID;
 		laterNoteAsMid.layer = earlierHoldStart.layer;
@@ -1067,13 +1067,13 @@ namespace MikuMikuWorld
 		Note holdStart = score.notes.at(hold.start.ID);
 
 		Note newSlideEnd = Note(NoteType::HoldEnd, note.tick, note.lane, note.width);
-		newSlideEnd.ID = nextID++;
+		newSlideEnd.ID = Note::getNextID();
 		newSlideEnd.parentID = hold.start.ID;
 		newSlideEnd.critical = note.critical;
 		newSlideEnd.layer = holdStart.layer;
 
 		Note newSlideStart = Note(NoteType::Hold, note.tick, note.lane, note.width);
-		newSlideStart.ID = nextID++;
+		newSlideStart.ID = Note::getNextID();
 		newSlideStart.critical = holdStart.critical;
 		newSlideStart.layer = holdStart.layer;
 
@@ -1223,7 +1223,7 @@ namespace MikuMikuWorld
 				nextMid.parentID = hold.start.ID;
 				nextMid.layer = currentRep.layer;
 
-				nextMid.ID = nextID++;
+				nextMid.ID = Note::getNextID();
 				score.notes[nextMid.ID] = nextMid;
 
 				HoldStepType type = jPos == -1 ? hold.steps[0].type : hold.steps[jPos].type;
@@ -1311,7 +1311,7 @@ namespace MikuMikuWorld
 				newNote.layer = score.notes.at(targetSlideId).layer;
 
 				score.notes.emplace(nextID, newNote);
-				nextID++;
+				Note::getNextID();
 			}
 
 			// Delete origin slide
@@ -1356,7 +1356,7 @@ namespace MikuMikuWorld
 				    (float)first.speed + t * ((float)second.speed - (float)first.speed); // lerp
 				// remapping the current tick to the speed
 
-				int id = nextHiSpeedID++;
+				int id = getNextHiSpeedID();
 				score.hiSpeedChanges[id] = { id, tick, speed, selectedLayer };
 			}
 		}

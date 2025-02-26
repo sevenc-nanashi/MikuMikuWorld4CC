@@ -5,6 +5,7 @@
 #include "Constants.h"
 #include "ResourceManager.h"
 #include "Tempo.h"
+#include "Score.h"
 #include "UI.h"
 #include "Utilities.h"
 #include <algorithm>
@@ -361,7 +362,8 @@ namespace MikuMikuWorld
 			                    selectedTickNum >= 3 and selectedStartNum < 2))
 				context.repeatMidsInSelection(context);
 
-			if (ImGui::BeginMenu(getString("hold_to_traces"), context.selectionHasHold())) {
+			if (ImGui::BeginMenu(getString("hold_to_traces"), context.selectionHasHold()))
+			{
 				if (ImGui::MenuItem(getString("add_traces_for_hold")))
 					context.convertHoldToTraces(division, false);
 				if (ImGui::MenuItem(getString("convert_hold_to_traces")))
@@ -1162,7 +1164,7 @@ namespace MikuMikuWorld
 					return;
 
 			Score prev = context.score;
-			int id = nextHiSpeedID++;
+			int id = getNextHiSpeedID();
 			context.score.hiSpeedChanges[id] = { id, hoverTick, edit.hiSpeed,
 				                                 context.selectedLayer };
 			context.pushHistory("Insert hi-speed changes", prev, context.score);
@@ -2626,7 +2628,7 @@ namespace MikuMikuWorld
 		Score prev = context.score;
 
 		Note newNote = inputNotes.tap;
-		newNote.ID = nextID++;
+		newNote.ID = Note::getNextID();
 		newNote.layer = context.selectedLayer;
 
 		context.score.notes[newNote.ID] = newNote;
@@ -2638,11 +2640,11 @@ namespace MikuMikuWorld
 		Score prev = context.score;
 
 		Note holdStart = inputNotes.holdStart;
-		holdStart.ID = nextID++;
+		holdStart.ID = Note::getNextID();
 		holdStart.layer = context.selectedLayer;
 
 		Note holdEnd = inputNotes.holdEnd;
-		holdEnd.ID = nextID++;
+		holdEnd.ID = Note::getNextID();
 		holdEnd.parentID = holdStart.ID;
 		holdEnd.layer = context.selectedLayer;
 
@@ -2691,7 +2693,7 @@ namespace MikuMikuWorld
 		Note holdStart = context.score.notes[holdId];
 
 		Note holdStep = inputNotes.holdStep;
-		holdStep.ID = nextID++;
+		holdStep.ID = Note::getNextID();
 		holdStep.critical = holdStart.critical;
 		holdStep.parentID = holdStart.ID;
 		holdStep.layer = context.selectedLayer;
@@ -2711,7 +2713,7 @@ namespace MikuMikuWorld
 		Score prev = context.score;
 
 		Note newNote = inputNotes.damage;
-		newNote.ID = nextID++;
+		newNote.ID = Note::getNextID();
 		newNote.layer = context.selectedLayer;
 
 		context.score.notes[newNote.ID] = newNote;

@@ -6,8 +6,8 @@
 namespace MikuMikuWorld
 {
 	int nextID = 1;
-	int nextSkillID = 1;
-	int nextHiSpeedID = 1;
+
+	int Note::getNextID() { return nextID++; }
 
 	Note::Note(NoteType _type)
 	    : type{ _type }, parentID{ -1 }, tick{ 0 }, lane{ 0 }, width{ 3 }, critical{ false },
@@ -39,8 +39,6 @@ namespace MikuMikuWorld
 	{
 		return type == NoteType::Hold || type == NoteType::HoldEnd || type == NoteType::Tap;
 	}
-
-	void resetNextID() { nextID = 1; }
 
 	void cycleFlick(Note& note)
 	{

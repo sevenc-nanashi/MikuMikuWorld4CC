@@ -10,6 +10,11 @@ using namespace IO;
 
 namespace MikuMikuWorld
 {
+	int nextSkillID = 1;
+	int nextHiSpeedID = 1;
+	int getNextSkillID() { return nextSkillID++; }
+	int getNextHiSpeedID() { return nextHiSpeedID++; }
+
 	enum NoteFlags
 	{
 		NOTE_CRITICAL = 1 << 0,
@@ -32,7 +37,7 @@ namespace MikuMikuWorld
 
 		tempoChanges.push_back(Tempo());
 		timeSignatures[0] = { 0, 4, 4 };
-		auto id = nextHiSpeedID++;
+		auto id = getNextHiSpeedID();
 		hiSpeedChanges[id] = HiSpeedChange{ id, 0, 1.0f, 0 };
 
 		fever.startTick = fever.endTick = -1;
@@ -154,7 +159,7 @@ namespace MikuMikuWorld
 				int layer = 0;
 				if (cyanvasVersion >= 4)
 					layer = reader->readUInt32();
-				int id = nextHiSpeedID++;
+				int id = getNextHiSpeedID();
 				score.hiSpeedChanges[id] = HiSpeedChange{ id, tick, speed, layer };
 			}
 		}
@@ -166,7 +171,7 @@ namespace MikuMikuWorld
 			for (int i = 0; i < skillCount; ++i)
 			{
 				int tick = reader->readUInt32();
-				score.skills.push_back({ nextSkillID++, tick });
+				score.skills.push_back({ getNextSkillID(), tick });
 			}
 
 			score.fever.startTick = reader->readUInt32();
@@ -267,7 +272,7 @@ namespace MikuMikuWorld
 		for (int i = 0; i < noteCount; ++i)
 		{
 			Note note = readNote(NoteType::Tap, &reader, cyanvasVersion);
-			note.ID = nextID++;
+			note.ID = Note::getNextID();
 			score.notes[note.ID] = note;
 		}
 
@@ -294,7 +299,7 @@ namespace MikuMikuWorld
 				hold.startType = hold.endType = HoldNoteType::Guide;
 
 			Note start = readNote(NoteType::Hold, &reader, cyanvasVersion);
-			start.ID = nextID++;
+			start.ID = Note::getNextID();
 			hold.start.ease = (EaseType)reader.readUInt32();
 			hold.start.ID = start.ID;
 			if (cyanvasVersion >= 2)
@@ -316,7 +321,7 @@ namespace MikuMikuWorld
 			for (int i = 0; i < stepCount; ++i)
 			{
 				Note mid = readNote(NoteType::HoldMid, &reader, cyanvasVersion);
-				mid.ID = nextID++;
+				mid.ID = Note::getNextID();
 				mid.parentID = start.ID;
 				score.notes[mid.ID] = mid;
 
@@ -328,7 +333,7 @@ namespace MikuMikuWorld
 			}
 
 			Note end = readNote(NoteType::HoldEnd, &reader, cyanvasVersion);
-			end.ID = nextID++;
+			end.ID = Note::getNextID();
 			end.parentID = start.ID;
 			score.notes[end.ID] = end;
 
@@ -345,7 +350,7 @@ namespace MikuMikuWorld
 			for (int i = 0; i < damageCount; ++i)
 			{
 				Note note = readNote(NoteType::Damage, &reader, cyanvasVersion);
-				note.ID = nextID++;
+				note.ID = Note::getNextID();
 				score.notes[note.ID] = note;
 			}
 		}

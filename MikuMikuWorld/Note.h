@@ -52,7 +52,6 @@ namespace MikuMikuWorld
 	};
 
 	extern NoteTextures noteTextures;
-	extern int nextID;
 
 	class Note
 	{
@@ -60,6 +59,8 @@ namespace MikuMikuWorld
 		NoteType type;
 
 	  public:
+		static int getNextID();
+
 		int ID;
 		int parentID;
 		int tick;
@@ -118,7 +119,8 @@ namespace MikuMikuWorld
 		 * @throw `std::out_of_range` if `index` is invalid
 		 * @warning Reference returned by this method can be invalidated by vector reallocation
 		 */
-		HoldStep& operator[](int index) {
+		HoldStep& operator[](int index)
+		{
 			if (index < -1 || index >= (int)steps.size())
 				throw std::out_of_range("Index out of range in HoldNote[]");
 			return index == -1 ? start : steps[index];
@@ -129,7 +131,8 @@ namespace MikuMikuWorld
 		 * @throw `std::out_of_range` if `index` is invalid
 		 * @warning Reference returned by this method can be invalidated by vector reallocation
 		 */
-		const HoldStep& operator[](int index) const {
+		const HoldStep& operator[](int index) const
+		{
 			if (index < -1 || index >= (int)steps.size())
 				throw std::out_of_range("Index out of range in HoldNote[]");
 			return index == -1 ? start : steps[index];
@@ -139,7 +142,8 @@ namespace MikuMikuWorld
 		 *        where -1 stands for the start note and `steps.size()` stands for the end note
 		 * @throw `std::out_of_range` if `index` is invalid
 		 */
-		int id_at(int index) const {
+		int id_at(int index) const
+		{
 			if (index < -1 || index > (int)steps.size())
 				throw std::out_of_range("Index out of range in HoldNote::id_at");
 			return (index == steps.size()) ? end : (index == -1 ? start.ID : steps[index].ID);
@@ -147,8 +151,6 @@ namespace MikuMikuWorld
 	};
 
 	struct Score;
-
-	void resetNextID();
 
 	void cycleFlick(Note& note);
 	void cycleStepEase(HoldStep& note);

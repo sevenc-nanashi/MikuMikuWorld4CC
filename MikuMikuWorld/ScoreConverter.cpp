@@ -203,7 +203,7 @@ namespace MikuMikuWorld
 			n.layer = std::distance(
 			    hiSpeedGroupNames.begin(),
 			    std::find(hiSpeedGroupNames.begin(), hiSpeedGroupNames.end(), note.hiSpeedGroup));
-			n.ID = nextID++;
+			n.ID = Note::getNextID();
 
 			notes[n.ID] = n;
 		}
@@ -227,7 +227,7 @@ namespace MikuMikuWorld
 				bool critical = criticals.find(key) != criticals.end();
 
 				HoldNote hold;
-				int startID = nextID++;
+				int startID = Note::getNextID();
 				hold.steps.reserve(slide.size() - 2);
 
 				for (const auto& note : slide)
@@ -289,7 +289,7 @@ namespace MikuMikuWorld
 						    std::distance(hiSpeedGroupNames.begin(),
 						                  std::find(hiSpeedGroupNames.begin(),
 						                            hiSpeedGroupNames.end(), note.hiSpeedGroup));
-						n.ID = nextID++;
+						n.ID = Note::getNextID();
 						n.parentID = startID;
 
 						if (isGuide)
@@ -325,7 +325,7 @@ namespace MikuMikuWorld
 						                  std::find(hiSpeedGroupNames.begin(),
 						                            hiSpeedGroupNames.end(), note.hiSpeedGroup));
 						n.friction = false;
-						n.ID = nextID++;
+						n.ID = Note::getNextID();
 						n.parentID = startID;
 
 						if (n.friction)
@@ -386,7 +386,7 @@ namespace MikuMikuWorld
 			layers.push_back(Layer{ IO::formatString("#%d", hiSpeedGroupIndex) });
 			for (const auto& change : speed.hiSpeeds)
 			{
-				int id = nextHiSpeedID++;
+				int id = getNextHiSpeedID();
 				hiSpeedChanges[id] = { id, change.tick, change.speed, hiSpeedGroupIndex };
 			}
 		}
@@ -841,7 +841,7 @@ namespace MikuMikuWorld
 				score.layers.push_back(Layer{ IO::formatString("#%d", index) });
 				for (const auto& change : obj["changes"])
 				{
-					int id = nextID++;
+					int id = Note::getNextID();
 					score.hiSpeedChanges[id] =
 					    HiSpeedChange{ id, (int)(change["beat"].get<double>() * TICKS_PER_BEAT),
 						               change["timeScale"].get<float>(), index };
@@ -867,7 +867,7 @@ namespace MikuMikuWorld
 					note.flick = FlickType::None;
 				}
 				note.layer = obj["timeScaleGroup"].get<int>();
-				note.ID = nextID++;
+				note.ID = Note::getNextID();
 				score.notes[note.ID] = note;
 			}
 			else if (obj["type"] == "damage")
@@ -877,7 +877,7 @@ namespace MikuMikuWorld
 				note.width = obj["size"].get<float>() * 2;
 				note.lane = obj["lane"].get<float>() + 6 - obj["size"].get<float>();
 				note.layer = obj["timeScaleGroup"].get<int>();
-				note.ID = nextID++;
+				note.ID = Note::getNextID();
 				score.notes[note.ID] = note;
 			}
 			else if (obj["type"] == "guide")
@@ -931,7 +931,7 @@ namespace MikuMikuWorld
 						startNote.tick = step["beat"].get<double>() * TICKS_PER_BEAT;
 						startNote.lane = step["lane"].get<float>() + 6 - step["size"].get<float>();
 						startNote.layer = step["timeScaleGroup"].get<int>();
-						startNote.ID = nextID++;
+						startNote.ID = Note::getNextID();
 						startNote.width = step["size"].get<float>() * 2;
 						score.notes[startNote.ID] = startNote;
 						hold.start.ID = startNote.ID;
@@ -966,7 +966,7 @@ namespace MikuMikuWorld
 						endNote.tick = step["beat"].get<double>() * TICKS_PER_BEAT;
 						endNote.lane = step["lane"].get<float>() + 6 - step["size"].get<float>();
 						endNote.layer = step["timeScaleGroup"].get<int>();
-						endNote.ID = nextID++;
+						endNote.ID = Note::getNextID();
 						endNote.parentID = hold.start.ID;
 						endNote.width = step["size"].get<float>() * 2;
 						score.notes[endNote.ID] = endNote;
@@ -980,7 +980,7 @@ namespace MikuMikuWorld
 						mid.tick = step["beat"].get<double>() * TICKS_PER_BEAT;
 						mid.lane = step["lane"].get<float>() + 6 - step["size"].get<float>();
 						mid.layer = step["timeScaleGroup"].get<int>();
-						mid.ID = nextID++;
+						mid.ID = Note::getNextID();
 						mid.parentID = hold.start.ID;
 						mid.width = step["size"].get<float>() * 2;
 						score.notes[mid.ID] = mid;
@@ -1068,7 +1068,7 @@ namespace MikuMikuWorld
 						{
 							hold.startType = HoldNoteType::Normal;
 						}
-						startNote.ID = nextID++;
+						startNote.ID = Note::getNextID();
 						score.notes[startNote.ID] = startNote;
 						hold.start.ID = startNote.ID;
 
@@ -1110,7 +1110,7 @@ namespace MikuMikuWorld
 						                          ? FlickType::Left
 						                          : FlickType::Right
 						                    : FlickType::None;
-						endNote.ID = nextID++;
+						endNote.ID = Note::getNextID();
 						endNote.parentID = hold.start.ID;
 
 						if (step["judgeType"].get<std::string>() == "trace")
@@ -1138,7 +1138,7 @@ namespace MikuMikuWorld
 						mid.width = step["size"].get<float>() * 2;
 						mid.layer = step["timeScaleGroup"].get<int>();
 						mid.critical = isCritical;
-						mid.ID = nextID++;
+						mid.ID = Note::getNextID();
 						mid.parentID = hold.start.ID;
 						score.notes[mid.ID] = mid;
 						s.ID = mid.ID;

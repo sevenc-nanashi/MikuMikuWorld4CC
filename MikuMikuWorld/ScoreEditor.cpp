@@ -389,10 +389,8 @@ namespace MikuMikuWorld
 		std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 
 		// Backup next note ID in case of an import failure
-		int nextIdBackup = nextID;
 		try
 		{
-			resetNextID();
 			std::string workingFilename;
 			Score newScore;
 
@@ -435,7 +433,6 @@ namespace MikuMikuWorld
 		}
 		catch (std::exception& error)
 		{
-			nextID = nextIdBackup;
 			std::string errorMessage = IO::formatString(
 			    "%s\n%s: %s\n%s: %s", getString("error_load_score_file"), getString("score_file"),
 			    filename.c_str(), getString("error"), error.what());
