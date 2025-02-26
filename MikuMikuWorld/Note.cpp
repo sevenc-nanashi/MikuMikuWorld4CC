@@ -2,12 +2,20 @@
 #include "Constants.h"
 #include "Score.h"
 #include <algorithm>
+#include <choc/memory/choc_xxHash.h>
+
+static choc::hash::xxHash64 hasher = choc::hash::xxHash64(0x3939cc01);
 
 namespace MikuMikuWorld
 {
 	int nextID = 1;
 
-	int Note::getNextID() { return nextID++; }
+	int Note::getNextID() {
+		uint8_t data[sizeof(int)];
+		std::memcpy(data, &nextID, sizeof(int));
+		nextID = hasher.hash(&data, sizeof(int));
+		return nextID;
+	}
 
 	Note::Note(NoteType _type)
 	    : type{ _type }, parentID{ -1 }, tick{ 0 }, lane{ 0 }, width{ 3 }, critical{ false },

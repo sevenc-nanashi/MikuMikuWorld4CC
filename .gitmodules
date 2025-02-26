@@ -1,3 +1,6 @@
 [submodule "Depends/cpp-httplib"]
 	path = Depends/cpp-httplib
 	url = https://github.com/yhirose/cpp-httplib.git
+[submodule "Depends/choc"]
+	path = Depends/choc
+	url = https://github.com/Tracktion/choc

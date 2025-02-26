@@ -1,3 +1,4 @@
+#include <choc/memory/choc_xxHash.h>
 #include "Score.h"
 #include "BinaryReader.h"
 #include "BinaryWriter.h"
@@ -8,12 +9,25 @@
 
 using namespace IO;
 
+static choc::hash::xxHash64 skillHasher = choc::hash::xxHash64(0x3939cc02);
+static choc::hash::xxHash64 hiSpeedHasher = choc::hash::xxHash64(0x3939cc03);
+
 namespace MikuMikuWorld
 {
 	int nextSkillID = 1;
 	int nextHiSpeedID = 1;
-	int getNextSkillID() { return nextSkillID++; }
-	int getNextHiSpeedID() { return nextHiSpeedID++; }
+	int getNextSkillID() {
+		uint8_t data[sizeof(int)];
+		std::memcpy(data, &nextSkillID, sizeof(int));
+		nextSkillID = skillHasher.hash(&data, sizeof(int));
+		return nextSkillID;
+	}
+	int getNextHiSpeedID() {
+		uint8_t data[sizeof(int)];
+		std::memcpy(data, &nextHiSpeedID, sizeof(int));
+		nextHiSpeedID = hiSpeedHasher.hash(&data, sizeof(int));
+		return nextHiSpeedID;
+	}
 
 	enum NoteFlags
 	{

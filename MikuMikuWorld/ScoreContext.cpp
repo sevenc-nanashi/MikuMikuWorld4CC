@@ -1305,12 +1305,12 @@ namespace MikuMikuWorld
 				float right = easeFunc(connectorHead->lane+connectorHead->width, connectorTail->lane+connectorTail->width, t);
 				// Spawn a trace note
 				Note newNote(NoteType::Tap, tick, left, right - left);
-				newNote.ID = nextID;
+				newNote.ID = Note::getNextID();
 				newNote.critical = critical;
 				newNote.friction = true;
 				newNote.layer = score.notes.at(targetSlideId).layer;
 
-				score.notes.emplace(nextID, newNote);
+				score.notes.emplace(newNote.ID, newNote);
 				Note::getNextID();
 			}
 
