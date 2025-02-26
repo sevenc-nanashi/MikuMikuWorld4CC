@@ -38,7 +38,6 @@ If you want to contribute a translation, please see [the guide](./TRANSLATION.md
 ## Requirements:
 
 -   64-bit Windows 10 or higher\*.
--   [Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe).
 -   GPU supporting OpenGL 3.3 with latest drivers installed.
 
 \*Earlier versions of Windows may work but not tested.
