@@ -95,6 +95,6 @@ task "update", [:version] do |t, args|
   )
 
   File.write("./MikuMikuWorld/MikuMikuWorld.rc", rc)
-  system %Q(git commit --allow-empty -am "release: v#{version_raw}")
-  system %Q(git tag -f v#{version_raw})
+  sh %Q(git commit --allow-empty -am "release: v#{version_raw}")
+  sh %Q(git tag -f v#{version_raw})
 end
