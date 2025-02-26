@@ -135,13 +135,13 @@ namespace MikuMikuWorld
 			}
 		}
 
-		std::unordered_map<int, Note> notes;
+		std::unordered_map<id_t, Note> notes;
 		notes.reserve(sus.taps.size());
 
-		std::unordered_map<int, HoldNote> holds;
+		std::unordered_map<id_t, HoldNote> holds;
 		holds.reserve(sus.slides.size());
 
-		std::vector<SkillTrigger> skills;
+		std::unordered_map<id_t, SkillTrigger> skills;
 		Fever fever{ -1, -1 };
 
 		std::unordered_set<std::string> cyanvasStyleCriticalTraces;
@@ -217,9 +217,8 @@ namespace MikuMikuWorld
 				bool isGuide = isGuideSlides;
 				const std::string key = noteKey(slide[0]);
 
-				auto start =
-				    std::find_if(slide.begin(), slide.end(),
-				                 [](const SUSNote& a) { return a.type == 1 || a.type == 2; });
+				auto start = std::find_if(slide.begin(), slide.end(), [](const SUSNote& a)
+				                          { return a.type == 1 || a.type == 2; });
 
 				if (start == slide.end() || slide.size() < 2)
 					continue;
@@ -373,7 +372,7 @@ namespace MikuMikuWorld
 		}
 
 		std::vector<Layer> layers;
-		std::unordered_map<int, HiSpeedChange> hiSpeedChanges;
+		std::unordered_map<id_t, HiSpeedChange> hiSpeedChanges;
 		int hiSpeedChangesCount = 0;
 		for (const auto& group : sus.hiSpeedGroups)
 			for (const auto& change : group.hiSpeeds)
@@ -386,7 +385,7 @@ namespace MikuMikuWorld
 			layers.push_back(Layer{ IO::formatString("#%d", hiSpeedGroupIndex) });
 			for (const auto& change : speed.hiSpeeds)
 			{
-				int id = getNextHiSpeedID();
+				id_t id = getNextHiSpeedID();
 				hiSpeedChanges[id] = { id, change.tick, change.speed, hiSpeedGroupIndex };
 			}
 		}
@@ -570,7 +569,7 @@ namespace MikuMikuWorld
 			}
 		}
 
-		for (const auto& skill : score.skills)
+		for (const auto& [_, skill] : score.skills)
 			taps.push_back(SUSNote{ skill.tick, 0, 1, 4 });
 
 		if (score.fever.startTick != -1)
@@ -841,7 +840,7 @@ namespace MikuMikuWorld
 				score.layers.push_back(Layer{ IO::formatString("#%d", index) });
 				for (const auto& change : obj["changes"])
 				{
-					int id = Note::getNextID();
+					id_t id = Note::getNextID();
 					score.hiSpeedChanges[id] =
 					    HiSpeedChange{ id, (int)(change["beat"].get<double>() * TICKS_PER_BEAT),
 						               change["timeScale"].get<float>(), index };
@@ -936,8 +935,7 @@ namespace MikuMikuWorld
 						score.notes[startNote.ID] = startNote;
 						hold.start.ID = startNote.ID;
 
-						std::string ease =
-							jsonIO::tryGetValue(step, "ease", std::string("linear"));
+						std::string ease = jsonIO::tryGetValue(step, "ease", std::string("linear"));
 						if (ease == "in")
 						{
 							hold.start.ease = EaseType::EaseIn;
@@ -986,8 +984,7 @@ namespace MikuMikuWorld
 						score.notes[mid.ID] = mid;
 						s.ID = mid.ID;
 
-						std::string ease =
-							jsonIO::tryGetValue(step, "ease", std::string("linear"));
+						std::string ease = jsonIO::tryGetValue(step, "ease", std::string("linear"));
 						if (ease == "in")
 						{
 							s.ease = EaseType::EaseIn;
@@ -1072,8 +1069,7 @@ namespace MikuMikuWorld
 						score.notes[startNote.ID] = startNote;
 						hold.start.ID = startNote.ID;
 
-						std::string ease =
-							jsonIO::tryGetValue(step, "ease", std::string("linear"));
+						std::string ease = jsonIO::tryGetValue(step, "ease", std::string("linear"));
 						if (ease == "in")
 						{
 							hold.start.ease = EaseType::EaseIn;
@@ -1143,8 +1139,7 @@ namespace MikuMikuWorld
 						score.notes[mid.ID] = mid;
 						s.ID = mid.ID;
 
-						std::string ease =
-							jsonIO::tryGetValue(step, "ease", std::string("linear"));
+						std::string ease = jsonIO::tryGetValue(step, "ease", std::string("linear"));
 						if (ease == "in")
 						{
 							s.ease = EaseType::EaseIn;

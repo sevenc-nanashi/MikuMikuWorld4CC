@@ -1,6 +1,8 @@
 #pragma once
+#include "Constants.h"
 #include "Note.h"
 #include "Tempo.h"
+#include <cstdint>
 #include <map>
 #include <string>
 #include <unordered_map>
@@ -8,12 +10,12 @@
 
 namespace MikuMikuWorld
 {
-	int getNextSkillID();
-	int getNextHiSpeedID();
+	id_t getNextSkillID();
+	id_t getNextHiSpeedID();
 
 	struct SkillTrigger
 	{
-		int ID;
+		id_t ID;
 		int tick;
 	};
 
@@ -37,7 +39,7 @@ namespace MikuMikuWorld
 
 	struct HiSpeedChange
 	{
-		int ID;
+		id_t ID;
 		int tick;
 		float speed;
 		int layer = 0;
@@ -58,12 +60,12 @@ namespace MikuMikuWorld
 	struct Score
 	{
 		ScoreMetadata metadata;
-		std::unordered_map<int, Note> notes;
-		std::unordered_map<int, HoldNote> holdNotes;
+		std::unordered_map<id_t, Note> notes;
+		std::unordered_map<id_t, HoldNote> holdNotes;
 		std::vector<Tempo> tempoChanges;
 		std::map<int, TimeSignature> timeSignatures;
-		std::unordered_map<int, HiSpeedChange> hiSpeedChanges;
-		std::vector<SkillTrigger> skills;
+		std::unordered_map<id_t, HiSpeedChange> hiSpeedChanges;
+		std::unordered_map<id_t, SkillTrigger> skills;
 		Fever fever;
 
 		std::vector<Layer> layers{ { Layer{ "default" } } };

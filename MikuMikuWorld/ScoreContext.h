@@ -55,10 +55,10 @@ namespace MikuMikuWorld
 
 	struct PasteData
 	{
-		std::unordered_map<int, Note> notes;
-		std::unordered_map<int, HoldNote> holds;
-		std::unordered_map<int, Note> damages;
-		std::unordered_map<int, HiSpeedChange> hiSpeedChanges;
+		std::unordered_map<id_t, Note> notes;
+		std::unordered_map<id_t, HoldNote> holds;
+		std::unordered_map<id_t, Note> damages;
+		std::unordered_map<id_t, HiSpeedChange> hiSpeedChanges;
 		bool pasting{ false };
 		int offsetTicks{};
 		int offsetLane{};

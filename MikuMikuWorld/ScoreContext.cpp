@@ -1356,7 +1356,7 @@ namespace MikuMikuWorld
 				    (float)first.speed + t * ((float)second.speed - (float)first.speed); // lerp
 				// remapping the current tick to the speed
 
-				int id = getNextHiSpeedID();
+				id_t id = getNextHiSpeedID();
 				score.hiSpeedChanges[id] = { id, tick, speed, selectedLayer };
 			}
 		}

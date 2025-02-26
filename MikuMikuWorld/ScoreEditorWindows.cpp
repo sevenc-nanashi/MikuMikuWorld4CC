@@ -1750,7 +1750,7 @@ namespace MikuMikuWorld
 			{
 				context.score.layers.push_back(Layer{ layerName });
 
-				int id = getNextHiSpeedID();
+				id_t id = getNextHiSpeedID();
 				context.score.hiSpeedChanges[id] = {
 					id, 0, 1, static_cast<int>(context.score.layers.size()) - 1
 				};

@@ -1,7 +1,12 @@
 #pragma once
 
+#include <cstdint>
+
 namespace MikuMikuWorld
 {
+	constexpr uint64_t SEED = 0x3939cc00;
+	typedef uint64_t id_t;
+
 	constexpr int TICKS_PER_BEAT = 480;
 
 	constexpr float MEASURE_WIDTH = 30.0f;

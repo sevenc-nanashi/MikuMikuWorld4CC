@@ -134,10 +134,10 @@ namespace MikuMikuWorld
 		return 0;
 	}
 
-	int findHighSpeedChange(int tick, const std::unordered_map<int, HiSpeedChange>& hiSpeeds,
-	                        int selectedLayer)
+	id_t findHighSpeedChange(int tick, const std::unordered_map<id_t, HiSpeedChange>& hiSpeeds,
+	                         int selectedLayer)
 	{
-		std::vector<std::pair<int, HiSpeedChange>> currentLayersHiSpeeds;
+		std::vector<std::pair<id_t, HiSpeedChange>> currentLayersHiSpeeds;
 		for (auto& [i, h] : hiSpeeds)
 		{
 			if (selectedLayer != -1 && h.layer != selectedLayer)

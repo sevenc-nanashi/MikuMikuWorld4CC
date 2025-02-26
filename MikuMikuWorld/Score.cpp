@@ -14,15 +14,17 @@ static choc::hash::xxHash64 hiSpeedHasher = choc::hash::xxHash64(0x3939cc03);
 
 namespace MikuMikuWorld
 {
-	int nextSkillID = 1;
-	int nextHiSpeedID = 1;
-	int getNextSkillID() {
+	id_t nextSkillID = 1;
+	id_t nextHiSpeedID = 1;
+	id_t getNextSkillID()
+	{
 		uint8_t data[sizeof(int)];
 		std::memcpy(data, &nextSkillID, sizeof(int));
 		nextSkillID = skillHasher.hash(&data, sizeof(int));
 		return nextSkillID;
 	}
-	int getNextHiSpeedID() {
+	id_t getNextHiSpeedID()
+	{
 		uint8_t data[sizeof(int)];
 		std::memcpy(data, &nextHiSpeedID, sizeof(int));
 		nextHiSpeedID = hiSpeedHasher.hash(&data, sizeof(int));
@@ -173,7 +175,7 @@ namespace MikuMikuWorld
 				int layer = 0;
 				if (cyanvasVersion >= 4)
 					layer = reader->readUInt32();
-				int id = getNextHiSpeedID();
+				id_t id = getNextHiSpeedID();
 				score.hiSpeedChanges[id] = HiSpeedChange{ id, tick, speed, layer };
 			}
 		}
@@ -185,7 +187,8 @@ namespace MikuMikuWorld
 			for (int i = 0; i < skillCount; ++i)
 			{
 				int tick = reader->readUInt32();
-				score.skills.push_back({ getNextSkillID(), tick });
+				id_t id = getNextSkillID();
+				score.skills.emplace(id, SkillTrigger{ id, tick });
 			}
 
 			score.fever.startTick = reader->readUInt32();
@@ -219,7 +222,7 @@ namespace MikuMikuWorld
 		}
 
 		writer->writeInt32(score.skills.size());
-		for (const auto& skill : score.skills)
+		for (const auto& [_, skill] : score.skills)
 		{
 			writer->writeInt32(skill.tick);
 		}

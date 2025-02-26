@@ -1,4 +1,5 @@
 #pragma once
+#include "Constants.h"
 #include "NoteTypes.h"
 #include <string>
 #include <vector>
@@ -61,8 +62,8 @@ namespace MikuMikuWorld
 	  public:
 		static int getNextID();
 
-		int ID;
-		int parentID;
+		id_t ID;
+		id_t parentID;
 		int tick;
 		float lane;
 		float width;
@@ -90,7 +91,7 @@ namespace MikuMikuWorld
 
 	struct HoldStep
 	{
-		int ID;
+		id_t ID;
 		HoldStepType type;
 		EaseType ease;
 	};
@@ -100,7 +101,7 @@ namespace MikuMikuWorld
 	  public:
 		HoldStep start;
 		std::vector<HoldStep> steps;
-		int end;
+		id_t end;
 
 		HoldNoteType startType{};
 		HoldNoteType endType{};

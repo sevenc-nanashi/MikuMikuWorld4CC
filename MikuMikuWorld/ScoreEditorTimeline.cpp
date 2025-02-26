@@ -749,7 +749,7 @@ namespace MikuMikuWorld
 		feverControl(context.score, context.score.fever);
 
 		// Update skill triggers
-		for (const auto& skill : context.score.skills)
+		for (const auto& [_, skill] : context.score.skills)
 			skillControl(context.score, skill);
 
 		eventEditor(context);
@@ -910,7 +910,7 @@ namespace MikuMikuWorld
 		ImGui::SameLine();
 		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
 		ImGui::SameLine();
-		ImGui::Text(rhythmString.c_str());
+		ImGui::Text("%s", rhythmString.c_str());
 
 		updateScrollbar();
 
@@ -1164,7 +1164,7 @@ namespace MikuMikuWorld
 					return;
 
 			Score prev = context.score;
-			int id = getNextHiSpeedID();
+			id_t id = getNextHiSpeedID();
 			context.score.hiSpeedChanges[id] = { id, hoverTick, edit.hiSpeed,
 				                                 context.selectedLayer };
 			context.pushHistory("Insert hi-speed changes", prev, context.score);
@@ -1369,7 +1369,7 @@ namespace MikuMikuWorld
 					}
 				}
 
-				int nextId = hold.steps[s1].ID;
+				id_t nextId = hold.steps[s1].ID;
 				if ((context.showAllLayers || start.layer == context.selectedLayer ||
 				     context.score.notes.at(nextId).layer == context.selectedLayer) &&
 				    isMouseInHoldPath(context.score.notes.at(nextId), end, hold.steps[s1].ease, xt,
@@ -1863,7 +1863,7 @@ namespace MikuMikuWorld
 		}
 	}
 
-	void ScoreEditorTimeline::drawHoldNote(const std::unordered_map<int, Note>& notes,
+	void ScoreEditorTimeline::drawHoldNote(const std::unordered_map<id_t, Note>& notes,
 	                                       const HoldNote& note, Renderer* renderer,
 	                                       const Color& tint_, const int selectedLayer,
 	                                       const int offsetTicks, const int offsetLane)
@@ -2748,17 +2748,17 @@ namespace MikuMikuWorld
 
 		if (ImGui::CollapsingHeader("Hover Note", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			ImGui::Text("Hovering note ID: %d", hoveringNote);
-			ImGui::Text("Holding note ID: %d", holdingNote);
+			ImGui::Text("Hovering note ID: %llu", hoveringNote);
+			ImGui::Text("Holding note ID: %llu", holdingNote);
 
 			auto it = context.score.notes.find(hoveringNote);
 			if (it != context.score.notes.end())
 			{
 				const Note& note = it->second;
-				ImGui::Text("ID: %d\nType: %d\nTick: %d\nLane: %d\nWidth: %d\nCritical: "
+				ImGui::Text("ID: %llu\nType: %hhu\nTick: %d\nLane: %f\nWidth: %f\nCritical: "
 				            "%s\nFriction: %s\nFlick: %s",
-				            note.ID, note.getType(), note.tick, note.lane, note.width,
-				            boolToString(note.critical), boolToString(note.friction),
+				            note.ID, static_cast<uint8_t>(note.getType()), note.tick, note.lane,
+				            note.width, boolToString(note.critical), boolToString(note.friction),
 				            flickTypes[static_cast<int>(note.flick)]);
 			}
 			else

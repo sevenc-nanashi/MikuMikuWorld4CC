@@ -12,9 +12,9 @@ using nlohmann::json;
 
 namespace MikuMikuWorld
 {
-	NotesPreset::NotesPreset(int _id, std::string _name) : ID{ _id }, name{ _name } {}
+	NotesPreset::NotesPreset(id_t _id, std::string _name) : ID{ _id }, name{ _name } {}
 
-	NotesPreset::NotesPreset() : ID{ -1 }, name{ "" }, description{ "" } {}
+	NotesPreset::NotesPreset() : ID{ static_cast<id_t>(-1) }, name{ "" }, description{ "" } {}
 
 	Result NotesPreset::read(const std::string& filepath)
 	{
@@ -171,13 +171,12 @@ namespace MikuMikuWorld
 		preset.name = name;
 		preset.description = desc;
 
-		int baseTick = score.notes
-		                   .at(*std::min_element(selectedNotes.begin(), selectedNotes.end(),
-		                                         [&score](int id1, int id2) {
-			                                         return score.notes.at(id1).tick <
-			                                                score.notes.at(id2).tick;
-		                                         }))
-		                   .tick;
+		int baseTick =
+		    score.notes
+		        .at(*std::min_element(
+		            selectedNotes.begin(), selectedNotes.end(), [&score](int id1, int id2)
+		            { return score.notes.at(id1).tick < score.notes.at(id2).tick; }))
+		        .tick;
 		preset.data =
 		    jsonIO::noteSelectionToJson(score, selectedNotes, selectedHiSpeedChanges, baseTick);
 

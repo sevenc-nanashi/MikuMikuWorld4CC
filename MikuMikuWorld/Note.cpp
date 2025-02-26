@@ -10,7 +10,8 @@ namespace MikuMikuWorld
 {
 	int nextID = 1;
 
-	int Note::getNextID() {
+	int Note::getNextID()
+	{
 		uint8_t data[sizeof(int)];
 		std::memcpy(data, &nextID, sizeof(int));
 		nextID = hasher.hash(&data, sizeof(int));
@@ -18,20 +19,20 @@ namespace MikuMikuWorld
 	}
 
 	Note::Note(NoteType _type)
-	    : type{ _type }, parentID{ -1 }, tick{ 0 }, lane{ 0 }, width{ 3 }, critical{ false },
-	      friction{ false }
+	    : type{ _type }, parentID{ static_cast<id_t>(-1) }, tick{ 0 }, lane{ 0 }, width{ 3 },
+	      critical{ false }, friction{ false }
 	{
 	}
 
 	Note::Note(NoteType _type, int _tick, float _lane, float _width)
-	    : type{ _type }, parentID{ -1 }, tick{ _tick }, lane{ _lane }, width{ _width },
-	      critical{ false }, friction{ false }
+	    : type{ _type }, parentID{ static_cast<id_t>(-1) }, tick{ _tick }, lane{ _lane },
+	      width{ _width }, critical{ false }, friction{ false }
 	{
 	}
 
 	Note::Note()
-	    : type{ NoteType::Tap }, parentID{ -1 }, tick{ 0 }, lane{ 0 }, width{ 3 },
-	      critical{ false }, friction{ false }
+	    : type{ NoteType::Tap }, parentID{ static_cast<id_t>(-1) }, tick{ 0 }, lane{ 0 },
+	      width{ 3 }, critical{ false }, friction{ false }
 	{
 	}
 

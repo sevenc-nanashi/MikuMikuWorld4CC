@@ -1,4 +1,5 @@
 #pragma once
+#include "Constants.h"
 #include "ScoreContext.h"
 #include <atomic>
 #include <unordered_set>
@@ -8,11 +9,11 @@ namespace MikuMikuWorld
 	class NotesPreset
 	{
 	  private:
-		int ID;
+		id_t ID;
 		std::string filename;
 
 	  public:
-		NotesPreset(int id, std::string name);
+		NotesPreset(id_t id, std::string name);
 		NotesPreset();
 
 		std::string name;
@@ -22,7 +23,7 @@ namespace MikuMikuWorld
 
 		inline std::string getName() const { return name; };
 		inline std::string getFilename() const { return filename; }
-		inline int getID() const { return ID; };
+		inline id_t getID() const { return ID; };
 
 		Result read(const std::string& filepath);
 		void write(std::string filepath, bool overwrite);

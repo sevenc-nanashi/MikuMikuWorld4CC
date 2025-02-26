@@ -1,5 +1,6 @@
 #pragma once
 #include "Background.h"
+#include "Constants.h"
 #include "ImGui/imgui_internal.h"
 #include "Rendering/Camera.h"
 #include "Rendering/Framebuffer.h"
@@ -98,8 +99,8 @@ namespace MikuMikuWorld
 		float minNoteYDistance{};
 		int hoverLane{};
 		int hoverTick{};
-		int hoveringNote{};
-		int holdingNote{};
+		id_t hoveringNote{};
+		id_t holdingNote{};
 		int holdLane{};
 		int holdTick{};
 		int lastSelectedTick{};
@@ -180,7 +181,7 @@ namespace MikuMikuWorld
 		                   const float endAlpha = 1,
 		                   const GuideColor guideColor = GuideColor::Green,
 		                   const int selectedLayer = -1);
-		void drawHoldNote(const std::unordered_map<int, Note>& notes, const HoldNote& note,
+		void drawHoldNote(const std::unordered_map<id_t, Note>& notes, const HoldNote& note,
 		                  Renderer* renderer, const Color& tint, const int selectedLayer = -1,
 		                  const int offsetTicks = 0, const int offsetLane = 0);
 		void drawHoldMid(Note& note, HoldStepType type, Renderer* renderer, const Color& tint,
