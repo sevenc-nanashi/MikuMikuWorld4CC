@@ -237,7 +237,7 @@ namespace MikuMikuWorld
 		struct EventEditParams
 		{
 			EventType type = EventType::None;
-			int editIndex = -1;
+			id_t editId = static_cast<id_t>(-1);
 
 			float editBpm = 120.0f;
 			int editTimeSignatureNumerator = 4;

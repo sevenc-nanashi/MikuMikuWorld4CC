@@ -681,7 +681,7 @@ namespace MikuMikuWorld
 		{
 			if (hiSpeedControl(context, hiSpeed))
 			{
-				eventEdit.editIndex = id;
+				eventEdit.editId = id;
 				eventEdit.editHiSpeed = hiSpeed.speed;
 				eventEdit.type = EventType::HiSpeed;
 				ImGui::OpenPopup("edit_event");
@@ -696,7 +696,7 @@ namespace MikuMikuWorld
 			        measureToTicks(ts.measure, TICKS_PER_BEAT, context.score.timeSignatures),
 			        !playing))
 			{
-				eventEdit.editIndex = measure;
+				eventEdit.editId = measure;
 				eventEdit.editTimeSignatureNumerator = ts.numerator;
 				eventEdit.editTimeSignatureDenominator = ts.denominator;
 				eventEdit.type = EventType::TimeSignature;
@@ -710,7 +710,7 @@ namespace MikuMikuWorld
 			Tempo& tempo = context.score.tempoChanges[index];
 			if (bpmControl(context.score, tempo))
 			{
-				eventEdit.editIndex = index;
+				eventEdit.editId = index;
 				eventEdit.editBpm = tempo.bpm;
 				eventEdit.type = EventType::Bpm;
 				ImGui::OpenPopup("edit_event");
@@ -723,7 +723,7 @@ namespace MikuMikuWorld
 			Waypoint& wp = context.score.waypoints[index];
 			if (waypointControl(context.score, wp))
 			{
-				eventEdit.editIndex = index;
+				eventEdit.editId = index;
 				eventEdit.editName = wp.name;
 				eventEdit.type = EventType::Waypoint;
 				ImGui::OpenPopup("edit_event");
@@ -2437,7 +2437,7 @@ namespace MikuMikuWorld
 
 			if (eventEdit.type == EventType::Bpm)
 			{
-				if (!isArrayIndexInBounds(eventEdit.editIndex, context.score.tempoChanges))
+				if (!isArrayIndexInBounds(eventEdit.editId, context.score.tempoChanges))
 				{
 					ImGui::CloseCurrentPopup();
 					ImGui::EndPopup();
@@ -2446,7 +2446,7 @@ namespace MikuMikuWorld
 
 				UI::beginPropertyColumns();
 
-				Tempo& tempo = context.score.tempoChanges[eventEdit.editIndex];
+				Tempo& tempo = context.score.tempoChanges[eventEdit.editId];
 				UI::addFloatProperty(getString("bpm"), eventEdit.editBpm, "%g");
 				if (ImGui::IsItemDeactivatedAfterEdit())
 				{
@@ -2466,14 +2466,14 @@ namespace MikuMikuWorld
 						ImGui::CloseCurrentPopup();
 						Score prev = context.score;
 						context.score.tempoChanges.erase(context.score.tempoChanges.begin() +
-						                                 eventEdit.editIndex);
+						                                 eventEdit.editId);
 						context.pushHistory("Remove tempo change", prev, context.score);
 					}
 				}
 			}
 			else if (eventEdit.type == EventType::TimeSignature)
 			{
-				if (context.score.timeSignatures.find(eventEdit.editIndex) ==
+				if (context.score.timeSignatures.find(eventEdit.editId) ==
 				    context.score.timeSignatures.end())
 				{
 					ImGui::CloseCurrentPopup();
@@ -2486,7 +2486,7 @@ namespace MikuMikuWorld
 				                            eventEdit.editTimeSignatureDenominator))
 				{
 					Score prev = context.score;
-					TimeSignature& ts = context.score.timeSignatures[eventEdit.editIndex];
+					TimeSignature& ts = context.score.timeSignatures[eventEdit.editId];
 					ts.numerator = std::clamp(abs(eventEdit.editTimeSignatureNumerator),
 					                          MIN_TIME_SIGNATURE, MAX_TIME_SIGNATURE_NUMERATOR);
 					ts.denominator = std::clamp(abs(eventEdit.editTimeSignatureDenominator),
@@ -2497,21 +2497,21 @@ namespace MikuMikuWorld
 				UI::endPropertyColumns();
 
 				// cannot remove the first time signature
-				if (eventEdit.editIndex != 0)
+				if (eventEdit.editId != 0)
 				{
 					ImGui::Separator();
 					if (ImGui::Button(getString("remove"), ImVec2(-1, UI::btnSmall.y + 2)))
 					{
 						ImGui::CloseCurrentPopup();
 						Score prev = context.score;
-						context.score.timeSignatures.erase(eventEdit.editIndex);
+						context.score.timeSignatures.erase(eventEdit.editId);
 						context.pushHistory("Remove time signature", prev, context.score);
 					}
 				}
 			}
 			else if (eventEdit.type == EventType::HiSpeed)
 			{
-				if (context.score.hiSpeedChanges.find(eventEdit.editIndex) ==
+				if (context.score.hiSpeedChanges.find(eventEdit.editId) ==
 				    context.score.hiSpeedChanges.end())
 				{
 					ImGui::CloseCurrentPopup();
@@ -2521,7 +2521,7 @@ namespace MikuMikuWorld
 
 				UI::beginPropertyColumns();
 				UI::addFloatProperty(getString("hi_speed_speed"), eventEdit.editHiSpeed, "%g");
-				HiSpeedChange& hiSpeed = context.score.hiSpeedChanges[eventEdit.editIndex];
+				HiSpeedChange& hiSpeed = context.score.hiSpeedChanges[eventEdit.editId];
 				if (ImGui::IsItemDeactivatedAfterEdit())
 				{
 					Score prev = context.score;
@@ -2536,13 +2536,13 @@ namespace MikuMikuWorld
 				{
 					ImGui::CloseCurrentPopup();
 					Score prev = context.score;
-					context.score.hiSpeedChanges.erase(eventEdit.editIndex);
+					context.score.hiSpeedChanges.erase(eventEdit.editId);
 					context.pushHistory("Remove hi-speed change", prev, context.score);
 				}
 			}
 			else if (eventEdit.type == EventType::Waypoint)
 			{
-				if (eventEdit.editIndex >= context.score.waypoints.size())
+				if (eventEdit.editId >= context.score.waypoints.size())
 				{
 					ImGui::CloseCurrentPopup();
 					ImGui::EndPopup();
@@ -2551,7 +2551,7 @@ namespace MikuMikuWorld
 
 				UI::beginPropertyColumns();
 				UI::addStringProperty(getString("waypoint_name"), eventEdit.editName);
-				Waypoint& waypoint = context.score.waypoints[eventEdit.editIndex];
+				Waypoint& waypoint = context.score.waypoints[eventEdit.editId];
 				if (ImGui::IsItemDeactivatedAfterEdit())
 				{
 					Score prev = context.score;
@@ -2567,7 +2567,7 @@ namespace MikuMikuWorld
 					ImGui::CloseCurrentPopup();
 					Score prev = context.score;
 					context.score.waypoints.erase(context.score.waypoints.begin() +
-					                              eventEdit.editIndex);
+					                              eventEdit.editId);
 					context.pushHistory("Remove waypint", prev, context.score);
 				}
 			}
