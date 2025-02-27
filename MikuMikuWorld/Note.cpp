@@ -4,8 +4,6 @@
 #include <algorithm>
 #include <choc/memory/choc_xxHash.h>
 
-static choc::hash::xxHash64 hasher = choc::hash::xxHash64(0x3939cc01);
-
 namespace MikuMikuWorld
 {
 	int nextID = 1;
@@ -14,7 +12,7 @@ namespace MikuMikuWorld
 	{
 		uint8_t data[sizeof(int)];
 		std::memcpy(data, &nextID, sizeof(int));
-		nextID = hasher.hash(&data, sizeof(int));
+		nextID = choc::hash::xxHash64::hash(&data, sizeof(int), HASH_SEED + 1);
 		return nextID;
 	}
 
