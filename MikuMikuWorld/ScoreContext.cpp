@@ -802,7 +802,7 @@ namespace MikuMikuWorld
 
 		Score prev = score;
 
-		std::vector<std::pair<Type, int>> sortedSelection;
+		std::vector<std::pair<Type, id_t>> sortedSelection;
 		for (auto noteID : selectedNotes)
 			sortedSelection.push_back({ Type::Note, noteID });
 		for (auto hscID : selectedHiSpeedChanges)
