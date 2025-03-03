@@ -160,8 +160,8 @@ namespace MikuMikuWorld
 	}
 
 	void PresetManager::createPreset(const Score& score,
-	                                 const std::unordered_set<int>& selectedNotes,
-	                                 const std::unordered_set<int>& selectedHiSpeedChanges,
+	                                 const std::unordered_set<id_t>& selectedNotes,
+	                                 const std::unordered_set<id_t>& selectedHiSpeedChanges,
 	                                 const std::string& name, const std::string& desc)
 	{
 		if (!(selectedNotes.size() + selectedHiSpeedChanges.size()) || !name.size())

@@ -55,15 +55,16 @@ namespace jsonIO
 		return data;
 	}
 
-	json noteSelectionToJson(const mmw::Score& score, const std::unordered_set<int>& selection,
-	                         const std::unordered_set<int>& hiSpeedSelection, int baseTick)
+	json noteSelectionToJson(const mmw::Score& score,
+	                         const std::unordered_set<mmw::id_t>& selection,
+	                         const std::unordered_set<mmw::id_t>& hiSpeedSelection, int baseTick)
 	{
 		json data, notes, holds, damages, hiSpeedChanges;
-		std::unordered_set<int> selectedNotes;
-		std::unordered_set<int> selectedHolds;
-		std::unordered_set<int> selectedDamages;
+		std::unordered_set<mmw::id_t> selectedNotes;
+		std::unordered_set<mmw::id_t> selectedHolds;
+		std::unordered_set<mmw::id_t> selectedDamages;
 
-		for (int id : selection)
+		for (mmw::id_t id : selection)
 		{
 			if (score.notes.find(id) == score.notes.end())
 				continue;
@@ -91,7 +92,7 @@ namespace jsonIO
 			}
 		}
 
-		for (int id : selectedNotes)
+		for (mmw::id_t id : selectedNotes)
 		{
 			const mmw::Note& note = score.notes.at(id);
 			json data = noteToJson(note);
@@ -99,7 +100,7 @@ namespace jsonIO
 
 			notes.push_back(data);
 		}
-		for (int id : selectedDamages)
+		for (mmw::id_t id : selectedDamages)
 		{
 			const mmw::Note& note = score.notes.at(id);
 			json data = noteToJson(note);
@@ -116,7 +117,7 @@ namespace jsonIO
 			hiSpeedChanges.push_back(data);
 		}
 
-		for (int id : selectedHolds)
+		for (mmw::id_t id : selectedHolds)
 		{
 			const mmw::HoldNote& hold = score.holdNotes.at(id);
 			const mmw::Note& start = score.notes.at(hold.start.ID);

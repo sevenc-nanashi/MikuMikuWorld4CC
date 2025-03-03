@@ -220,7 +220,7 @@ namespace MikuMikuWorld
 
 			bool multipleHold = false;
 			int holdIndex = -1;
-			for (int id : context.selectedNotes)
+			for (id_t id : context.selectedNotes)
 			{
 				const Note& n = context.score.notes.at(id);
 				if (n.isHold())

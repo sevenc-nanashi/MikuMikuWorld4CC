@@ -22,7 +22,7 @@ namespace MikuMikuWorld
 
 		bool edit = false;
 		Score prev = score;
-		for (int id : selectedNotes)
+		for (id_t id : selectedNotes)
 		{
 			const Note& note = score.notes.at(id);
 			if (note.getType() != NoteType::HoldMid)
@@ -60,7 +60,7 @@ namespace MikuMikuWorld
 
 		bool edit = false;
 		Score prev = score;
-		for (int id : selectedNotes)
+		for (id_t id : selectedNotes)
 		{
 			Note& note = score.notes.at(id);
 			bool canFlick = note.canFlick();
@@ -96,7 +96,7 @@ namespace MikuMikuWorld
 
 		bool edit = false;
 		Score prev = score;
-		for (int id : selectedNotes)
+		for (id_t id : selectedNotes)
 		{
 			Note& note = score.notes.at(id);
 			if (note.getType() == NoteType::Hold)
@@ -144,7 +144,7 @@ namespace MikuMikuWorld
 
 		Score prev = score;
 		bool edit = false;
-		for (int id : selectedNotes)
+		for (id_t id : selectedNotes)
 		{
 			// Invisible hold points cannot be trace notes!
 			Note& note = score.notes.at(id);
@@ -190,7 +190,7 @@ namespace MikuMikuWorld
 
 		Score prev = score;
 		bool edit = false;
-		for (int id : selectedNotes)
+		for (id_t id : selectedNotes)
 		{
 			// Invisible hold points cannot be trace notes!
 			Note& note = score.notes.at(id);
@@ -218,7 +218,7 @@ namespace MikuMikuWorld
 
 		Score prev = score;
 		bool edit = false;
-		for (int id : selectedNotes)
+		for (id_t id : selectedNotes)
 		{
 			// Invisible hold points cannot be trace notes!
 			Note& note = score.notes.at(id);
@@ -258,7 +258,7 @@ namespace MikuMikuWorld
 
 		bool edit = false;
 		Score prev = score;
-		for (int id : selectedNotes)
+		for (id_t id : selectedNotes)
 		{
 			Note& note = score.notes.at(id);
 
@@ -279,7 +279,7 @@ namespace MikuMikuWorld
 
 		Score prev = score;
 		std::unordered_set<int> critHolds;
-		for (int id : selectedNotes)
+		for (id_t id : selectedNotes)
 		{
 			Note& note = score.notes.at(id);
 			if (note.getType() == NoteType::Damage)
@@ -337,7 +337,7 @@ namespace MikuMikuWorld
 
 		Score prev = score;
 		bool edit = false;
-		for (int id : selectedNotes)
+		for (id_t id : selectedNotes)
 		{
 			// Hold steps and invisible hold points cannot be trace notes
 			Note& note = score.notes.at(id);
@@ -431,7 +431,7 @@ namespace MikuMikuWorld
 			return;
 
 		Score prev = score;
-		for (int id : selectedNotes)
+		for (id_t id : selectedNotes)
 		{
 			Note& note = score.notes.at(id);
 			note.lane = MAX_LANE - note.lane - note.width + 1;
@@ -920,7 +920,7 @@ namespace MikuMikuWorld
 				}
 			}
 			// Add Hi-Speed
-			int id = getNextHiSpeedID();
+			id_t id = getNextHiSpeedID();
 			this->score.hiSpeedChanges[id].ID = id;
 			this->score.hiSpeedChanges[id].tick = newTick;
 			if (elements->front().first == Type::Note)

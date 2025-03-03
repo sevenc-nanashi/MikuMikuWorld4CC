@@ -76,8 +76,8 @@ namespace MikuMikuWorld
 		HistoryManager history;
 		Audio::AudioManager audio;
 		PasteData pasteData{};
-		std::unordered_set<int> selectedNotes;
-		std::unordered_set<int> selectedHiSpeedChanges;
+		std::unordered_set<id_t> selectedNotes;
+		std::unordered_set<id_t> selectedHiSpeedChanges;
 
 		Audio::WaveformMipChain waveformL, waveformR;
 
@@ -94,7 +94,7 @@ namespace MikuMikuWorld
 
 		bool hasHoldInSelection() const
 		{
-			for (int id : selectedNotes)
+			for (id_t id : selectedNotes)
 			{
 				const Note& n = score.notes.at(id);
 				if (n.getType() == NoteType::Hold || n.getType() == NoteType::HoldMid ||
@@ -107,7 +107,7 @@ namespace MikuMikuWorld
 		std::unordered_set<int> getHoldsFromSelection()
 		{
 			std::unordered_set<int> holds;
-			for (int id : selectedNotes)
+			for (id_t id : selectedNotes)
 			{
 				const Note& note = score.notes.at(id);
 				if (note.getType() == NoteType::Hold)

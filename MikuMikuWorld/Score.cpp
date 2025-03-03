@@ -15,16 +15,16 @@ namespace MikuMikuWorld
 	id_t nextHiSpeedID = 1;
 	id_t getNextSkillID()
 	{
-		uint8_t data[sizeof(int)];
-		std::memcpy(data, &nextSkillID, sizeof(int));
-		nextSkillID = choc::hash::xxHash64::hash(&data, sizeof(int), HASH_SEED + 2);
+		uint8_t data[sizeof(id_t)];
+		std::memcpy(data, &nextSkillID, sizeof(id_t));
+		nextSkillID = choc::hash::xxHash64::hash(&data, sizeof(id_t), HASH_SEED + 2);
 		return nextSkillID;
 	}
 	id_t getNextHiSpeedID()
 	{
-		uint8_t data[sizeof(int)];
-		std::memcpy(data, &nextHiSpeedID, sizeof(int));
-		nextHiSpeedID = choc::hash::xxHash64::hash(&data, sizeof(int), HASH_SEED + 3);
+		uint8_t data[sizeof(id_t)];
+		std::memcpy(data, &nextHiSpeedID, sizeof(id_t));
+		nextHiSpeedID = choc::hash::xxHash64::hash(&data, sizeof(id_t), HASH_SEED + 3);
 		return nextHiSpeedID;
 	}
 

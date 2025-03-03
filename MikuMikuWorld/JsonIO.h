@@ -54,7 +54,7 @@ namespace jsonIO
 	nlohmann::json noteToJson(const mmw::Note& note);
 
 	nlohmann::json noteSelectionToJson(const mmw::Score& score,
-	                                   const std::unordered_set<int>& selection,
-	                                   const std::unordered_set<int>& hiSpeedSelection,
+	                                   const std::unordered_set<mmw::id_t>& selection,
+	                                   const std::unordered_set<mmw::id_t>& hiSpeedSelection,
 	                                   int baseTick);
 }

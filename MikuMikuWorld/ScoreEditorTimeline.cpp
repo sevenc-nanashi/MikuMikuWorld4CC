@@ -766,7 +766,7 @@ namespace MikuMikuWorld
 		}
 
 		// Selection boxes
-		for (int id : context.selectedNotes)
+		for (id_t id : context.selectedNotes)
 		{
 			const Note& note = context.score.notes.at(id);
 			if (!isNoteVisible(note, 0))
@@ -893,7 +893,7 @@ namespace MikuMikuWorld
 		    context.score
 		        .timeSignatures[findTimeSignature(currentMeasure, context.score.timeSignatures)];
 		const Tempo& tempo = getTempoAt(context.currentTick, context.score.tempoChanges);
-		int hiSpeed = findHighSpeedChange(context.currentTick, context.score.hiSpeedChanges,
+		id_t hiSpeed = findHighSpeedChange(context.currentTick, context.score.hiSpeedChanges,
 		                                  context.selectedLayer);
 		float speed = (hiSpeed == -1 ? 1.0f : context.score.hiSpeedChanges[hiSpeed].speed);
 
@@ -1566,7 +1566,7 @@ namespace MikuMikuWorld
 				if (canResize)
 				{
 					ctrlMousePos.x = mousePos.x;
-					for (int id : context.selectedNotes)
+					for (id_t id : context.selectedNotes)
 					{
 						Note& n = context.score.notes.at(id);
 						n.width = std::clamp(n.width - diff, (float)MIN_NOTE_WIDTH, maxNoteWidth);
@@ -1604,7 +1604,7 @@ namespace MikuMikuWorld
 
 				if (canMove)
 				{
-					for (int id : context.selectedNotes)
+					for (id_t id : context.selectedNotes)
 					{
 						Note& n = context.score.notes.at(id);
 						n.lane = std::clamp(n.lane + laneDiff, minLane, maxLane - n.width + 1);
@@ -1629,7 +1629,7 @@ namespace MikuMikuWorld
 					{
 					case SnapMode::Relative:
 					{
-						for (int id : context.selectedNotes)
+						for (id_t id : context.selectedNotes)
 						{
 							Note& n = context.score.notes.at(id);
 							n.tick = std::max(n.tick + tickDiff, 0);
@@ -1643,7 +1643,7 @@ namespace MikuMikuWorld
 						    roundTickDown(grabbingNoteTick + tickDiff, division);
 						int actualDiff = grabbingNoteTickSnapped - grabbingNoteTick;
 
-						for (int id : context.selectedNotes)
+						for (id_t id : context.selectedNotes)
 						{
 							Note& n = context.score.notes.at(id);
 							n.tick = std::max(n.tick + actualDiff, 0);
@@ -1653,11 +1653,11 @@ namespace MikuMikuWorld
 					}
 					case SnapMode::IndividualAbsolute:
 					{
-						std::vector<int> sortedSelectedNotes(context.selectedNotes.size());
+						std::vector<id_t> sortedSelectedNotes(context.selectedNotes.size());
 						std::copy(context.selectedNotes.begin(), context.selectedNotes.end(),
 						          sortedSelectedNotes.begin());
 						std::sort(sortedSelectedNotes.begin(), sortedSelectedNotes.end(),
-						          [&context](int a, int b) {
+						          [&context](id_t a, id_t b) {
 							          return context.score.notes.at(a).tick <
 							                 context.score.notes.at(b).tick;
 						          });
@@ -1741,7 +1741,7 @@ namespace MikuMikuWorld
 				if (canResize)
 				{
 					ctrlMousePos.x = mousePos.x;
-					for (int id : context.selectedNotes)
+					for (id_t id : context.selectedNotes)
 					{
 						Note& n = context.score.notes.at(id);
 						n.width = std::clamp(n.width + diff, (float)MIN_NOTE_WIDTH,
