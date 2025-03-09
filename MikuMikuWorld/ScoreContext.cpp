@@ -1364,6 +1364,70 @@ namespace MikuMikuWorld
 		pushHistory("Lerp hispeeds", prev, score);
 	}
 
+void ScoreContext::convertHoldToGuide(GuideColor color)
+	{
+		if (selectedNotes.empty())
+			return;
+
+		Score prev = score;
+		bool edit = false;
+
+		for (int id : selectedNotes)
+		{
+			if (!score.notes.count(id))
+				continue;
+
+			Note& note = score.notes.at(id);
+			if (note.getType() == NoteType::Hold || note.getType() == NoteType::HoldEnd)
+			{
+				HoldNote& hold =
+				    score.holdNotes.at(note.getType() == NoteType::Hold ? note.ID : note.parentID);
+				if (!hold.isGuide())
+				{
+					hold.startType = HoldNoteType::Guide;
+					hold.endType = HoldNoteType::Guide;
+					hold.guideColor = color; // éwíËÇ≥ÇÍÇΩêFÇ…ïœçX
+					edit = true;
+				}
+			}
+		}
+
+		if (edit)
+			pushHistory("Convert hold to guide", prev, score);
+	}
+
+	void ScoreContext::convertGuideToHold()
+	{
+		if (selectedNotes.empty())
+			return;
+
+		Score prev = score;
+		bool edit = false;
+
+		for (int id : selectedNotes)
+		{
+			if (!score.notes.count(id))
+				continue;
+
+			Note& note = score.notes.at(id);
+			if (note.getType() == NoteType::Hold || note.getType() == NoteType::HoldEnd)
+			{
+				HoldNote& hold =
+				    score.holdNotes.at(note.getType() == NoteType::Hold ? note.ID : note.parentID);
+				if (hold.isGuide())
+				{
+					hold.startType = HoldNoteType::Normal;
+					hold.endType = HoldNoteType::Normal;
+					edit = true;
+				}
+			}
+		}
+
+		if (edit)
+			pushHistory("Convert guide to hold", prev, score);
+	}
+
+
 	void ScoreContext::undo()
 	{
 		if (history.hasUndo())
