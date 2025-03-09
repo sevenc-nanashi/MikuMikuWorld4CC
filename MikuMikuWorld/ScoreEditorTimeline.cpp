@@ -375,6 +375,28 @@ namespace MikuMikuWorld
 			if (ImGui::MenuItem(getString("lerp_hispeeds"), NULL, false,
 			                    context.selectedHiSpeedChanges.size() >= 2))
 				context.lerpHiSpeeds(division);
+
+			if (ImGui::BeginMenu(getString("convert_guide_hold"), context.selectionHasHold()))
+			{
+				if (ImGui::MenuItem(getString("convert_guide_to_hold")))
+					context.convertGuideToHold();
+
+				if (ImGui::BeginMenu(getString("convert_hold_to_guide"),
+				                     context.selectionHasHold()))
+				{
+					for (int i = 0; i < arrayLength(guideColors); ++i)
+					{
+						char str[32];
+						sprintf_s(str, "guide_%s", guideColors[i]);
+						if (ImGui::MenuItem(getString(str)))
+							context.convertHoldToGuide((GuideColor)i);
+					}
+					ImGui::EndMenu();
+				}
+
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndPopup();
 		}
 	}
