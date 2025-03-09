@@ -376,7 +376,7 @@ namespace MikuMikuWorld
 			                    context.selectedHiSpeedChanges.size() >= 2))
 				context.lerpHiSpeeds(division);
 
-			if (ImGui::BeginMenu(getString("convert_notes"), context.selectionHasHold()))
+			if (ImGui::BeginMenu(getString("convert_guide_hold"), context.selectionHasHold()))
 			{
 				if (ImGui::MenuItem(getString("convert_guide_to_hold")))
 					context.convertGuideToHold();
