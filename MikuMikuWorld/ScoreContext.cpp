@@ -1386,7 +1386,7 @@ void ScoreContext::convertHoldToGuide(GuideColor color)
 				{
 					hold.startType = HoldNoteType::Guide;
 					hold.endType = HoldNoteType::Guide;
-					hold.guideColor = color; // w’è‚³‚ê‚½F‚É•ÏX
+					hold.guideColor = color; 
 					edit = true;
 				}
 			}
