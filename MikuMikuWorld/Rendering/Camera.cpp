@@ -4,7 +4,15 @@ namespace MikuMikuWorld
 {
 	Camera::Camera() {}
 
-	void Camera::setPositionY(float posY) { position.m128_f32[1] = posY; }
+	void Camera::setPositionY(float posY)
+	{
+#ifdef CHOC_WINDOWS
+		position.m128_f32[1] = posY;
+#else
+		float* pos = (float*)&position;
+		pos[1] = posY;
+#endif
+	}
 
 	DirectX::XMMATRIX Camera::getOrthographicProjection(float width, float height) const
 	{

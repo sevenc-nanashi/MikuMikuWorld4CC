@@ -79,7 +79,7 @@ namespace MikuMikuWorld
 
 			if (GetFileVersionInfoW(filename, verHandle, verSize, verData))
 			{
-				if (VerQueryValue(verData, "\\", (VOID FAR * FAR*)&lpBuffer, &size))
+				if (VerQueryValue(verData, "/", (VOID FAR * FAR*)&lpBuffer, &size))
 				{
 					if (size)
 					{
@@ -317,8 +317,8 @@ namespace MikuMikuWorld
 
 	void Application::loadResources()
 	{
-		ResourceManager::loadShader(appDir + "res\\shaders\\basic2d");
-		const std::string texturesDir = appDir + "res\\textures\\";
+		ResourceManager::loadShader(appDir + "res/shaders/basic2d");
+		const std::string texturesDir = appDir + "res/textures/";
 		ResourceManager::loadTexture(texturesDir + "notes1.png",
 		                             TextureFilterMode::LinearMipMapLinear,
 		                             TextureFilterMode::Linear);
@@ -341,7 +341,7 @@ namespace MikuMikuWorld
 		for (auto color : guideColors)
 			for (auto fade : fadeTypes)
 				ResourceManager::loadTexture(
-				    appDir + IO::formatString("res\\textures\\timeline_guide_%s_%s.png", color,
+				    appDir + IO::formatString("res/textures/timeline_guide_%s_%s.png", color,
 				                              std::string(fade).substr(5).c_str()));
 		ResourceManager::loadTexture(texturesDir + "timeline_damage.png");
 		ResourceManager::loadTexture(texturesDir + "timeline_bpm.png");
@@ -354,12 +354,12 @@ namespace MikuMikuWorld
 		noteTextures.ccNotes = ResourceManager::getTexture(CC_NOTES_TEX);
 		noteTextures.guideColors = ResourceManager::getTexture(GUIDE_COLORS_TEX);
 
-		Localization::loadLanguages(appDir + "res\\i18n");
+		Localization::loadLanguages(appDir + "res/i18n");
 	}
 
 	void Application::run()
 	{
-#ifdef _WIN32
+#if defined(CHOC_WINDOWS)
 		HWND hwnd = glfwGetWin32Window(window);
 
 		/*
@@ -378,6 +378,22 @@ namespace MikuMikuWorld
 		               USER_TIMER_MINIMUM, nullptr);
 
 		::DragAcceptFiles(hwnd, TRUE);
+#elif defined(CHOC_OSX)
+		NSWindow* windowPtr = glfwGetCocoaWindow(window);
+
+		if (windowPtr == 0)
+			throw std::runtime_error("Failed to get Cocoa window");
+
+		windowState.windowHandle = (void*)windowPtr;
+#elif defined(CHOC_LINUX)
+		Window windowPtr = glfwGetX11Window(window);
+
+		if (windowPtr == 0)
+			throw std::runtime_error("Failed to get X11 window");
+
+		windowState.windowHandle = (void*)windowPtr;
+#else
+#error "Unsupported platform"
 #endif
 
 		while (!glfwWindowShouldClose(window))

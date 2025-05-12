@@ -1,5 +1,6 @@
 #include "File.h"
 #include "IO.h"
+#include "nfd.h"
 #include <algorithm>
 #include <cstring>
 #include <ctime>
@@ -12,6 +13,7 @@
 #include <Windows.h>
 #else
 #include <sys/stat.h>
+#include <nfd.hpp>
 #endif
 
 namespace IO
@@ -210,6 +212,7 @@ namespace IO
 
 	FileDialogResult FileDialog::showFileDialog(DialogType type, DialogSelectType selectType)
 	{
+#ifdef CHOC_WINDOWS
 		std::wstring wTitle = mbToWideStr(title);
 
 		OPENFILENAMEW ofn;
@@ -279,6 +282,73 @@ namespace IO
 		}
 
 		return outputFilename.empty() ? FileDialogResult::Cancel : FileDialogResult::OK;
+#else
+		if (selectType == DialogSelectType::Folder)
+		{
+			NFD::UniquePathN outPath;
+			auto result = NFD::PickFolder(outPath, nullptr, {});
+			if (result == NFD_OKAY)
+			{
+				char* outPathCStr;
+				auto result = NFD::PathSet::GetPath(outPath.get(), 0, outPathCStr);
+				if (result == NFD_OKAY)
+				{
+					outputFilename = std::string(outPathCStr);
+					NFD::PathSet::FreePath(outPathCStr);
+					return FileDialogResult::OK;
+				}
+				else
+				{
+					return FileDialogResult::Cancel;
+				}
+			}
+			else
+			{
+				if (result == NFD_CANCEL)
+				{
+					return FileDialogResult::Cancel;
+				}
+				else
+				{
+					return FileDialogResult::Error;
+				}
+			}
+		}
+		else
+		{
+			if (type == DialogType::Open)
+			{
+				NFD::UniquePathN outPath;
+				auto result = NFD::OpenDialog(outPath);
+				if (result == NFD_OKAY)
+				{
+					char* outPathCStr;
+					auto result = NFD::PathSet::GetPath(outPath.get(), 0, outPathCStr);
+					if (result == NFD_OKAY)
+					{
+						outputFilename = std::string(outPathCStr);
+						NFD::PathSet::FreePath(outPathCStr);
+						return FileDialogResult::OK;
+					}
+					else
+					{
+						return FileDialogResult::Cancel;
+					}
+				}
+				else
+				{
+					if (result == NFD_CANCEL)
+					{
+						return FileDialogResult::Cancel;
+					}
+					else
+					{
+						return FileDialogResult::Error;
+					}
+				}
+			}
+		}
+#endif
 	}
 
 	FileDialogResult FileDialog::openFile()

@@ -1,5 +1,11 @@
 // Put httplib first otherwise the compiler will throw an error
+#include <choc/platform/choc_Platform.h>
+#include <cstdio>
+#if CHOC_WINDOWS
 #include <corecrt_math.h>
+#else
+#include <math.h>
+#endif
 #define CPPHTTPLIB_OPENSSL_SUPPORT 1
 #include <cpp-httplib/httplib.h>
 
@@ -13,9 +19,11 @@
 #include "SusParser.h"
 #include "UI.h"
 #include "Utilities.h"
-#include <Windows.h>
 #include <filesystem>
 #include <fstream>
+#if CHOC_WINDOWS
+#include <Windows.h>
+#endif
 
 using nlohmann::json;
 
@@ -69,14 +77,17 @@ namespace MikuMikuWorld
 
 	void ScoreEditor::fetchUpdate()
 	{
-
+#if CHOC_WINDOWS
 		std::wstring updateFlagPath =
 		    IO::mbToWideStr(Application::getAppDir() + "latest_version.txt");
+#else
+		std::string updateFlagPath = Application::getAppDir() + "latest_version.txt";
+#endif
 		bool shouldFetchUpdate = true;
 		std::string latestVersionString;
 		if (IO::File::exists(updateFlagPath))
 		{
-			auto file = IO::File(updateFlagPath, L"r");
+			auto file = IO::File(updateFlagPath, IO::Mode::read);
 			auto lastWriteTime = file.getLastWriteTime();
 			auto now = std::chrono::system_clock::now();
 			auto diff =
@@ -111,7 +122,7 @@ namespace MikuMikuWorld
 				latestVersionString = tagName.substr(1);
 			}
 
-			auto file = IO::File(updateFlagPath, L"w");
+			auto file = IO::File(updateFlagPath, IO::Mode::write);
 			file.write(latestVersionString);
 			file.flush();
 			file.close();
@@ -254,7 +265,7 @@ namespace MikuMikuWorld
 		if (settingsWindow.isBackgroundChangePending)
 		{
 			static const std::string defaultBackgroundPath =
-			    Application::getAppDir() + "res\\textures\\default.png";
+			    Application::getAppDir() + "res/textures/default.png";
 			timeline.background.load(config.backgroundImage.empty() ? defaultBackgroundPath
 			                                                        : config.backgroundImage);
 			settingsWindow.isBackgroundChangePending = false;
@@ -401,8 +412,7 @@ namespace MikuMikuWorld
 			}
 			else if (extension == USC_EXTENSION)
 			{
-				std::wstring wFilename = IO::mbToWideStr(filename);
-				std::ifstream uscfile(wFilename);
+				std::ifstream uscfile = IO::openFile(filename);
 				json usc;
 				uscfile >> usc;
 				uscfile.close();
@@ -782,8 +792,9 @@ namespace MikuMikuWorld
 					deleteOldAutoSave(config.autoSaveMaxCount);
 
 				bool audioRunning = context.audio.isEngineStarted();
-				if (ImGui::MenuItem(audioRunning ? "Stop Audio" : "Start Audio",
-				                    audioRunning ? ICON_FA_VOLUME_UP : ICON_FA_VOLUME_MUTE))
+				if (ImGui::MenuItem(
+				        audioRunning ? "Stop Audio" : "Start Audio",
+				        IO::icon(audioRunning ? ICON_FA_VOLUME_UP : ICON_FA_VOLUME_MUTE)))
 				{
 					if (audioRunning)
 						context.audio.stopEngine();
@@ -848,54 +859,54 @@ namespace MikuMikuWorld
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 		ImGui::Begin("##app_toolbar", NULL, ImGuiWindowFlags_Toolbar);
 
-		if (UI::toolbarButton(ICON_FA_FILE, getString("new"),
+		if (UI::toolbarButton(IO::icon(ICON_FA_FILE), getString("new"),
 		                      ToShortcutString(config.input.create)))
 		{
 			Application::windowState.resetting = true;
 		}
 
-		if (UI::toolbarButton(ICON_FA_FOLDER_OPEN, getString("open"),
+		if (UI::toolbarButton(IO::icon(ICON_FA_FOLDER_OPEN), getString("open"),
 		                      ToShortcutString(config.input.open)))
 		{
 			Application::windowState.resetting = true;
 			Application::windowState.shouldPickScore = true;
 		}
 
-		if (UI::toolbarButton(ICON_FA_SAVE, getString("save"), ToShortcutString(config.input.save)))
+		if (UI::toolbarButton(IO::icon(ICON_FA_SAVE), getString("save"), ToShortcutString(config.input.save)))
 			trySave(context.workingData.filename);
 
-		if (UI::toolbarButton(ICON_FA_FILE_EXPORT, getString("export_usc"),
+		if (UI::toolbarButton(IO::icon(ICON_FA_FILE_EXPORT), getString("export_usc"),
 		                      ToShortcutString(config.input.exportUsc)))
 			exportUsc();
 
 		UI::toolbarSeparator();
 
-		if (UI::toolbarButton(ICON_FA_CUT, getString("cut"),
+		if (UI::toolbarButton(IO::icon(ICON_FA_CUT), getString("cut"),
 		                      ToShortcutString(config.input.cutSelection),
 		                      context.selectedNotes.size() > 0))
 			context.cutSelection();
 
-		if (UI::toolbarButton(ICON_FA_COPY, getString("copy"),
+		if (UI::toolbarButton(IO::icon(ICON_FA_COPY), getString("copy"),
 		                      ToShortcutString(config.input.copySelection),
 		                      context.selectedNotes.size() > 0))
 			context.copySelection();
 
-		if (UI::toolbarButton(ICON_FA_PASTE, getString("paste"),
+		if (UI::toolbarButton(IO::icon(ICON_FA_PASTE), getString("paste"),
 		                      ToShortcutString(config.input.paste)))
 			context.paste(false);
 
-		if (UI::toolbarButton(ICON_FA_CLONE, getString("duplicate"),
+		if (UI::toolbarButton(IO::icon(ICON_FA_CLONE), getString("duplicate"),
 		                      ToShortcutString(config.input.duplicate),
 		                      context.selectedNotes.size() > 0))
 			context.duplicateSelection(false);
 
 		UI::toolbarSeparator();
 
-		if (UI::toolbarButton(ICON_FA_UNDO, getString("undo"), ToShortcutString(config.input.undo),
+		if (UI::toolbarButton(IO::icon(ICON_FA_UNDO), getString("undo"), ToShortcutString(config.input.undo),
 		                      context.history.hasUndo()))
 			context.undo();
 
-		if (UI::toolbarButton(ICON_FA_REDO, getString("redo"), ToShortcutString(config.input.redo),
+		if (UI::toolbarButton(IO::icon(ICON_FA_REDO), getString("redo"), ToShortcutString(config.input.redo),
 		                      context.history.hasRedo()))
 			context.redo();
 
@@ -928,7 +939,21 @@ namespace MikuMikuWorld
 
 	void ScoreEditor::help()
 	{
+#if CHOC_WINDOWS
 		ShellExecuteW(0, 0, L"https://github.com/crash5band/MikuMikuWorld/wiki", 0, 0, SW_SHOW);
+#elif CHOC_MAC
+		std::string url = "https://github.com/crash5band/MikuMikuWorld/wiki";
+		std::string command = "open " + url;
+		system(command.c_str());
+#elif CHOC_LINUX
+		std::string url = "https://github.com/crash5band/MikuMikuWorld/wiki";
+		std::string command = "xdg-open " + url;
+		system(command.c_str());
+#else
+		throw std::runtime_error("Unsupported platform");
+#endif
+
+
 	}
 
 	void ScoreEditor::autoSave()
@@ -942,7 +967,7 @@ namespace MikuMikuWorld
 		int laneExtension = context.score.metadata.laneExtension;
 		context.score.metadata = context.workingData.toScoreMetadata();
 		context.score.metadata.laneExtension = laneExtension;
-		serializeScore(context.score, autoSavePath + "\\mmw_auto_save_" +
+		serializeScore(context.score, autoSavePath + "/mmw_auto_save_" +
 		                                  Utilities::getCurrentDateTime() + CC_MMWS_EXTENSION);
 
 		// get mmws files
@@ -977,8 +1002,7 @@ namespace MikuMikuWorld
 		}
 
 		// sort files by modification date
-		std::sort(deleteFiles.begin(), deleteFiles.end(),
-		          [](const entry& f1, const entry& f2)
+		std::sort(deleteFiles.begin(), deleteFiles.end(), [](const entry& f1, const entry& f2)
 		          { return f1.last_write_time() < f2.last_write_time(); });
 
 		int deleteCount = 0;

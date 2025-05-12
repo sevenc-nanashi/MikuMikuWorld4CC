@@ -9,6 +9,7 @@
 #include "UI.h"
 #include "Utilities.h"
 #include <algorithm>
+#include <cstdio>
 #include <string>
 
 namespace MikuMikuWorld
@@ -310,7 +311,11 @@ namespace MikuMikuWorld
 				for (int i = 0; i < arrayLength(guideColors); ++i)
 				{
 					char str[32];
+#if CHOC_WINDOWS
 					sprintf_s(str, "guide_%s", guideColors[i]);
+#else
+					sprintf(str, "guide_%s", guideColors[i]);
+#endif
 					if (ImGui::MenuItem(getString(str)))
 						context.setGuideColor((GuideColor)i);
 				}
@@ -799,11 +804,11 @@ namespace MikuMikuWorld
 			iconPos.y += visualOffset;
 			if (io.KeyCtrl)
 			{
-				drawList->AddText(ImGui::GetFont(), 12, iconPos, 0xdddddddd, ICON_FA_PLUS_CIRCLE);
+				drawList->AddText(ImGui::GetFont(), 12, iconPos, 0xdddddddd, IO::icon(ICON_FA_PLUS_CIRCLE));
 			}
 			else if (io.KeyAlt)
 			{
-				drawList->AddText(ImGui::GetFont(), 12, iconPos, 0xdddddddd, ICON_FA_MINUS_CIRCLE);
+				drawList->AddText(ImGui::GetFont(), 12, iconPos, 0xdddddddd, IO::icon(ICON_FA_MINUS_CIRCLE));
 			}
 		}
 
@@ -815,20 +820,20 @@ namespace MikuMikuWorld
 		            size.y + UI::toolbarBtnSize.y + 4 + ImGui::GetStyle().WindowPadding.y });
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.0f, 0.0f, 0.0f, 0.0f });
 
-		if (UI::transparentButton(ICON_FA_BACKWARD, UI::btnSmall, true,
+		if (UI::transparentButton(IO::icon(ICON_FA_BACKWARD), UI::btnSmall, true,
 		                          context.currentTick > 0 && !playing))
 			previousTick(context);
 
 		ImGui::SameLine();
-		if (UI::transparentButton(ICON_FA_STOP, UI::btnSmall, false))
+		if (UI::transparentButton(IO::icon(ICON_FA_STOP), UI::btnSmall, false))
 			stop(context);
 
 		ImGui::SameLine();
-		if (UI::transparentButton(playing ? ICON_FA_PAUSE : ICON_FA_PLAY, UI::btnSmall))
+		if (UI::transparentButton(IO::icon(playing ? ICON_FA_PAUSE : ICON_FA_PLAY), UI::btnSmall))
 			setPlaying(context, !playing);
 
 		ImGui::SameLine();
-		if (UI::transparentButton(ICON_FA_FORWARD, UI::btnSmall, true, !playing))
+		if (UI::transparentButton(IO::icon(ICON_FA_FORWARD), UI::btnSmall, true, !playing))
 			nextTick(context);
 
 		ImGui::PopStyleColor();
@@ -857,7 +862,7 @@ namespace MikuMikuWorld
 		UI::tooltip(getString("goto_measure"));
 
 		ImGui::SameLine();
-		activated |= UI::transparentButton(ICON_FA_ARROW_RIGHT, UI::btnSmall);
+		activated |= UI::transparentButton(IO::icon(ICON_FA_ARROW_RIGHT), UI::btnSmall);
 
 		if (activated)
 		{
@@ -869,7 +874,7 @@ namespace MikuMikuWorld
 		ImGui::SameLine();
 		ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
 		ImGui::SameLine();
-		if (UI::transparentButton(ICON_FA_MINUS, UI::btnSmall, false,
+		if (UI::transparentButton(IO::icon(ICON_FA_MINUS), UI::btnSmall, false,
 		                          playbackSpeed > minPlaybackSpeed))
 			setPlaybackSpeed(context, playbackSpeed - 0.25f);
 
@@ -879,7 +884,7 @@ namespace MikuMikuWorld
 		                      false);
 
 		ImGui::SameLine();
-		if (UI::transparentButton(ICON_FA_PLUS, UI::btnSmall, false,
+		if (UI::transparentButton(IO::icon(ICON_FA_PLUS), UI::btnSmall, false,
 		                          playbackSpeed < maxPlaybackSpeed))
 			setPlaybackSpeed(context, playbackSpeed + 0.25f);
 
@@ -1791,7 +1796,7 @@ namespace MikuMikuWorld
 		int right = spr.getX() + spr.getWidth() - holdCutoffX;
 
 		auto easeFunc = getEaseFunction(ease);
-		float steps = std::max(5.0f, std::ceilf(abs((endY - startY)) / 10));
+		float steps = std::max(5.0f, ceilf(abs((endY - startY)) / 10));
 		for (int y = 0; y < steps; ++y)
 		{
 			Color inactiveTint = tint * otherLayerTint;
@@ -2369,7 +2374,7 @@ namespace MikuMikuWorld
 			return false;
 
 		std::string txt = "FEVER";
-		txt.append(start ? ICON_FA_CARET_UP : ICON_FA_CARET_DOWN);
+		txt.append(IO::icon(start ? ICON_FA_CARET_UP : ICON_FA_CARET_DOWN));
 
 		float dpiScale = ImGui::GetMainViewport()->DpiScale;
 		Vector2 pos{ getTimelineStartX(score) - (108 * dpiScale),
@@ -2776,7 +2781,7 @@ namespace MikuMikuWorld
 		playbackSpeed = 1.0f;
 
 		background.load(config.backgroundImage.empty()
-		                    ? (Application::getAppDir() + "res\\textures\\default.png")
+		                    ? (Application::getAppDir() + "res/textures/default.png")
 		                    : config.backgroundImage);
 		background.setBrightness(0.67);
 

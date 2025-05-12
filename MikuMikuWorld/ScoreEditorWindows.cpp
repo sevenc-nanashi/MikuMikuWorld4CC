@@ -13,7 +13,7 @@ namespace MikuMikuWorld
 	void ScorePropertiesWindow::update(ScoreContext& context)
 	{
 		if (ImGui::CollapsingHeader(
-		        IO::concat(ICON_FA_ALIGN_LEFT, getString("metadata"), " ").c_str(),
+		        IO::concat(IO::icon(ICON_FA_ALIGN_LEFT), getString("metadata"), " ").c_str(),
 		        ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			UI::beginPropertyColumns();
@@ -45,7 +45,7 @@ namespace MikuMikuWorld
 			UI::endPropertyColumns();
 		}
 
-		if (ImGui::CollapsingHeader(IO::concat(ICON_FA_VOLUME_UP, getString("audio"), " ").c_str(),
+		if (ImGui::CollapsingHeader(IO::concat(IO::icon(ICON_FA_VOLUME_UP), getString("audio"), " ").c_str(),
 		                            ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			UI::beginPropertyColumns();
@@ -102,7 +102,7 @@ namespace MikuMikuWorld
 		}
 
 		if (ImGui::CollapsingHeader(
-		        IO::concat(ICON_FA_CHART_BAR, getString("statistics"), " ").c_str(),
+		        IO::concat(IO::icon(ICON_FA_CHART_BAR), getString("statistics"), " ").c_str(),
 		        ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			UI::beginPropertyColumns();
@@ -151,7 +151,7 @@ namespace MikuMikuWorld
 			return;
 		}
 
-		if (ImGui::CollapsingHeader(IO::concat(ICON_FA_COG, getString("general"), " ").c_str(),
+		if (ImGui::CollapsingHeader(IO::concat(IO::icon(ICON_FA_COG), getString("general"), " ").c_str(),
 		                            ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			UI::beginPropertyColumns();
@@ -244,7 +244,7 @@ namespace MikuMikuWorld
 
 			Note& note = context.score.notes.at(*context.selectedNotes.begin());
 			if (ImGui::CollapsingHeader(
-			        IO::concat(ICON_FA_COG, getString("note_properties_note"), " ").c_str(),
+			        IO::concat(IO::icon(ICON_FA_COG), getString("note_properties_note"), " ").c_str(),
 			        ImGuiTreeNodeFlags_DefaultOpen))
 			{
 				UI::beginPropertyColumns();
@@ -397,7 +397,7 @@ namespace MikuMikuWorld
 			UI::endPropertyColumns();
 			if (context.hasHoldInSelection())
 			{
-				if (ImGui::CollapsingHeader(IO::concat(ICON_FA_COG,
+				if (ImGui::CollapsingHeader(IO::concat(IO::icon(ICON_FA_COG),
 				                                       isGuide
 				                                           ? getString("note_properties_guide")
 				                                           : getString("note_properties_hold_note"),
@@ -533,7 +533,7 @@ namespace MikuMikuWorld
 			HiSpeedChange& hiSpeed =
 			    context.score.hiSpeedChanges.at(*context.selectedHiSpeedChanges.begin());
 			if (ImGui::CollapsingHeader(
-			        IO::concat(ICON_FA_FAST_FORWARD, getString("note_properties_hi_speed"), " ")
+			        IO::concat(IO::icon(ICON_FA_FAST_FORWARD), getString("note_properties_hi_speed"), " ")
 			            .c_str(),
 			        ImGuiTreeNodeFlags_DefaultOpen))
 			{
@@ -602,10 +602,10 @@ namespace MikuMikuWorld
 			float filterWidth = ImGui::GetContentRegionAvail().x - UI::btnSmall.x - 2;
 
 			presetFilter.Draw("##preset_filter",
-			                  IO::concat(ICON_FA_SEARCH, getString("search"), " ").c_str(),
+			                  IO::concat(IO::icon(ICON_FA_SEARCH), getString("search"), " ").c_str(),
 			                  filterWidth);
 			ImGui::SameLine();
-			if (ImGui::Button(ICON_FA_TIMES, UI::btnSmall))
+			if (ImGui::Button(IO::icon(ICON_FA_TIMES), UI::btnSmall))
 				presetFilter.Clear();
 
 			ImGui::PopStyleVar();
@@ -641,7 +641,7 @@ namespace MikuMikuWorld
 							UI::tooltip(preset.description.c_str());
 
 						ImGui::SameLine();
-						if (UI::transparentButton(ICON_FA_TRASH,
+						if (UI::transparentButton(IO::icon(ICON_FA_TRASH),
 						                          ImVec2(UI::btnSmall.x, presetButtonHeight)))
 							removePattern = id;
 
@@ -1054,7 +1054,7 @@ namespace MikuMikuWorld
 							            static_cast<int>((duration - durationSecondsOnly) * 100));
 
 							ImGui::TableSetColumnIndex(2);
-							if (UI::transparentButton(ICON_FA_PLAY, UI::btnSmall))
+							if (UI::transparentButton(IO::icon(ICON_FA_PLAY), UI::btnSmall))
 							{
 								sound.seek(0);
 								sound.play();
@@ -1063,7 +1063,7 @@ namespace MikuMikuWorld
 							ImGui::SameLine();
 							ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
 							ImGui::SameLine();
-							if (UI::transparentButton(ICON_FA_STOP, UI::btnSmall))
+							if (UI::transparentButton(IO::icon(ICON_FA_STOP), UI::btnSmall))
 								sound.stop();
 
 							ImGui::PopID();
@@ -1177,7 +1177,7 @@ namespace MikuMikuWorld
 				ImGui::SameLine();
 				if (!canMoveUp)
 					UI::beginNextItemDisabled();
-				if (ImGui::Button(ICON_FA_CARET_UP, { btnHeight, btnHeight }))
+				if (ImGui::Button(IO::icon(ICON_FA_CARET_UP), { btnHeight, btnHeight }))
 				{
 					moveIndex = b;
 					moveDirection = -1;
@@ -1188,7 +1188,7 @@ namespace MikuMikuWorld
 				ImGui::SameLine();
 				if (!canMoveDown)
 					UI::beginNextItemDisabled();
-				if (ImGui::Button(ICON_FA_CARET_DOWN, { btnHeight, btnHeight }))
+				if (ImGui::Button(IO::icon(ICON_FA_CARET_DOWN), { btnHeight, btnHeight }))
 				{
 					moveIndex = b;
 					moveDirection = 1;
@@ -1349,7 +1349,7 @@ namespace MikuMikuWorld
 						for (int i = 0; i < UI::accentColors.size(); ++i)
 						{
 							bool apply = false;
-							std::string id = i == config.accentColor ? ICON_FA_CHECK
+							std::string id = i == config.accentColor ? IO::icon(ICON_FA_CHECK)
 							                 : i == 0                ? "C"
 							                                         : "##" + std::to_string(i);
 							ImGui::PushStyleColor(ImGuiCol_Button, UI::accentColors[i]);
@@ -1603,7 +1603,7 @@ namespace MikuMikuWorld
 
 					ImGui::SameLine();
 
-					if (UI::transparentButton(layer.hidden ? ICON_FA_EYE_SLASH : ICON_FA_EYE,
+					if (UI::transparentButton(IO::icon(layer.hidden ? ICON_FA_EYE_SLASH : ICON_FA_EYE),
 					                          ImVec2(UI::btnSmall.x, layersButtonHeight), false))
 					{
 						toggleHideIndex = index;
@@ -1611,7 +1611,7 @@ namespace MikuMikuWorld
 					UI::tooltip(layer.hidden ? getString("layer_show") : getString("layer_hide"));
 
 					ImGui::SameLine();
-					if (UI::transparentButton(ICON_FA_PENCIL_ALT,
+					if (UI::transparentButton(IO::icon(ICON_FA_PENCIL_ALT),
 					                          ImVec2(UI::btnSmall.x, layersButtonHeight), false))
 					{
 						renameIndex = index;
@@ -1622,7 +1622,7 @@ namespace MikuMikuWorld
 
 					bool isFirst = index == 0;
 					ImGui::SameLine();
-					if (UI::transparentButton(ICON_FA_CHEVRON_UP,
+					if (UI::transparentButton(IO::icon(ICON_FA_CHEVRON_UP),
 					                          ImVec2(UI::btnSmall.x, layersButtonHeight), false,
 					                          !isFirst))
 						moveUpPattern = index;
@@ -1630,14 +1630,14 @@ namespace MikuMikuWorld
 
 					int isLast = index == context.score.layers.size() - 1;
 					ImGui::SameLine();
-					if (UI::transparentButton(ICON_FA_CHEVRON_DOWN,
+					if (UI::transparentButton(IO::icon(ICON_FA_CHEVRON_DOWN),
 					                          ImVec2(UI::btnSmall.x, layersButtonHeight), false,
 					                          !isLast))
 						moveDownPattern = index;
 					UI::tooltip(getString("layer_down"));
 
 					ImGui::SameLine();
-					if (UI::transparentButton(ICON_FA_LEVEL_DOWN_ALT,
+					if (UI::transparentButton(IO::icon(ICON_FA_LEVEL_DOWN_ALT),
 					                          ImVec2(UI::btnSmall.x, layersButtonHeight), false,
 					                          !isLast))
 						mergePattern = index;

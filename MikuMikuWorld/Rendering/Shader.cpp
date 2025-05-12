@@ -20,7 +20,6 @@ namespace MikuMikuWorld
 
 	void Shader::compile(const std::string& source)
 	{
-		std::wstring wSource = mbToWideStr(source);
 		std::string vertexCode, fragmentCode;
 		std::ifstream vertexFile, fragmentFile;
 		vertexFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -28,8 +27,14 @@ namespace MikuMikuWorld
 
 		try
 		{
+#if CHOC_WINDOWS
+			std::wstring wSource = mbToWideStr(source);
 			vertexFile.open(wSource + L".vert");
 			fragmentFile.open(wSource + L".frag");
+#else
+			vertexFile.open(source + ".vert");
+			fragmentFile.open(source + ".frag");
+#endif
 
 			std::stringstream vertexStream, fragmentStream;
 
@@ -144,7 +149,14 @@ namespace MikuMikuWorld
 
 	void Shader::setMatrix4(const std::string& name, DirectX::XMMATRIX value)
 	{
-		glUniformMatrix4fv(getUniformLoc(name), 1, GL_FALSE, (GLfloat*)&value.r->m128_f32[0]);
+		float r;
+#if CHOC_WINDOWS
+		r = value.r[0].m128_f32[0];
+#else
+		float* p = (float*)&value;
+		r = p[0];
+#endif
+		glUniformMatrix4fv(getUniformLoc(name), 1, GL_FALSE, (GLfloat*)&r);
 	}
 
 }

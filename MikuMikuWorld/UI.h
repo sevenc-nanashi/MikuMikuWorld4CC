@@ -136,7 +136,8 @@ namespace MikuMikuWorld
 			addReadOnlyProperty(label, val.c_str());
 		}
 
-		static bool addSelectProperty(const char* label, int& value, const char* const* items,
+		template <typename T>
+		static bool addSelectProperty(const char* label, T& value, const char* const* items,
 		                              int count)
 		{
 			propertyLabel(label);
@@ -146,21 +147,21 @@ namespace MikuMikuWorld
 
 			bool edited = false;
 
-			std::string curr = getString(items[value]);
+			std::string curr = getString(items[static_cast<int>(value)]);
 			if (!curr.size())
-				curr = items[value];
+				curr = items[static_cast<int>(value)];
 			if (ImGui::BeginCombo(id.c_str(), curr.c_str()))
 			{
 				for (int i = 0; i < count; ++i)
 				{
-					const bool selected = value == i;
+					const bool selected = static_cast<int>(value) == i;
 					std::string str = getString(items[i]);
 					if (!str.size())
 						str = items[i];
 
 					if (ImGui::Selectable(str.c_str(), selected))
 					{
-						value = i;
+						value = static_cast<T>(i);
 						edited = true;
 					}
 				}

@@ -4,9 +4,20 @@
 #include <vector>
 #include <stdexcept>
 #include <memory>
+#include <fstream>
 
 namespace IO
 {
+	namespace Mode {
+#if CHOC_WINDOWS
+		constexpr const char* read = L"r";
+		constexpr const char* write = L"w";
+#else
+		constexpr const char* read = "r";
+		constexpr const char* write = "w";
+#endif
+	}
+
 	enum class MessageBoxButtons : uint8_t
 	{
 		Ok,
@@ -56,6 +67,9 @@ namespace IO
 
 	std::ifstream openFile(const std::string& filename);
 	std::ofstream openFileWrite(const std::string& filename);
+
+	const char* icon(const char* iconName);
+	const char* icon(const char8_t* iconName);
 
 	template <typename... Args> std::string formatString(const char* format, Args... args)
 	{

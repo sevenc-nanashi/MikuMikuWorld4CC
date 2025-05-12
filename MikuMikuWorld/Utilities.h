@@ -1,9 +1,10 @@
 #pragma once
-#include <string>
-#include <vector>
+
 #include <algorithm>
 #include "ImGui/imgui_internal.h"
+#include <string>
 #include <type_traits>
+#include <vector>
 
 // Macro to allow usage of flags operators with types enums
 #define DECLARE_ENUM_FLAG_OPERATORS(EnumType)                                                      \

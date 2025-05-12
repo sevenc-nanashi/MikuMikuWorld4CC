@@ -1,13 +1,19 @@
 #include <choc/platform/choc_Platform.h>
 #include "IO.h"
-#include <Windows.h>
+#include "json.hpp"
 #include <algorithm>
+#if CHOC_WINDOWS
+#include <Windows.h>
+#elif CHOC_LINUX
+#include <stdio.h>
+#endif
 
 namespace IO
 {
 	MessageBoxResult messageBox(std::string title, std::string message, MessageBoxButtons buttons,
 	                            MessageBoxIcon icon, void* parentWindow)
 	{
+#if CHOC_WINDOWS
 		UINT flags = 0;
 		switch (icon)
 		{
@@ -24,7 +30,7 @@ namespace IO
 			flags |= MB_ICONQUESTION;
 			break;
 		default:
-			break;
+		break;
 		}
 
 		switch (buttons)
@@ -65,6 +71,72 @@ namespace IO
 		default:
 			return MessageBoxResult::None;
 		}
+
+#elif CHOC_LINUX
+		std::string command = "kdialog --title ";
+		command += nlohmann::json(title).dump();
+		command += " --";
+		switch (icon)
+		{
+		case MessageBoxIcon::Information:
+			command += "msgbox";
+			break;
+		case MessageBoxIcon::Warning:
+			command += "warning";
+			break;
+		case MessageBoxIcon::Error:
+			command += "error";
+			break;
+		case MessageBoxIcon::Question:
+			command += "yesno";
+			break;
+		default:
+			command += "msgbox";
+			break;
+		}
+
+		switch (buttons)
+		{
+		case MessageBoxButtons::Ok:
+			break;
+		case MessageBoxButtons::OkCancel:
+			command += " --yesno";
+			break;
+		case MessageBoxButtons::YesNo:
+			command += " --yesno";
+			break;
+		case MessageBoxButtons::YesNoCancel:
+			command += " --yesnocancel";
+			break;
+		default:
+			break;
+		}
+		command += " ";
+		command += nlohmann::json(message).dump();
+		if (buttons == MessageBoxButtons::OkCancel)
+			command += " --ok-label OK --cancel-label Cancel";
+
+		int result = system(command.c_str());
+		switch (result)
+		{
+		case 0:
+			return MessageBoxResult::Ok;
+		case 1:
+			return MessageBoxResult::Cancel;
+		case 2:
+			return MessageBoxResult::No;
+		case 3:
+			return MessageBoxResult::Yes;
+		case 4:
+			return MessageBoxResult::Ignore;
+		case 5:
+			return MessageBoxResult::Abort;
+		default:
+			return MessageBoxResult::None;
+		}
+#else
+#error "Unsupported platform"
+#endif
 	}
 
 	char* reverse(char* str)
@@ -96,7 +168,7 @@ namespace IO
 		{
 			do
 			{
-				*buff++ = digits[abs(num % base)];
+				*buff++ = digits[std::abs(num % base)];
 				num /= base;
 			} while (num);
 			if (sign)
@@ -132,7 +204,7 @@ namespace IO
 		if (str.empty())
 			return false;
 
-		return std::all_of(str.begin() + (str.at(0) == '-' ? 1 : 0), str.end(), std::isdigit);
+		return std::all_of(str.begin() + (str.at(0) == '-' ? 1 : 0), str.end(), isdigit);
 	}
 
 	std::string trim(const std::string& line)
@@ -165,20 +237,30 @@ namespace IO
 
 	std::string wideStringToMb(const std::wstring& str)
 	{
+#if CHOC_WINDOWS
 		int size = WideCharToMultiByte(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0, NULL, NULL);
 		std::string result(size, 0);
 		WideCharToMultiByte(CP_UTF8, 0, &str[0], (int)str.size(), &result[0], size, NULL, NULL);
 
 		return result;
+#else
+		std::string result(str.begin(), str.end());
+		return result;
+#endif
 	}
 
 	std::wstring mbToWideStr(const std::string& str)
 	{
+#if CHOC_WINDOWS
 		int size = MultiByteToWideChar(CP_UTF8, 0, &str[0], str.size(), NULL, 0);
 		std::wstring wResult(size, 0);
 		MultiByteToWideChar(CP_UTF8, 0, &str[0], str.size(), &wResult[0], size);
 
 		return wResult;
+#else
+		std::wstring wResult(str.begin(), str.end());
+		return wResult;
+#endif
 	}
 
 	std::string concat(const char* s1, const char* s2, const char* join)
@@ -204,5 +286,15 @@ namespace IO
 #else
 		return std::ofstream(filename);
 #endif
+	}
+
+	const char* icon(const char* icon)
+	{
+		return icon;
+	}
+
+	const char* icon(const char8_t* icon)
+	{
+		return reinterpret_cast<const char*>(icon);
 	}
 }

@@ -1,10 +1,12 @@
 #include "Application.h"
 #include "IO.h"
-#include <iostream>
+#include "nfd.hpp"
+#include <whereami++.hpp>
 
 namespace mmw = MikuMikuWorld;
 mmw::Application app;
 
+#if CHOC_WINDOWS
 int main()
 {
 	int argc;
@@ -16,16 +18,25 @@ int main()
 		               IO::MessageBoxIcon::Error);
 		return 1;
 	}
+#else
+int main(int argc, char* argv[])
+{
+	NFD::Init();
+	std::wstring args[argc];
+	for (int i = 0; i < argc; ++i)
+		args[i] = IO::mbToWideStr(argv[i]);
+#endif
 
 #ifndef DEBUG
 	try
 	{
 #endif
-		std::string dir = IO::File::getFilepath(IO::wideStringToMb(args[0]));
+		std::string dir = whereami::executable_dir();
+		dir += "/";
 		mmw::Result result = app.initialize(dir);
 
 		if (!result.isOk())
-			throw(std::exception(result.getMessage().c_str()));
+			throw(std::runtime_error(result.getMessage().c_str()));
 
 		for (int i = 1; i < argc; ++i)
 			app.appendOpenFile(IO::wideStringToMb(args[i]));
@@ -48,9 +59,11 @@ int main()
 #endif
 
 	app.dispose();
+	NFD::Quit();
 	return 0;
 }
 
+#if CHOC_WINDOWS
 LRESULT CALLBACK wndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
@@ -104,3 +117,4 @@ LRESULT CALLBACK wndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	return ::DefWindowProcW(hwnd, uMsg, wParam, lParam);
 }
+#endif

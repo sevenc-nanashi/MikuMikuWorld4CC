@@ -4,6 +4,7 @@
 #include "JsonIO.h"
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 
 using namespace nlohmann;
 
@@ -21,6 +22,11 @@ namespace MikuMikuWorld
 	void ApplicationConfiguration::read(const std::string& filename)
 	{
 		std::ifstream configFile = IO::openFile(filename);
+		if (!configFile.is_open())
+		{
+			std::cerr << "Failed to open config file: " << filename << std::endl;
+			return;
+		}
 		json config;
 		configFile >> config;
 		configFile.close();

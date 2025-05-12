@@ -6,11 +6,24 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <choc/platform/choc_Platform.h>
 
-#ifdef _WIN32
+#if CHOC_WINDOWS
 #define GLFW_EXPOSE_NATIVE_WIN32
+#elif CHOC_OSX
+#define GLFW_EXPOSE_NATIVE_COCOA
+#elif CHOC_LINUX
+#define GLFW_EXPOSE_NATIVE_X11
+#else
+#error "Unsupported platform"
 #endif
+
 #include <GLFW/glfw3native.h>
+
+#if CHOC_LINUX
+#undef Success // Avoid conflict with X11
+#undef None
+#endif
 
 #include "ScoreEditor.h"
 #include "ImGuiManager.h"

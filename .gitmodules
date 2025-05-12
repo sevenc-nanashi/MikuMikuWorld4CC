@@ -4,3 +4,21 @@
 [submodule "Depends/choc"]
 	path = Depends/choc
 	url = https://github.com/Tracktion/choc
+[submodule "Depends/nativefiledialog-extended"]
+	path = Depends/nativefiledialog-extended
+	url = https://github.com/btzy/nativefiledialog-extended
+[submodule "Depends/glfw"]
+	path = Depends/glfw
+	url = https://github.com/glfw/glfw
+[submodule "Depends/native_message_box"]
+	path = Depends/native_message_box
+	url = https://github.com/thegabman/native_message_box.git
+[submodule "Depends/boost"]
+	path = Depends/boost
+	url = https://github.com/boostorg/boost.git
+[submodule "Depends/whereami"]
+	path = Depends/whereami
+	url = https://github.com/gpakosz/whereami.git
+[submodule "Depends/whereami-cpp"]
+	path = Depends/whereami-cpp
+	url = https://github.com/nabijaczleweli/whereami-cpp.git

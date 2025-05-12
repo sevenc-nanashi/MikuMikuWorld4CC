@@ -382,7 +382,7 @@ namespace MikuMikuWorld
 		ImGui::PushButtonRepeat(true);
 
 		bool act = false;
-		if (UI::transparentButton(ICON_FA_SEARCH_MINUS, UI::btnSmall, true, value > min))
+		if (UI::transparentButton(IO::icon(ICON_FA_SEARCH_MINUS), UI::btnSmall, true, value > min))
 		{
 			value -= 0.25f;
 			act = true;
@@ -395,7 +395,7 @@ namespace MikuMikuWorld
 		tooltip(getString("zoom_tooltip"));
 		ImGui::SameLine();
 
-		if (UI::transparentButton(ICON_FA_SEARCH_PLUS, UI::btnSmall, true, value < max))
+		if (UI::transparentButton(IO::icon(ICON_FA_SEARCH_PLUS), UI::btnSmall, true, value < max))
 		{
 			value += 0.25f;
 			act = true;

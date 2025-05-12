@@ -18,11 +18,7 @@ namespace MikuMikuWorld
 
 	Result NotesPreset::read(const std::string& filepath)
 	{
-		std::wstring wFilename = IO::mbToWideStr(filepath);
-		if (!std::filesystem::exists(wFilename))
-			return Result(ResultStatus::Error, "The preset file " + filepath + " does not exist.");
-
-		std::ifstream file(wFilename);
+		std::ifstream file = IO::openFile(filepath);
 
 		file >> data;
 		file.close();
@@ -59,7 +55,7 @@ namespace MikuMikuWorld
 		data["name"] = name;
 		data["description"] = description;
 
-		std::ofstream file(wFilename);
+		std::ofstream file = IO::openFileWrite(filepath);
 
 		file << std::setw(2) << data;
 		file.flush();
@@ -153,7 +149,7 @@ namespace MikuMikuWorld
 				              // we will add the extension later after determining what the final
 				              // filename should be
 				              std::string filename =
-				                  (libPath / fixFilename(preset.getName())).u8string();
+				                  (libPath / fixFilename(preset.getName())).c_str();
 				              preset.write(filename, false);
 			              }
 		              });

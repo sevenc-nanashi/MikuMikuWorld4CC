@@ -318,7 +318,7 @@ namespace MikuMikuWorld
 			    bpmIdentifiers.size(), maxBpmIdentifiers);
 			printf("%s", errorMessage.c_str());
 
-			throw std::exception(errorMessage.c_str());
+			throw std::runtime_error(errorMessage);
 		}
 
 		// Group bpms by measure
