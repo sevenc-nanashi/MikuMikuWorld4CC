@@ -5,9 +5,13 @@ namespace IO
 {
 	BinaryReader::BinaryReader(const std::string& filename)
 	{
+#ifdef CHOC_WINDOWS
 		stream = NULL;
 		std::wstring wFilename = mbToWideStr(filename);
 		stream = _wfopen(wFilename.c_str(), L"rb");
+#else
+		stream = fopen(filename.c_str(), "rb");
+#endif
 	}
 
 	BinaryReader::~BinaryReader() { close(); }

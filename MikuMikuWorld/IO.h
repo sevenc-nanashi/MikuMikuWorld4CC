@@ -54,6 +54,9 @@ namespace IO
 
 	std::string concat(const char* s1, const char* s2, const char* join = "");
 
+	std::ifstream openFile(const std::string& filename);
+	std::ofstream openFileWrite(const std::string& filename);
+
 	template <typename... Args> std::string formatString(const char* format, Args... args)
 	{
 		size_t length = std::snprintf(nullptr, 0, format, args...) + 1;

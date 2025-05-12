@@ -5,9 +5,13 @@ namespace IO
 {
 	BinaryWriter::BinaryWriter(const std::string& filename)
 	{
+#ifdef CHOC_WINDOWS
 		stream = NULL;
 		std::wstring wFilename = mbToWideStr(filename);
 		stream = _wfopen(wFilename.c_str(), L"wb");
+#else
+		stream = fopen(filename.c_str(), "wb");
+#endif
 	}
 
 	BinaryWriter::~BinaryWriter() { close(); }

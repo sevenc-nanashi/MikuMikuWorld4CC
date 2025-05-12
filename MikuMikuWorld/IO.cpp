@@ -1,3 +1,4 @@
+#include <choc/platform/choc_Platform.h>
 #include "IO.h"
 #include <Windows.h>
 #include <algorithm>
@@ -183,5 +184,25 @@ namespace IO
 	std::string concat(const char* s1, const char* s2, const char* join)
 	{
 		return std::string(s1).append(join).append(s2);
+	}
+
+	std::ifstream openFile(const std::string& filename)
+	{
+#ifdef CHOC_WINDOWS
+		std::wstring wFilename = IO::mbToWideStr(filename);
+		return std::ifstream(wFilename);
+#else
+		return std::ifstream(filename);
+#endif
+	}
+
+	std::ofstream openFileWrite(const std::string& filename)
+	{
+#ifdef CHOC_WINDOWS
+		std::wstring wFilename = IO::mbToWideStr(filename);
+		return std::ofstream(wFilename);
+#else
+		return std::ofstream(filename);
+#endif
 	}
 }

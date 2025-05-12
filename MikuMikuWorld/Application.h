@@ -1,19 +1,24 @@
 #pragma once
 
+#include <cstdint>
 #define IMGUI_DEFINE_MATH_OPERATORS
 #define NOMINMAX
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#ifdef _WIN32
 #define GLFW_EXPOSE_NATIVE_WIN32
+#endif
 #include <GLFW/glfw3native.h>
 
 #include "ScoreEditor.h"
 #include "ImGuiManager.h"
+#ifdef _WIN32
 #include <Windows.h>
 
 LRESULT CALLBACK wndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+#endif
 
 namespace MikuMikuWorld
 {
@@ -33,7 +38,7 @@ namespace MikuMikuWorld
 		void* windowHandle;
 		Vector2 position{};
 		Vector2 size{};
-		UINT_PTR windowTimerId{};
+		uintptr_t windowTimerId{};
 	};
 
 	class Application

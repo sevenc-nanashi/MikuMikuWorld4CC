@@ -1,13 +1,18 @@
 #include "File.h"
 #include "IO.h"
-#include <Windows.h>
 #include <algorithm>
+#include <cstring>
 #include <ctime>
 #include <stdio.h>
 #include <iostream>
 #include <stdlib.h>
 #include <filesystem>
 #include <chrono>
+#ifdef CHOC_WINDOWS
+#include <Windows.h>
+#else
+#include <sys/stat.h>
+#endif
 
 namespace IO
 {
@@ -32,7 +37,11 @@ namespace IO
 		if (stream)
 			close();
 
+#ifdef CHOC_WINDOWS
 		stream = _wfopen(filename.c_str(), mode);
+#else
+		stream = fopen(wideStringToMb(filename).c_str(), wideStringToMb(mode).c_str());
+#endif
 		if (!stream)
 			std::wcerr << L"Failed to open file: " << filename << std::endl;
 	}
@@ -62,7 +71,11 @@ namespace IO
 	std::chrono::time_point<std::chrono::system_clock> File::getLastWriteTime() const
 	{
 		struct stat fileStat;
+#ifdef CHOC_WINDOWS
 		fstat(_fileno(stream), &fileStat);
+#else
+		fstat(fileno(stream), &fileStat);
+#endif
 		auto time = fileStat.st_mtime;
 
 		return std::chrono::system_clock::from_time_t(time);
@@ -193,10 +206,7 @@ namespace IO
 		return std::filesystem::exists(wPath);
 	}
 
-	bool File::exists(const std::wstring& path)
-	{
-		return std::filesystem::exists(path);
-	}
+	bool File::exists(const std::wstring& path) { return std::filesystem::exists(path); }
 
 	FileDialogResult FileDialog::showFileDialog(DialogType type, DialogSelectType selectType)
 	{

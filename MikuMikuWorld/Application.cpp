@@ -63,6 +63,7 @@ namespace MikuMikuWorld
 
 	std::string Application::getVersion()
 	{
+#ifdef _WIN32
 		wchar_t filename[1024];
 		lstrcpyW(filename, IO::mbToWideStr(std::string(appDir + "MikuMikuWorld.exe")).c_str());
 
@@ -95,6 +96,9 @@ namespace MikuMikuWorld
 			}
 			delete[] verData;
 		}
+#else
+		int major = 0, minor = 0, build = 0, rev = 0;
+#endif
 
 		return IO::formatString("%d.%d.%d.%d", major, minor, rev, build);
 	}
@@ -355,6 +359,7 @@ namespace MikuMikuWorld
 
 	void Application::run()
 	{
+#ifdef _WIN32
 		HWND hwnd = glfwGetWin32Window(window);
 
 		/*
@@ -373,6 +378,7 @@ namespace MikuMikuWorld
 		               USER_TIMER_MINIMUM, nullptr);
 
 		::DragAcceptFiles(hwnd, TRUE);
+#endif
 
 		while (!glfwWindowShouldClose(window))
 		{

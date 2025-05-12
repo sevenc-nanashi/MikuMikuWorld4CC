@@ -578,4 +578,125 @@ namespace MikuMikuWorld
 		ImGui::PopStyleVar();
 		ImGui::PopItemFlag();
 	}
+
+	/// <summary>
+	/// For use with sequential enums only
+	// </summary>
+	template <typename T>
+	bool _UIInternal::addSelectProperty(const char* label, T& value, const char* const* items,
+	                                    int count)
+	{
+		UI::propertyLabel(label);
+
+		std::string id("##");
+		id.append(label);
+
+		bool edited = false;
+
+		std::string curr = getString(items[(int)value]);
+		if (!curr.size())
+			curr = items[(int)value];
+		if (ImGui::BeginCombo(id.c_str(), curr.c_str()))
+		{
+			for (int i = 0; i < count; ++i)
+			{
+				const bool selected = (int)value == i;
+				std::string str = getString(items[i]);
+				if (!str.size())
+					str = items[i];
+
+				if (ImGui::Selectable(str.c_str(), selected))
+				{
+					value = (T)i;
+					edited = true;
+				}
+			}
+
+			ImGui::EndCombo();
+		}
+
+		ImGui::NextColumn();
+
+		return edited;
+	}
+
+	// we need to get proper translated names for the colors
+	template <>
+	bool _UIInternal::addSelectProperty<GuideColor>(const char* label, GuideColor& value,
+	                                                const char* const* items, int count)
+	{
+		UI::propertyLabel(label);
+
+		std::string id("##");
+		id.append(label);
+
+		bool edited = false;
+
+		std::string curr = items[(int)value];
+		if (!curr.size())
+			curr = items[(int)value];
+		const std::string translated_str = getString(curr.c_str());
+		if (ImGui::BeginCombo(id.c_str(), translated_str.c_str()))
+		{
+			for (int i = (int)GuideColor::Neutral; i < count; ++i)
+			{
+				const bool selected = (int)value == i;
+				std::string str = getString(items[i]);
+				if (!str.size())
+					str = items[i];
+
+				if (ImGui::Selectable(str.c_str(), selected))
+				{
+					value = (GuideColor)i;
+					edited = true;
+				}
+			}
+
+			ImGui::EndCombo();
+		}
+
+		ImGui::NextColumn();
+
+		return edited;
+	}
+
+	// we don't want FlickType::None to appear in the selection
+	template <>
+	bool _UIInternal::addSelectProperty<FlickType>(const char* label, FlickType& value,
+	                                               const char* const* items, int count)
+	{
+		UI::propertyLabel(label);
+
+		std::string id("##");
+		id.append(label);
+
+		bool edited = false;
+
+		std::string curr = getString(items[(int)value]);
+		if (!curr.size())
+			curr = items[(int)value];
+		if (ImGui::BeginCombo(id.c_str(), curr.c_str()))
+		{
+			for (int i = (int)FlickType::Default; i < count; ++i)
+			{
+				const bool selected = (int)value == i;
+				std::string str = getString(items[i]);
+				if (!str.size())
+					str = items[i];
+
+				if (ImGui::Selectable(str.c_str(), selected))
+				{
+
+					value = (FlickType)i;
+					edited = true;
+				}
+			}
+
+			ImGui::EndCombo();
+		}
+
+		ImGui::NextColumn();
+
+		return edited;
+	};
 }

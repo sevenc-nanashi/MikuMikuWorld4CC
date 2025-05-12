@@ -1,3 +1,4 @@
+#include <choc/platform/choc_Platform.h>
 #include "ApplicationConfiguration.h"
 #include "IO.h"
 #include "JsonIO.h"
@@ -19,11 +20,7 @@ namespace MikuMikuWorld
 
 	void ApplicationConfiguration::read(const std::string& filename)
 	{
-		std::wstring wFilename = IO::mbToWideStr(filename);
-		if (!std::filesystem::exists(wFilename))
-			return;
-
-		std::ifstream configFile(wFilename);
+		std::ifstream configFile = IO::openFile(filename);
 		json config;
 		configFile >> config;
 		configFile.close();
@@ -217,8 +214,7 @@ namespace MikuMikuWorld
 
 		config["recent_files"] = recentFiles;
 
-		std::wstring wFilename = IO::mbToWideStr(filename);
-		std::ofstream configFile(wFilename);
+		std::ofstream configFile = IO::openFileWrite(filename);
 		configFile << std::setw(4) << config;
 		configFile.flush();
 		configFile.close();

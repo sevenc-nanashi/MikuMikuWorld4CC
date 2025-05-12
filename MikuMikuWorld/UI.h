@@ -48,8 +48,15 @@ namespace MikuMikuWorld
 
 	constexpr const char* baseThemes[]{ "theme_dark", "theme_light" };
 
+	namespace _UIInternal
+	{
+		template <typename T>
+		bool addSelectProperty(const char* label, T& value, const char* const* items, int count);
+	};
+
 	class UI
 	{
+
 	  private:
 		static char idStr[256];
 		static const ImVec2 _btnNormal;
@@ -129,11 +136,7 @@ namespace MikuMikuWorld
 			addReadOnlyProperty(label, val.c_str());
 		}
 
-		/// <summary>
-		/// For use with sequential enums only
-		/// </summary>
-		template <typename T>
-		static bool addSelectProperty(const char* label, T& value, const char* const* items,
+		static bool addSelectProperty(const char* label, int& value, const char* const* items,
 		                              int count)
 		{
 			propertyLabel(label);
@@ -143,21 +146,21 @@ namespace MikuMikuWorld
 
 			bool edited = false;
 
-			std::string curr = getString(items[(int)value]);
+			std::string curr = getString(items[value]);
 			if (!curr.size())
-				curr = items[(int)value];
+				curr = items[value];
 			if (ImGui::BeginCombo(id.c_str(), curr.c_str()))
 			{
 				for (int i = 0; i < count; ++i)
 				{
-					const bool selected = (int)value == i;
+					const bool selected = value == i;
 					std::string str = getString(items[i]);
 					if (!str.size())
 						str = items[i];
 
 					if (ImGui::Selectable(str.c_str(), selected))
 					{
-						value = (T)i;
+						value = i;
 						edited = true;
 					}
 				}
@@ -170,84 +173,11 @@ namespace MikuMikuWorld
 			return edited;
 		}
 
-		// we need to get proper translated names for the colors
-		template <>
-		static bool addSelectProperty<GuideColor>(const char* label, GuideColor& value,
-		                                          const char* const* items, int count)
+		template <typename T>
+		static bool addSelectProperty(const char* label, int& value, const char* const* items,
+		                              int count, bool none)
 		{
-			propertyLabel(label);
-
-			std::string id("##");
-			id.append(label);
-
-			bool edited = false;
-
-			std::string curr = items[(int)value];
-			if (!curr.size())
-				curr = items[(int)value];
-			const std::string translated_str = getString(curr.c_str());
-			if (ImGui::BeginCombo(id.c_str(), translated_str.c_str()))
-			{
-				for (int i = (int)GuideColor::Neutral; i < count; ++i)
-				{
-					const bool selected = (int)value == i;
-					std::string str = getString(items[i]);
-					if (!str.size())
-						str = items[i];
-
-					if (ImGui::Selectable(str.c_str(), selected))
-					{
-						value = (GuideColor)i;
-						edited = true;
-					}
-				}
-
-				ImGui::EndCombo();
-			}
-
-			ImGui::NextColumn();
-
-			return edited;
-		}
-
-		// we don't want FlickType::None to appear in the selection
-		template <>
-		static bool addSelectProperty<FlickType>(const char* label, FlickType& value,
-		                                         const char* const* items, int count)
-		{
-			propertyLabel(label);
-
-			std::string id("##");
-			id.append(label);
-
-			bool edited = false;
-
-			std::string curr = getString(items[(int)value]);
-			if (!curr.size())
-				curr = items[(int)value];
-			if (ImGui::BeginCombo(id.c_str(), curr.c_str()))
-			{
-				for (int i = (int)FlickType::Default; i < count; ++i)
-				{
-					const bool selected = (int)value == i;
-					std::string str = getString(items[i]);
-					if (!str.size())
-						str = items[i];
-
-					if (ImGui::Selectable(str.c_str(), selected))
-					{
-
-						value = (FlickType)i;
-						edited = true;
-					}
-				}
-
-				ImGui::EndCombo();
-			}
-
-			ImGui::NextColumn();
-
-			return edited;
+			_UIInternal::addSelectProperty(label, value, items, count);
 		}
 
 		static bool addFlickSelectPropertyWithNone(const char* label, FlickType& value,
@@ -287,4 +217,5 @@ namespace MikuMikuWorld
 			return edited;
 		}
 	};
+
 }
