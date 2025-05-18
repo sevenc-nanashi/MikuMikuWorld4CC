@@ -56,7 +56,7 @@ namespace MikuMikuWorld
 
 			ImGui::BeginTooltip();
 			ImGui::GetWindowDrawList()->AddImage(
-			    (void*)texture->getID(), ImGui::GetWindowPos() + imageOffset,
+			    texture->getID(), ImGui::GetWindowPos() + imageOffset,
 			    ImGui::GetWindowPos() + imageOffset + imageSize, ImVec2{ 0.0, 0.0f },
 			    ImVec2{ 1.0f, 1.0f }, ImGui::ColorConvertFloat4ToU32(color));
 			ImGui::EndTooltip();

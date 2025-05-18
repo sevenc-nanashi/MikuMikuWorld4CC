@@ -1,7 +1,9 @@
 #include "Application.h"
 #include "IO.h"
+#if !CHOC_EMSCRIPTEN
 #include "nfd.hpp"
 #include <whereami++.hpp>
+#endif
 
 namespace mmw = MikuMikuWorld;
 mmw::Application app;
@@ -21,7 +23,9 @@ int main()
 #else
 int main(int argc, char* argv[])
 {
+#if !CHOC_EMSCRIPTEN
 	NFD::Init();
+#endif
 	std::wstring args[argc];
 	for (int i = 0; i < argc; ++i)
 		args[i] = IO::mbToWideStr(argv[i]);
@@ -31,8 +35,12 @@ int main(int argc, char* argv[])
 	try
 	{
 #endif
+#if CHOC_EMSCRIPTEN
+		std::string dir = "/app";
+#else
 		std::string dir = whereami::executable_dir();
 		dir += "/";
+#endif
 		mmw::Result result = app.initialize(dir);
 
 		if (!result.isOk())
@@ -59,7 +67,9 @@ int main(int argc, char* argv[])
 #endif
 
 	app.dispose();
+#if !CHOC_EMSCRIPTEN
 	NFD::Quit();
+#endif
 	return 0;
 }
 

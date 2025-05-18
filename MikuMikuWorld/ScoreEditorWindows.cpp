@@ -7,6 +7,7 @@
 #include "ScoreContext.h"
 #include "UI.h"
 #include "Utilities.h"
+#include "imgui.h"
 
 namespace MikuMikuWorld
 {
@@ -45,8 +46,9 @@ namespace MikuMikuWorld
 			UI::endPropertyColumns();
 		}
 
-		if (ImGui::CollapsingHeader(IO::concat(IO::icon(ICON_FA_VOLUME_UP), getString("audio"), " ").c_str(),
-		                            ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::CollapsingHeader(
+		        IO::concat(IO::icon(ICON_FA_VOLUME_UP), getString("audio"), " ").c_str(),
+		        ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			UI::beginPropertyColumns();
 
@@ -151,8 +153,9 @@ namespace MikuMikuWorld
 			return;
 		}
 
-		if (ImGui::CollapsingHeader(IO::concat(IO::icon(ICON_FA_COG), getString("general"), " ").c_str(),
-		                            ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::CollapsingHeader(
+		        IO::concat(IO::icon(ICON_FA_COG), getString("general"), " ").c_str(),
+		        ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			UI::beginPropertyColumns();
 
@@ -244,7 +247,8 @@ namespace MikuMikuWorld
 
 			Note& note = context.score.notes.at(*context.selectedNotes.begin());
 			if (ImGui::CollapsingHeader(
-			        IO::concat(IO::icon(ICON_FA_COG), getString("note_properties_note"), " ").c_str(),
+			        IO::concat(IO::icon(ICON_FA_COG), getString("note_properties_note"), " ")
+			            .c_str(),
 			        ImGuiTreeNodeFlags_DefaultOpen))
 			{
 				UI::beginPropertyColumns();
@@ -532,10 +536,10 @@ namespace MikuMikuWorld
 		{
 			HiSpeedChange& hiSpeed =
 			    context.score.hiSpeedChanges.at(*context.selectedHiSpeedChanges.begin());
-			if (ImGui::CollapsingHeader(
-			        IO::concat(IO::icon(ICON_FA_FAST_FORWARD), getString("note_properties_hi_speed"), " ")
-			            .c_str(),
-			        ImGuiTreeNodeFlags_DefaultOpen))
+			if (ImGui::CollapsingHeader(IO::concat(IO::icon(ICON_FA_FAST_FORWARD),
+			                                       getString("note_properties_hi_speed"), " ")
+			                                .c_str(),
+			                            ImGuiTreeNodeFlags_DefaultOpen))
 			{
 				UI::beginPropertyColumns();
 
@@ -601,8 +605,12 @@ namespace MikuMikuWorld
 			ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyleColorVec4(ImGuiCol_FrameBg));
 			float filterWidth = ImGui::GetContentRegionAvail().x - UI::btnSmall.x - 2;
 
-			presetFilter.Draw("##preset_filter",
-			                  IO::concat(IO::icon(ICON_FA_SEARCH), getString("search"), " ").c_str(),
+			// presetFilter.Draw("##preset_filter",
+			//                   IO::concat(IO::icon(ICON_FA_SEARCH), getString("search"), "
+			//                   ").c_str(), filterWidth);
+			presetFilter.Draw((IO::concat(IO::icon(ICON_FA_SEARCH), getString("search"), " ") +
+			                   "###preset_filter")
+			                      .c_str(),
 			                  filterWidth);
 			ImGui::SameLine();
 			if (ImGui::Button(IO::icon(ICON_FA_TIMES), UI::btnSmall))
@@ -1247,7 +1255,7 @@ namespace MikuMikuWorld
 					    !isSuper)
 					{
 						bindings[selectedBindingIndex]->bindings[editBindingIndex] =
-						    InputBinding((ImGuiKey)key, (ImGuiModFlags_)ImGui::GetIO().KeyMods);
+						    InputBinding((ImGuiKey)key, (ImGuiKeyChord)ImGui::GetIO().KeyMods);
 						listeningForInput = false;
 						editBindingIndex = -1;
 					}
@@ -1603,8 +1611,9 @@ namespace MikuMikuWorld
 
 					ImGui::SameLine();
 
-					if (UI::transparentButton(IO::icon(layer.hidden ? ICON_FA_EYE_SLASH : ICON_FA_EYE),
-					                          ImVec2(UI::btnSmall.x, layersButtonHeight), false))
+					if (UI::transparentButton(
+					        IO::icon(layer.hidden ? ICON_FA_EYE_SLASH : ICON_FA_EYE),
+					        ImVec2(UI::btnSmall.x, layersButtonHeight), false))
 					{
 						toggleHideIndex = index;
 					}

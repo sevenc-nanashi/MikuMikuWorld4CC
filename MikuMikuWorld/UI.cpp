@@ -45,7 +45,7 @@ namespace MikuMikuWorld
 		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, 1 - (0.5f * !enabled));
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 
-		bool pressed = ImGui::ButtonEx(txt, size, (repeat ? ImGuiButtonFlags_Repeat : 0));
+		bool pressed = ImGui::ButtonEx(txt, size, (repeat ? ImGuiInputFlags_Repeat : 0));
 
 		ImGui::PopStyleColor();
 		ImGui::PopStyleVar();
@@ -283,8 +283,7 @@ namespace MikuMikuWorld
 		{
 			float txtWidth = ImGui::CalcTextSize(label).x + (ImGui::GetStyle().WindowPadding.x * 2);
 			ImGui::SetNextWindowSize(ImVec2(std::min(txtWidth, 250.0f), -1));
-			ImGui::BeginTooltipEx(ImGuiTooltipFlags_OverridePreviousTooltip,
-			                      ImGuiWindowFlags_NoResize);
+			ImGui::BeginTooltipEx(ImGuiTooltipFlags_OverridePrevious, ImGuiWindowFlags_NoResize);
 			ImGui::TextWrapped("%s", label);
 			ImGui::EndTooltip();
 		}
@@ -534,9 +533,8 @@ namespace MikuMikuWorld
 			                      ImGui::GetStyle().Colors[ImGuiCol_TabActive]);
 		}
 
-		bool activated =
-		    ImGui::ImageButton(lblId.c_str(), (void*)ResourceManager::textures[texIndex].getID(),
-		                       UI::toolbarBtnImgSize);
+		bool activated = ImGui::ImageButton(
+		    lblId.c_str(), ResourceManager::textures[texIndex].getID(), UI::toolbarBtnImgSize);
 
 		std::string tooltipLabel = label;
 		if (shortcut && strlen(shortcut))

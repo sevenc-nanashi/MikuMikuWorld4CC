@@ -392,6 +392,8 @@ namespace MikuMikuWorld
 			throw std::runtime_error("Failed to get X11 window");
 
 		windowState.windowHandle = (void*)windowPtr;
+#elif defined(CHOC_EMSCRIPTEN)
+		// nop
 #else
 #error "Unsupported platform"
 #endif

@@ -1,5 +1,5 @@
 #pragma once
-#include "ImGui/imgui.h"
+#include "imgui/imgui.h"
 #include <functional>
 #include "NoteTypes.h"
 

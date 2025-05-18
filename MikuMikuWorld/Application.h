@@ -1,13 +1,12 @@
 #pragma once
 
 #include <cstdint>
-#define IMGUI_DEFINE_MATH_OPERATORS
-#define NOMINMAX
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <choc/platform/choc_Platform.h>
 
+#if !CHOC_EMSCRIPTEN
 #if CHOC_WINDOWS
 #define GLFW_EXPOSE_NATIVE_WIN32
 #elif CHOC_OSX
@@ -23,6 +22,7 @@
 #if CHOC_LINUX
 #undef Success // Avoid conflict with X11
 #undef None
+#endif
 #endif
 
 #include "ScoreEditor.h"

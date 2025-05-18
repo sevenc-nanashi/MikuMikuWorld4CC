@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include "ImGui/imgui_internal.h"
+#include "imgui/imgui_internal.h"
 #include <string>
 #include <type_traits>
 #include <vector>

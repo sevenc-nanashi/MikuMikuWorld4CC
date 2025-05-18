@@ -1,9 +1,9 @@
 #pragma once
 #include "IO.h"
 #include "IconsFontAwesome5.h"
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_internal.h"
-#include "ImGui/imgui_stdlib.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 #include "Localization.h"
 #include "NoteTypes.h"
 #include <vector>

@@ -84,30 +84,34 @@ namespace Audio
 				sounds[index].pool.emplace(
 				    std::move(SoundPoolPair(mmw::SE_NAMES[i], std::make_unique<SoundPool>())));
 
-			std::for_each(std::execution::par, sounds[index].pool.begin(), sounds[index].pool.end(),
-			              [&](auto& s)
-			              {
-				              std::string filename = path + s.first.data() + ".mp3";
-				              size_t soundNameIndex = mmw::findArrayItem(
-				                  s.first.data(), mmw::SE_NAMES, mmw::arrayLength(mmw::SE_NAMES));
+			std::for_each(
+#ifdef __cpp_lib_execution
+			    std::execution::par,
+#endif
+			    sounds[index].pool.begin(), sounds[index].pool.end(),
+			    [&](auto& s)
+			    {
+				    std::string filename = path + s.first.data() + ".mp3";
+				    size_t soundNameIndex = mmw::findArrayItem(s.first.data(), mmw::SE_NAMES,
+				                                               mmw::arrayLength(mmw::SE_NAMES));
 
-				              std::string name{};
-				              if (mmw::isArrayIndexInBounds(soundNameIndex, mmw::SE_NAMES))
-					              name = IO::formatString("%s_%02d", mmw::SE_NAMES[soundNameIndex],
-					                                      index + 1);
+				    std::string name{};
+				    if (mmw::isArrayIndexInBounds(soundNameIndex, mmw::SE_NAMES))
+					    name =
+					        IO::formatString("%s_%02d", mmw::SE_NAMES[soundNameIndex], index + 1);
 
-				              s.second->initialize(name, filename, &engine, &soundEffectsGroup,
-				                                   soundEffectsFlags[soundNameIndex]);
-				              s.second->setVolume(soundEffectsVolumes[soundNameIndex]);
+				    s.second->initialize(name, filename, &engine, &soundEffectsGroup,
+				                         soundEffectsFlags[soundNameIndex]);
+				    s.second->setVolume(soundEffectsVolumes[soundNameIndex]);
 
-				              SoundInstance& debugSound =
-				                  debugSounds[soundNameIndex + (index * soundEffectsCount)];
-				              debugSound.name = name;
+				    SoundInstance& debugSound =
+				        debugSounds[soundNameIndex + (index * soundEffectsCount)];
+				    debugSound.name = name;
 
-				              ma_sound_init_from_file_w(&engine, IO::mbToWideStr(filename).c_str(),
-				                                        maSoundFlagsDecodeAsync, &soundEffectsGroup,
-				                                        nullptr, &debugSound.source);
-			              });
+				    ma_sound_init_from_file_w(&engine, IO::mbToWideStr(filename).c_str(),
+				                              maSoundFlagsDecodeAsync, &soundEffectsGroup, nullptr,
+				                              &debugSound.source);
+			    });
 
 			// Adjust hold SE loop times for gapless playback
 			ma_uint64 holdNrmDuration = sounds[index].pool[mmw::SE_CONNECT]->getDurationInFrames();

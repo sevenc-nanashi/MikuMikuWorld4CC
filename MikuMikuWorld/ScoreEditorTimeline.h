@@ -1,7 +1,7 @@
 #pragma once
 #include "Background.h"
 #include "Constants.h"
-#include "ImGui/imgui_internal.h"
+#include "imgui/imgui_internal.h"
 #include "Rendering/Camera.h"
 #include "Rendering/Framebuffer.h"
 #include "Rendering/Renderer.h"

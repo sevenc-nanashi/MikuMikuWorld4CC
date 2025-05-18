@@ -1,5 +1,6 @@
 #pragma once
 #include "Quad.h"
+#include <glad/glad.h>
 
 namespace MikuMikuWorld
 {
@@ -12,13 +13,15 @@ namespace MikuMikuWorld
 		int vertexCapcity;
 		int bufferPos;
 
-		unsigned int vao;
+		GLuint vao;
 		unsigned int vbo;
 		unsigned int ebo;
 
 	  public:
 		VertexBuffer(int _capacity);
 		~VertexBuffer();
+
+		VertexBuffer(const VertexBuffer&) = delete;
 
 		void setup();
 		void dispose();

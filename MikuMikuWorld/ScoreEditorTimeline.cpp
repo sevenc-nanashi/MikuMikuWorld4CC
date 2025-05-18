@@ -175,7 +175,7 @@ namespace MikuMikuWorld
 		ImGui::SetCursorScreenPos(windowEndTop);
 		ImGui::InvisibleButton("##scroll_background",
 		                       ImVec2{ scrollbarWidth, scrollHeight + handleHeight },
-		                       ImGuiButtonFlags_AllowItemOverlap);
+		                       ImGuiButtonFlags_AllowOverlap);
 		if (ImGui::IsItemActivated())
 		{
 			float yPos = std::clamp(ImGui::GetMousePos().y, windowEndTop.y,
@@ -804,11 +804,13 @@ namespace MikuMikuWorld
 			iconPos.y += visualOffset;
 			if (io.KeyCtrl)
 			{
-				drawList->AddText(ImGui::GetFont(), 12, iconPos, 0xdddddddd, IO::icon(ICON_FA_PLUS_CIRCLE));
+				drawList->AddText(ImGui::GetFont(), 12, iconPos, 0xdddddddd,
+				                  IO::icon(ICON_FA_PLUS_CIRCLE));
 			}
 			else if (io.KeyAlt)
 			{
-				drawList->AddText(ImGui::GetFont(), 12, iconPos, 0xdddddddd, IO::icon(ICON_FA_MINUS_CIRCLE));
+				drawList->AddText(ImGui::GetFont(), 12, iconPos, 0xdddddddd,
+				                  IO::icon(ICON_FA_MINUS_CIRCLE));
 			}
 		}
 
@@ -899,7 +901,7 @@ namespace MikuMikuWorld
 		        .timeSignatures[findTimeSignature(currentMeasure, context.score.timeSignatures)];
 		const Tempo& tempo = getTempoAt(context.currentTick, context.score.tempoChanges);
 		id_t hiSpeed = findHighSpeedChange(context.currentTick, context.score.hiSpeedChanges,
-		                                  context.selectedLayer);
+		                                   context.selectedLayer);
 		float speed = (hiSpeed == -1 ? 1.0f : context.score.hiSpeedChanges[hiSpeed].speed);
 
 		std::string rhythmString = IO::formatString(
@@ -1058,7 +1060,7 @@ namespace MikuMikuWorld
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
-		drawList->AddImage((void*)framebuffer->getTexture(), position, position + size);
+		drawList->AddImage(framebuffer->getTexture(), position, position + size);
 
 		// draw hold step outlines
 		for (const auto& data : drawSteps)
@@ -1662,7 +1664,8 @@ namespace MikuMikuWorld
 						std::copy(context.selectedNotes.begin(), context.selectedNotes.end(),
 						          sortedSelectedNotes.begin());
 						std::sort(sortedSelectedNotes.begin(), sortedSelectedNotes.end(),
-						          [&context](id_t a, id_t b) {
+						          [&context](id_t a, id_t b)
+						          {
 							          return context.score.notes.at(a).tick <
 							                 context.score.notes.at(b).tick;
 						          });

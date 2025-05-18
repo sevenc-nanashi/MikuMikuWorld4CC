@@ -1,6 +1,5 @@
 #include "File.h"
 #include "IO.h"
-#include "nfd.h"
 #include <algorithm>
 #include <cstring>
 #include <ctime>
@@ -9,10 +8,14 @@
 #include <stdlib.h>
 #include <filesystem>
 #include <chrono>
-#ifdef CHOC_WINDOWS
+#include <choc/platform/choc_Platform.h>
+#if CHOC_WINDOWS
 #include <Windows.h>
+#elif CHOC_EMSCRIPTEN
+#include <sys/stat.h>
 #else
 #include <sys/stat.h>
+#include <nfd.h>
 #include <nfd.hpp>
 #endif
 
@@ -282,6 +285,9 @@ namespace IO
 		}
 
 		return outputFilename.empty() ? FileDialogResult::Cancel : FileDialogResult::OK;
+#elif CHOC_EMSCRIPTEN
+		// TODO: Implement this in js
+		return FileDialogResult::Cancel;
 #else
 		if (selectType == DialogSelectType::Folder)
 		{
@@ -322,18 +328,8 @@ namespace IO
 				auto result = NFD::OpenDialog(outPath);
 				if (result == NFD_OKAY)
 				{
-					char* outPathCStr;
-					auto result = NFD::PathSet::GetPath(outPath.get(), 0, outPathCStr);
-					if (result == NFD_OKAY)
-					{
-						outputFilename = std::string(outPathCStr);
-						NFD::PathSet::FreePath(outPathCStr);
-						return FileDialogResult::OK;
-					}
-					else
-					{
-						return FileDialogResult::Cancel;
-					}
+					outputFilename = std::string(outPath.get());
+					return FileDialogResult::OK;
 				}
 				else
 				{

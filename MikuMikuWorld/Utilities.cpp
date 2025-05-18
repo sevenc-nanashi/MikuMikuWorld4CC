@@ -1,6 +1,6 @@
 #include "Utilities.h"
 #include "Constants.h"
-#include "ImGui/imgui.h"
+#include "imgui.h"
 #include "Localization.h"
 #include "IO.h"
 #include <ctime>

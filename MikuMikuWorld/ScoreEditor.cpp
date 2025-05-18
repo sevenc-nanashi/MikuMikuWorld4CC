@@ -1,4 +1,5 @@
 // Put httplib first otherwise the compiler will throw an error
+#include "imgui.h"
 #include <choc/platform/choc_Platform.h>
 #include <cstdio>
 #if CHOC_WINDOWS
@@ -6,8 +7,12 @@
 #else
 #include <math.h>
 #endif
+#if CHOC_EMSCRIPTEN
+#include <emscripten.h>
+#else
 #define CPPHTTPLIB_OPENSSL_SUPPORT 1
 #include <cpp-httplib/httplib.h>
+#endif
 
 #include "Application.h"
 #include "ApplicationConfiguration.h"
@@ -21,6 +26,7 @@
 #include "Utilities.h"
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #if CHOC_WINDOWS
 #include <Windows.h>
 #endif
@@ -77,6 +83,10 @@ namespace MikuMikuWorld
 
 	void ScoreEditor::fetchUpdate()
 	{
+#if CHOC_EMSCRIPTEN
+		// TODO
+		return;
+#else
 #if CHOC_WINDOWS
 		std::wstring updateFlagPath =
 		    IO::mbToWideStr(Application::getAppDir() + "latest_version.txt");
@@ -154,6 +164,7 @@ namespace MikuMikuWorld
 		}
 
 		std::cout << "No update" << std::endl;
+#endif
 	}
 
 	void ScoreEditor::writeSettings()
@@ -465,7 +476,7 @@ namespace MikuMikuWorld
 		{
 			std::string errorMessage = IO::formatString(
 			    "%s\n%s: %s\n%ls: %s", getString("error_load_music_file"), getString("music_file"),
-			    IO::mbToWideStr(filename.c_str()), result.getMessage().c_str());
+			    IO::mbToWideStr(filename.c_str()).c_str(), result.getMessage().c_str());
 
 			IO::messageBox(APP_NAME, errorMessage, IO::MessageBoxButtons::Ok,
 			               IO::MessageBoxIcon::Error);
@@ -716,7 +727,7 @@ namespace MikuMikuWorld
 
 			ImGui::Separator();
 			if (ImGui::MenuItem(getString("exit"),
-			                    ToShortcutString(ImGuiKey_F4, ImGuiModFlags_Alt)))
+			                    ToShortcutString(ImGuiKey_F4, ImGuiMod_Alt)))
 				Application::windowState.closing = true;
 
 			ImGui::EndMenu();
@@ -872,7 +883,8 @@ namespace MikuMikuWorld
 			Application::windowState.shouldPickScore = true;
 		}
 
-		if (UI::toolbarButton(IO::icon(ICON_FA_SAVE), getString("save"), ToShortcutString(config.input.save)))
+		if (UI::toolbarButton(IO::icon(ICON_FA_SAVE), getString("save"),
+		                      ToShortcutString(config.input.save)))
 			trySave(context.workingData.filename);
 
 		if (UI::toolbarButton(IO::icon(ICON_FA_FILE_EXPORT), getString("export_usc"),
@@ -902,12 +914,12 @@ namespace MikuMikuWorld
 
 		UI::toolbarSeparator();
 
-		if (UI::toolbarButton(IO::icon(ICON_FA_UNDO), getString("undo"), ToShortcutString(config.input.undo),
-		                      context.history.hasUndo()))
+		if (UI::toolbarButton(IO::icon(ICON_FA_UNDO), getString("undo"),
+		                      ToShortcutString(config.input.undo), context.history.hasUndo()))
 			context.undo();
 
-		if (UI::toolbarButton(IO::icon(ICON_FA_REDO), getString("redo"), ToShortcutString(config.input.redo),
-		                      context.history.hasRedo()))
+		if (UI::toolbarButton(IO::icon(ICON_FA_REDO), getString("redo"),
+		                      ToShortcutString(config.input.redo), context.history.hasRedo()))
 			context.redo();
 
 		UI::toolbarSeparator();
@@ -952,8 +964,6 @@ namespace MikuMikuWorld
 #else
 		throw std::runtime_error("Unsupported platform");
 #endif
-
-
 	}
 
 	void ScoreEditor::autoSave()

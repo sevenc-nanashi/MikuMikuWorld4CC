@@ -1,9 +1,9 @@
 ﻿#include "Application.h"
 #include "ApplicationConfiguration.h"
-#include "ImGui/imgui_impl_glfw.h"
-#include "ImGui/imgui_impl_opengl3.h"
-#include "../Depends/glad/include/glad/glad.h"
-#include "../Depends/glfw/include/GLFW/glfw3.h"
+#include "imgui/backends/imgui_impl_glfw.h"
+#include "imgui/backends/imgui_impl_opengl3.h"
+#include "glad/include/glad/glad.h"
+#include "glfw/include/GLFW/glfw3.h"
 #include "File.h"
 #include "UI.h"
 #include "Utilities.h"
@@ -213,7 +213,7 @@ namespace MikuMikuWorld
 		fontConfig.GlyphMinAdvanceX = 13.0f;
 		fontConfig.PixelSnapH = false;
 		fontConfig.OversampleH = 1;
-		static const ImWchar iconRanges[] = { start, end, 0 };
+		static const ImWchar iconRanges[] = { (ImWchar)start, (ImWchar)end, 0 };
 		ImGui::GetIO().Fonts->AddFontFromFileTTF(filename.c_str(), (int)size, &fontConfig,
 		                                         iconRanges);
 	}

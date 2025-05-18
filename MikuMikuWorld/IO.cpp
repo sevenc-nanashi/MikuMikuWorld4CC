@@ -134,6 +134,9 @@ namespace IO
 		default:
 			return MessageBoxResult::None;
 		}
+#elif CHOC_EMSCRIPTEN
+		// TODO: Implement this in js
+		return MessageBoxResult::None;
 #else
 #error "Unsupported platform"
 #endif

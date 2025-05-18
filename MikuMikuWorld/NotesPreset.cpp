@@ -83,24 +83,28 @@ namespace MikuMikuWorld
 		std::vector<Result> warnings;
 		std::vector<Result> errors;
 
-		std::for_each(std::execution::par, filenames.begin(), filenames.end(),
-		              [this, &warnings, &errors, &m2](const auto& filename)
-		              {
-			              int id = nextPresetID++;
+		std::for_each(
+#if defined(__cpp_lib_execution)
+		    std::execution::par,
+#endif
+		    filenames.begin(), filenames.end(),
+		    [this, &warnings, &errors, &m2](const auto& filename)
+		    {
+			    int id = nextPresetID++;
 
-			              NotesPreset preset(id, "");
-			              Result result = preset.read(filename);
-			              {
-				              std::lock_guard<std::mutex> lock{ m2 };
+			    NotesPreset preset(id, "");
+			    Result result = preset.read(filename);
+			    {
+				    std::lock_guard<std::mutex> lock{ m2 };
 
-				              if (result.getStatus() == ResultStatus::Success)
-					              presets.emplace(id, std::move(preset));
-				              else if (result.getStatus() == ResultStatus::Warning)
-					              warnings.push_back(result);
-				              else if (result.getStatus() == ResultStatus::Error)
-					              errors.push_back(result);
-			              }
-		              });
+				    if (result.getStatus() == ResultStatus::Success)
+					    presets.emplace(id, std::move(preset));
+				    else if (result.getStatus() == ResultStatus::Warning)
+					    warnings.push_back(result);
+				    else if (result.getStatus() == ResultStatus::Error)
+					    errors.push_back(result);
+			    }
+		    });
 
 		if (errors.size())
 		{
@@ -138,21 +142,24 @@ namespace MikuMikuWorld
 				std::filesystem::remove(wFullPath);
 		}
 
-		std::for_each(std::execution::par, createPresets.begin(), createPresets.end(),
-		              [this, &libPath](int id)
-		              {
-			              if (presets.find(id) != presets.end())
-			              {
-				              NotesPreset& preset = presets.at(id);
+		std::for_each(
+#if defined(__cpp_lib_execution)
+		    std::execution::par,
+#endif
+		    createPresets.begin(), createPresets.end(),
+		    [this, &libPath](int id)
+		    {
+			    if (presets.find(id) != presets.end())
+			    {
+				    NotesPreset& preset = presets.at(id);
 
-				              // filename without extension
-				              // we will add the extension later after determining what the final
-				              // filename should be
-				              std::string filename =
-				                  (libPath / fixFilename(preset.getName())).c_str();
-				              preset.write(filename, false);
-			              }
-		              });
+				    // filename without extension
+				    // we will add the extension later after determining what the final
+				    // filename should be
+				    std::string filename = (libPath / fixFilename(preset.getName())).c_str();
+				    preset.write(filename, false);
+			    }
+		    });
 	}
 
 	void PresetManager::createPreset(const Score& score,

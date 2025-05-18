@@ -1,6 +1,8 @@
 #include "VertexBuffer.h"
 #include "glad/glad.h"
+#include <cassert>
 #include <cstddef>
+#include <iostream>
 
 namespace MikuMikuWorld
 {
@@ -66,6 +68,9 @@ namespace MikuMikuWorld
 	{
 		delete[] buffer;
 		delete[] indices;
+
+		buffer = nullptr;
+		indices = nullptr;
 
 		glDeleteVertexArrays(1, &vao);
 		glDeleteBuffers(1, &vbo);
