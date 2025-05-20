@@ -22,6 +22,11 @@ namespace MikuMikuWorld
 		vPos[3] = DirectX::XMVECTOR{ -0.5f, 0.5f, 0.0f, 1.0f };
 	}
 
+	void Renderer::dispose()
+	{
+		vBuffer.dispose();
+	}
+
 	void Renderer::setAnchor(AnchorType type)
 	{
 		float top = 0.0f;

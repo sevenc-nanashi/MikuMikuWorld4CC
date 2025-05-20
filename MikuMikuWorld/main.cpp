@@ -23,12 +23,13 @@ int main()
 #else
 int main(int argc, char* argv[])
 {
-#if !CHOC_EMSCRIPTEN
-	NFD::Init();
-#endif
 	std::wstring args[argc];
 	for (int i = 0; i < argc; ++i)
 		args[i] = IO::mbToWideStr(argv[i]);
+#endif
+
+#if !CHOC_EMSCRIPTEN
+	NFD::Init();
 #endif
 
 #ifndef DEBUG

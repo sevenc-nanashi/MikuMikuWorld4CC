@@ -7,6 +7,7 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
     add_compile_options(-g)
   endif()
 endif()
+set(CMAKE_CXX_STANDARD 20)
 
 project(MikuMikuWorld)
 
@@ -17,7 +18,6 @@ set(source_dir "${CMAKE_CURRENT_SOURCE_DIR}/MikuMikuWorld")
 file(GLOB_RECURSE ALL_FILES "${source_dir}/*.cpp" "${source_dir}/*.h"
      "${source_dir}/*.hpp" "${source_dir}/*.c")
 add_executable(${PROJECT_NAME} ${ALL_FILES} ${depends_files})
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 target_include_directories(
   ${PROJECT_NAME}
   PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/DirectXMath/Inc;"
@@ -128,5 +128,12 @@ add_custom_command(
   POST_BUILD
   COMMAND
     ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_CURRENT_SOURCE_DIR}/MikuMikuWorld/res"
+    "${CMAKE_CURRENT_BINARY_DIR}/res")
+add_custom_command(
+  TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND
+    ${CMAKE_COMMAND} -E echo copy_directory
     "${CMAKE_CURRENT_SOURCE_DIR}/MikuMikuWorld/res"
     "${CMAKE_CURRENT_BINARY_DIR}/res")

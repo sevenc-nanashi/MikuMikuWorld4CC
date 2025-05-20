@@ -419,7 +419,7 @@ namespace MikuMikuWorld
 			const float bgHeight = static_cast<float>(background.getHeight());
 			ImVec2 bgPos{ position.x - (abs(bgWidth - size.x) / 2.0f),
 				          position.y - (abs(bgHeight - size.y) / 2.0f) };
-			drawList->AddImage((ImTextureID)background.getTextureID(), bgPos,
+			drawList->AddImage(background.getTextureID(), bgPos,
 			                   bgPos + ImVec2{ bgWidth, bgHeight });
 		}
 

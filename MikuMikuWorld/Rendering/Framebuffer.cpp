@@ -61,6 +61,7 @@ namespace MikuMikuWorld
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glGenTextures(1, &buffer);
 		createTexture(buffer);
+		glBindTexture(GL_TEXTURE_2D, buffer);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

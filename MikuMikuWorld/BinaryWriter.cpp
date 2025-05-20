@@ -1,5 +1,6 @@
 #include "BinaryWriter.h"
 #include "IO.h"
+#include <iostream>
 
 namespace IO
 {
@@ -12,6 +13,8 @@ namespace IO
 #else
 		stream = fopen(filename.c_str(), "wb");
 #endif
+		if (!stream)
+			std::cerr << "Failed to open file: " << filename << std::endl;
 	}
 
 	BinaryWriter::~BinaryWriter() { close(); }
@@ -20,8 +23,10 @@ namespace IO
 
 	void BinaryWriter::close()
 	{
-		if (stream)
+		if (stream) {
 			fclose(stream);
+			stream = nullptr;
+		}
 	}
 
 	void BinaryWriter::flush()

@@ -10,7 +10,7 @@ namespace MikuMikuWorld
 		Vertex* buffer;
 		int* indices;
 		int indexCapacity;
-		int vertexCapcity;
+		int vertexCapacity;
 		int bufferPos;
 
 		GLuint vao;
@@ -19,7 +19,6 @@ namespace MikuMikuWorld
 
 	  public:
 		VertexBuffer(int _capacity);
-		~VertexBuffer();
 
 		VertexBuffer(const VertexBuffer&) = delete;
 

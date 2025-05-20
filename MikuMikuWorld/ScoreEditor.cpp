@@ -148,6 +148,11 @@ namespace MikuMikuWorld
 
 		std::cout << "Current version: " << Application::getAppVersion() << std::endl;
 		std::cout << "Latest version: " << latestVersionString << std::endl;
+		if (Application::getAppVersion() == "0.0.0.0")
+		{
+			std::cout << "Version not set, skipping update check" << std::endl;
+			return;
+		}
 
 		for (int i = 0; i < currentVersion.size(); i++)
 		{
@@ -181,6 +186,7 @@ namespace MikuMikuWorld
 	{
 		context.audio.uninitializeAudioEngine();
 		timeline.background.dispose();
+		renderer->dispose();
 	}
 
 	void ScoreEditor::update()
@@ -726,8 +732,7 @@ namespace MikuMikuWorld
 			}
 
 			ImGui::Separator();
-			if (ImGui::MenuItem(getString("exit"),
-			                    ToShortcutString(ImGuiKey_F4, ImGuiMod_Alt)))
+			if (ImGui::MenuItem(getString("exit"), ToShortcutString(ImGuiKey_F4, ImGuiMod_Alt)))
 				Application::windowState.closing = true;
 
 			ImGui::EndMenu();

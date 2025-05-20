@@ -7,18 +7,16 @@
 namespace MikuMikuWorld
 {
 	VertexBuffer::VertexBuffer(int _capacity)
-	    : vertexCapcity{ _capacity }, bufferPos{ 0 }, vao{ 0 }, vbo{ 0 }, ebo{ 0 }
+	    : vertexCapacity{ _capacity }, bufferPos{ 0 }, vao{ 0 }, vbo{ 0 }, ebo{ 0 }
 	{
 		buffer = nullptr;
 		indices = nullptr;
-		indexCapacity = (vertexCapcity * 6) / 4;
+		indexCapacity = (vertexCapacity * 6) / 4;
 	}
-
-	VertexBuffer::~VertexBuffer() { dispose(); }
 
 	void VertexBuffer::setup()
 	{
-		buffer = new Vertex[vertexCapcity];
+		buffer = new Vertex[vertexCapacity];
 		indices = new int[indexCapacity];
 
 		size_t offset = 0;
@@ -42,7 +40,7 @@ namespace MikuMikuWorld
 		glGenBuffers(1, &ebo);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, vertexCapcity * sizeof(Vertex), NULL, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertexCapacity * sizeof(Vertex), NULL, GL_DYNAMIC_DRAW);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCapacity * sizeof(unsigned int), indices,
@@ -62,6 +60,17 @@ namespace MikuMikuWorld
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
+
+		if (buffer == nullptr || indices == nullptr)
+		{
+			std::cerr << "ERROR: VertexBuffer::setup() Failed to allocate memory for buffer\n";
+			assert(false);
+		}
+		else
+		{
+			std::cout << "VertexBuffer::setup() Allocated " << vertexCapacity * sizeof(Vertex)
+			          << " bytes\n";
+		}
 	}
 
 	void VertexBuffer::dispose()
@@ -85,7 +94,7 @@ namespace MikuMikuWorld
 
 	int VertexBuffer::getSize() const { return bufferPos * sizeof(Vertex); }
 
-	int VertexBuffer::getCapacity() const { return vertexCapcity; }
+	int VertexBuffer::getCapacity() const { return vertexCapacity; }
 
 	void VertexBuffer::pushBuffer(const Quad& q)
 	{

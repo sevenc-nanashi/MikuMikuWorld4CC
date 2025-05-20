@@ -35,6 +35,8 @@ namespace MikuMikuWorld
 	  public:
 		Renderer();
 
+		void dispose();
+
 		void drawSprite(const Vector2& pos, float rot, const Vector2& sz, AnchorType anchor,
 		                const Texture& tex, int spr, const Color& tint, int z = 0);
 		void drawSprite(const Vector2& pos, float rot, const Vector2& sz, AnchorType anchor,
