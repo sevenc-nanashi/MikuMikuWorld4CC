@@ -897,9 +897,21 @@ namespace MikuMikuWorld
 		                                  context.selectedLayer);
 		float speed = (hiSpeed == -1 ? 1.0f : context.score.hiSpeedChanges[hiSpeed].speed);
 
-		std::string rhythmString = IO::formatString(
-		    "  %02d:%02d:%02d  |  %d/%d  |  %g BPM  |  %gx", (int)time / 60, (int)time % 60,
-		    (int)((time - (int)time) * 100), ts.numerator, ts.denominator, tempo.bpm, speed);
+		std::string rhythmString;
+		if (config.showTickInProperties)
+		{
+			rhythmString = IO::formatString(
+				"  %02d:%02d:%02d  |  %dt  |  %d/%d  |  %g BPM  |  %gx",
+			    (int)time / 60, (int)time % 60, (int)((time - (int)time) * 100), 
+				context.currentTick, ts.numerator, ts.denominator, tempo.bpm, speed);
+		}
+		else
+		{
+			rhythmString = IO::formatString(
+			    "  %02d:%02d:%02d  |  %d/%d  |  %g BPM  |  %gx", 
+				(int)time / 60, (int)time % 60, (int)((time - (int)time) * 100), 
+				ts.numerator, ts.denominator, tempo.bpm, speed);
+		}
 
 		float _zoom = zoom;
 		int controlWidth = ImGui::GetContentRegionAvail().x -
