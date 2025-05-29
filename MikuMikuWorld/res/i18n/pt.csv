@@ -1,0 +1,271 @@
+# code: pt-br
+# key, value
+
+language_name, Português do Brasil
+translator, nora (__noradrenaline)
+
+# menu bar / Barra de menu
+file, Arquivo
+new, Novo
+open, Abrir
+open_recent, Abrir arquivo recente
+clear, Limpar
+save, Salvar
+save_as, Salvar como...
+export_sus, Exportar .sus
+export_usc, Exportar .usc
+exit, Sair
+edit, Editar
+undo, Desfazer
+redo, Refazer
+select_all, Selecionar tudo
+view, Vista
+settings, Configurações
+window, Janela
+vsync, VSync
+show_fps, Mostrar FPS
+debug, Debug
+create_auto_save, Criar salvamento automático
+help, Ajuda
+about, Sobre
+
+# dialogs
+file_not_found, Arquivo não encontrado
+file_not_found_msg1, O arquivo
+file_not_found_msg2, não foi encontrado
+remove_recent_file_not_found, Quer deletá-lo dos arquivos recentes?
+yes, Sim
+no, Não
+unsaved_changes, Você tem alterações não salvas
+ask_save, Deseja salvar as alterações?
+warn_unsaved, As alterações não salvas serão perdidas.
+save_changes, Salvar alterações
+discard_changes, Apagar alterações
+update_available, Há uma atualização disponível.
+update_available_description, A versão %s está disponível. Deseja abri-lá no navegador?
+score_file, Arquivo de música
+error, Erro
+error_load_score_file, Um erro ocorreu ao carregar a música.
+error_load_music_file, Não foi possível carregar o arquivo de música.
+cancel, Cancelar
+general, Geral
+key_config, Configuração das teclas
+language, Linguagem
+minify_usc, Diminuir .usc
+show_sus_export, Permitir exportação .sus
+auto, Automático
+auto_save, Salvamento automático
+auto_save_enable, Ativar o salvamento automático
+auto_save_interval, Intervalo do salvamento automático (minutos)
+auto_save_count, Limite de salvamentos automáticos
+accent_color, Cor principal
+accent_color_help, Selecione a cor principal para aplicá-la. A primeira cor pode ser customizada com as configurações abaixo.
+select_accent_color, Selecionar cor principal
+display_mode, Modo de exibição
+theme, Tema
+base_theme, Tema base
+theme_light, Claro
+theme_dark, Escuro
+custom_color, Cor customizada
+timeline, Timeline
+match_notes_size_to_timeline, Ajustar tamanho das notas á Timeline
+lane_width, Largura do editor
+notes_height, Altura das notas
+scrolling, Scrolling
+scroll_speed_normal, Velocidade do scroll	
+scroll_speed_shift, Velocidade do scroll (Shift)
+use_smooth_scroll,  Scroll suave
+smooth_scroll_time, Tempo de suavização
+return_to_last_tick, Voltar à posição original ao pausar
+cursor_auto_scroll, Scroll automático
+cursor_auto_scroll_amount, Porcentagem do scroll automático
+background, Fundo
+background_image, Imagem de fundo
+draw_background, Mostrar imagem de fundo
+background_brightnes,  Brilho do fundo
+lanes_opacity, Opacidade do editor
+video, Vídeo
+notes_se, Efeito sonoro das notas
+show_tick_in_properties, Mostrar tick nas propriedades
+translation_by, Tradução por:
+
+# score editor / Editor de charts
+options, Opções
+chart_properties, Propriedades de chart
+note_properties, Propriedades das notas
+notes_timeline, Editor de notas
+select, Selecionar
+tap, Tap
+hold, Hold
+hold_step, Hold (meio)
+flick, Flick
+critical, Crítico
+trace, Trace
+guide, Guia
+damage, Dano
+bpm, BPM
+time_signature, Indicação do tempo
+none, Nenhum
+default, Padrão
+left, Esquerda
+right, Direita
+normal, Normal
+hidden, Escondido
+skip, Pular
+linear, Linear
+ease_in, Curvar para dentro
+ease_out, Curvar para fora
+ease_in_out, Curvar para dentro e fora
+ease_out_in, Curvar para fora e dentro
+delete, Deletar
+copy, Copiar
+cut, Cortar
+paste, Colar
+flip_paste, Colar espelhado
+duplicate, Duplicar
+flip_duplicate, Duplicar espelhado
+flip, Espelhar
+note_width, Largura das notas
+shrink_down, Contrair para baixo
+shrink_up, Contrair para cima
+connect_holds, Conectar holds
+split_hold, Separar holds
+repeat_hold_mids, Repetir holds (meio)
+hold_to_traces, Hold para trace
+add_traces_for_hold, Adicionar traces para hold
+convert_hold_to_traces, Converter hold para traces
+lerp_hispeeds, Interpolar Hi-speeds
+step_type, Tipo de step
+ease_type, Tipo de curva
+flick_type, Tipo de flick
+hold_type, Tipo de hold
+fade_type, Tipo de desvanecimento
+hold_start_type, Tipo de começo de hold
+hold_end_type, Tipo de fim de hold
+metadata, Metadados
+title, Título
+designer, Designer
+artist, Artista
+jacket, Capa
+lane_extension, Extensão do editor
+audio, Aúdio
+music_file, Arquivo de música
+music_offset, Desvio da música
+volume_master, Volume geral
+volume_bgm, Volume da música
+volume_se, Volume dos efeitos sonoros
+statistics, Estatísticas
+taps, Taps
+flicks, Flicks
+holds, Holds
+steps, Steps
+traces, Traces
+total, Total
+combo, Combo
+goto_measure, Ir para medida
+division, Divisão em %d
+division_affix, %d Divisão
+custom, Personalizada
+custom_division, Divisão personalizada
+snap_mode, Modo de encaixe
+snap_mode_relative, Modo de encaixe relativo
+snap_mode_absolute, Modo de encaixe absoluto
+snap_mode_individual_absolute, Modo de encaixe individual absoluto
+zoom, Zoom
+show_step_outlines, Mostrar contorno de steps
+draw_waveform, Mostrar waveform
+edit_bpm,  Editar BPM
+tick, Tick
+remove, Remover 
+edit_time_signature, Editar indicação do tempo
+measure, Medida
+skill, Habilidade
+increase_note_size, Aumentar tamanho da nota
+decrease_note_size, Diminuir tamanho da nota
+hi_speed, Hi-speed
+edit_hi_speed, Editar Hi-speed
+hi_speed_speed, Velocidade
+fade_none, Sem desvanecimento
+fade_in, Desvanecimento (surgir)
+fade_out, Desvanecimento (desaparecer)
+guide_color, Cor da guia
+guide_neutral, Neutro (branco)
+guide_red, Vermelho
+guide_blue, Azul
+guide_green, Verde
+guide_yellow, Amarelo
+guide_purple, Roxo
+guide_cyan, Ciano
+guide_black, Preto
+layer, Layer
+edit_skill, Editar Trigger de habilidade
+edit_fever,  Editar Trigger de Febre
+edit_none, Editar
+edit_event, Editar evento
+beat, Batida
+lane, Posição
+width, Largura
+advanced, Avançado
+note_properties_note, Propriedades das notas
+note_properties_hi_speed, Propriedades de Hi-speed
+note_properties_hold_note, Propriedades de Hold
+note_properties_guide, Propriedades de guia
+note_properties_not_selected, Não há notas, guias ou hi-speeds selecionados
+note_properties_many_hold_notes, Mais de uma nota selecionada
+translated_by, Traduzido por:
+zoom_tooltip, Ferramenta de zoom
+
+# preset manager / Gerenciador de presets
+presets, Presets
+no_presets, Sem presets
+name, Nome
+description, Descrição
+create_preset, Criar preset
+search, Pesquisar
+confirm, Confirmar
+
+# layer manager / Gerenciador de camadas
+layers, Camadas
+name, Nome
+create_layer, Criar camada
+confirm, Confirmar
+show_all_layers, Mostrar todas as camadas
+layer_rename, Renomear camada
+layer_up, Mover camada para cima
+layer_down, Mover camada para baixo
+layer_merge, Juntar camadas
+layer_delete, Deletar camada
+layer_hide, Esconder camada
+layer_show, Mostrar camada
+
+# waypoint manager / Gerenciador de marcadores
+waypoints, Marcadores
+create_waypoint, Criar marcador
+edit_waypoint, Editar marcador
+waypoint_name, Nome
+
+# commands
+action, Ação
+keys, Teclas
+add, Adicionar
+cmd_key_listen, Esperando entrada
+new_chart, Novo chart
+toggle_playback, Ativar reprodução
+cancel_paste, Cancelar cola
+stop, Parar
+previous_tick, Tick anterior
+next_tick, Próximo tick
+timeline_select, Editor - Selecionar
+timeline_tap, Editor - Tap
+timeline_hold, Editor - Hold
+timeline_hold_step, Editor - Step
+timeline_flick, Editor - Flick
+timeline_critical, Editor - Crítico
+timeline_trace, Editor - Trace
+timeline_guide, Editor -  Guia
+timeline_damage, Editor - Dano
+timeline_bpm, Editor - BPM
+timeline_time_signature, Editor - Indicação de tempo
+timeline_hi_speed, Editor - Hi-speed
+zoom_in, Zoom
+zoom_out, Diminuir zoom
