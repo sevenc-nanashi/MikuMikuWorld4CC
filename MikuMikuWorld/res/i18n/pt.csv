@@ -87,7 +87,7 @@ lanes_opacity, Opacidade do editor
 video, Vídeo
 notes_se, Efeito sonoro das notas
 show_tick_in_properties, Mostrar tick nas propriedades
-translation_by, Tradução por:
+translation_by, Tradução por: %s
 
 # score editor / Editor de charts
 options, Opções

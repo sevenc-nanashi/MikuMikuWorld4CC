@@ -95,3 +95,11 @@ jobs:
           STATUS: ${{ steps.check.outputs.coverage_tr }}%
           COLOR: ${{ steps.check.outputs.coverage_tr == '100.0' && 'green' || 'orange' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Translation Coverage: pt"
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage-pt
+          LABEL: 'Brazillian Portuguese'
+          STATUS: ${{ steps.check.outputs.coverage_tr }}%
+          COLOR: ${{ steps.check.outputs.coverage_tr == '100.0' && 'green' || 'orange' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
