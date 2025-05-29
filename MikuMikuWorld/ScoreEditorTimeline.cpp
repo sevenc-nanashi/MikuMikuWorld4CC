@@ -372,9 +372,18 @@ namespace MikuMikuWorld
 			}
 
 			ImGui::Separator();
-			if (ImGui::MenuItem(getString("lerp_hispeeds"), NULL, false,
-			                    context.selectedHiSpeedChanges.size() >= 2))
-				context.lerpHiSpeeds(division);
+			if (ImGui::BeginMenu(getString("lerp_hispeeds"),
+			                     context.selectedHiSpeedChanges.size() >= 2))
+			{
+				for (int i = 0; i < arrayLength(easeTypes); ++i)
+				{
+					if (ImGui::MenuItem(getString(easeTypes[i])))
+					{
+						context.lerpHiSpeeds(division, (EaseType)i);
+					}
+				}
+				ImGui::EndMenu();
+			}
 			ImGui::EndPopup();
 		}
 	}

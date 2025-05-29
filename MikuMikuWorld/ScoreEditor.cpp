@@ -237,7 +237,7 @@ namespace MikuMikuWorld
 			if (ImGui::IsAnyPressed(config.input.splitHold))
 				context.splitHoldInSelection();
 			if (ImGui::IsAnyPressed(config.input.lerpHiSpeeds))
-				context.lerpHiSpeeds(timeline.getDivision());
+				context.lerpHiSpeeds(timeline.getDivision(), EaseType::Linear);
 
 			for (int i = 0; i < (int)TimelineMode::TimelineModeMax; ++i)
 				if (ImGui::IsAnyPressed(*timelineModeBindings[i]))

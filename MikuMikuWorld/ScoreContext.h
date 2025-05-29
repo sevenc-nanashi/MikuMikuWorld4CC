@@ -175,7 +175,7 @@ namespace MikuMikuWorld
 		 */
 		void convertHoldToTraces(int division, bool deleteOrigin);
 
-		void lerpHiSpeeds(int division);
+		void lerpHiSpeeds(int division, EaseType ease);
 
 		void undo();
 		void redo();

@@ -3,6 +3,7 @@
 #include "IO.h"
 #include "UI.h"
 #include "Utilities.h"
+#include "Math.h"
 #include <stdio.h>
 #include <map>
 #include <unordered_map>
@@ -1327,7 +1328,7 @@ namespace MikuMikuWorld
 		pushHistory("Convert slides into traces", prev, score);
 	}
 
-	void ScoreContext::lerpHiSpeeds(int division)
+	void ScoreContext::lerpHiSpeeds(int division, EaseType ease)
 	{
 		if (selectedHiSpeedChanges.size() < 2)
 			return;
@@ -1352,8 +1353,7 @@ namespace MikuMikuWorld
 			{
 				float t = ((float)tick - (float)first.tick) /
 				          ((float)second.tick - (float)first.tick); // inverse lerp
-				float speed =
-				    (float)first.speed + t * ((float)second.speed - (float)first.speed); // lerp
+				float speed = getEaseFunction(ease)((float)first.speed, (float)second.speed, t);
 				// remapping the current tick to the speed
 
 				id_t id = getNextHiSpeedID();
