@@ -584,6 +584,12 @@ namespace MikuMikuWorld
 			                                  guideColorsForString, arrayLength(guideColors));
 			UI::addSelectProperty<FadeType>(getString("fade_type"), edit.fadeType, fadeTypes,
 			                                arrayLength(fadeTypes));
+			UI::addSelectProperty<HoldEndType>(getString("hold_start_type"),
+			                                   edit.holdStartType, holdEndTypes,
+			                                   arrayLength(holdEndTypes));
+			UI::addSelectProperty<HoldEndType>(getString("hold_end_type"),
+			                                   edit.holdEndType, holdEndTypes,
+			                                   arrayLength(holdEndTypes));
 
 			break;
 		}

@@ -1139,12 +1139,30 @@ namespace MikuMikuWorld
 			inputNotes.holdEnd.lane = lane;
 			inputNotes.holdEnd.width = width;
 			inputNotes.holdEnd.tick = tick;
+
+			if (edit.holdEndType == HoldEndType::Trace)
+			{
+				inputNotes.holdEnd.friction = true;
+			}
+			else
+			{
+				inputNotes.holdEnd.friction = false;
+			}
 		}
 		else
 		{
 			inputNotes.holdStart.lane = lane;
 			inputNotes.holdStart.width = width;
 			inputNotes.holdStart.tick = tick;
+
+			if (edit.holdStartType == HoldEndType::Trace)
+			{
+				inputNotes.holdStart.friction = true;
+			}
+			else
+			{
+				inputNotes.holdStart.friction = false;
+			}
 		}
 
 		inputNotes.damage.lane = lane;
@@ -1203,12 +1221,35 @@ namespace MikuMikuWorld
 			{
 				drawHoldCurve(inputNotes.holdStart, inputNotes.holdEnd, edit.easeType, false,
 				              renderer, hoverTint);
-				drawNote(inputNotes.holdStart, renderer, hoverTint);
-				drawNote(inputNotes.holdEnd, renderer, hoverTint);
+				if (edit.holdStartType == HoldEndType::Hidden)
+				{
+					auto drawType = inputNotes.holdStart.critical
+					                    ? StepDrawType::InvisibleHoldCritical
+					                    : StepDrawType::InvisibleHold;
+					drawOutline(StepDrawData{ inputNotes.holdStart, drawType });
+				}
+				else
+				{
+					drawNote(inputNotes.holdStart, renderer, hoverTint);
+				}
+
+				if (edit.holdEndType == HoldEndType::Hidden)
+				{
+					auto drawType = inputNotes.holdEnd.critical
+					                    ? StepDrawType::InvisibleHoldCritical
+					                    : StepDrawType::InvisibleHold;
+					drawOutline(StepDrawData{ inputNotes.holdEnd, drawType });
+				}
+				else
+				{
+					drawNote(inputNotes.holdEnd, renderer, hoverTint);
+				}
 			}
 			else
 			{
-				drawNote(inputNotes.holdStart, renderer, hoverTint);
+				float lane = laneFromCenterPosition(context.score, hoverLane, edit.noteWidth);
+				Note fakeHold = Note{ NoteType::Hold, hoverTick, lane, (float)edit.noteWidth };
+				drawNote(fakeHold, renderer, hoverTint);
 			}
 			break;
 
@@ -2669,6 +2710,8 @@ namespace MikuMikuWorld
 		holdEnd.parentID = holdStart.ID;
 		holdEnd.layer = context.selectedLayer;
 
+		HoldEndType startType = edit.holdStartType;
+		HoldEndType endType = edit.holdEndType;
 		if (holdStart.tick == holdEnd.tick)
 		{
 			holdEnd.tick += TICKS_PER_BEAT / (static_cast<float>(division) / 4);
@@ -2678,10 +2721,37 @@ namespace MikuMikuWorld
 			std::swap(holdStart.tick, holdEnd.tick);
 			std::swap(holdStart.width, holdEnd.width);
 			std::swap(holdStart.lane, holdEnd.lane);
+			std::swap(startType, endType);
 		}
 
-		HoldNoteType holdType =
-		    currentMode == TimelineMode::InsertGuide ? HoldNoteType::Guide : HoldNoteType::Normal;
+		HoldNoteType holdStartType;
+		if (currentMode == TimelineMode::InsertGuide)
+		{
+			holdStartType = HoldNoteType::Guide;
+		}
+		else if (startType == HoldEndType::Hidden)
+		{
+			holdStartType = HoldNoteType::Hidden;
+		}
+		else
+		{
+			holdStartType = HoldNoteType::Normal;
+		}
+
+		HoldNoteType holdEndType;
+		if (currentMode == TimelineMode::InsertGuide)
+		{
+			holdEndType = HoldNoteType::Guide;
+		}
+		else if (endType == HoldEndType::Hidden)
+		{
+			holdEndType = HoldNoteType::Hidden;
+		}
+		else
+		{
+			holdEndType = HoldNoteType::Normal;
+		}
+
 		context.score.notes[holdStart.ID] = holdStart;
 		context.score.notes[holdEnd.ID] = holdEnd;
 		context.score.holdNotes[holdStart.ID] = { {
@@ -2691,8 +2761,8 @@ namespace MikuMikuWorld
 			                                      },
 			                                      {},
 			                                      holdEnd.ID,
-			                                      holdType,
-			                                      holdType,
+			                                      holdStartType,
+			                                      holdEndType,
 			                                      edit.fadeType,
 			                                      edit.colorType };
 		context.pushHistory("Insert hold", prev, context.score);

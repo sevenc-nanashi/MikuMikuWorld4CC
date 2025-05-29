@@ -20,6 +20,8 @@ namespace MikuMikuWorld
 		EaseType easeType{ EaseType::Linear };
 		GuideColor colorType{ GuideColor::Green };
 		FadeType fadeType{ FadeType::Out };
+		HoldEndType holdStartType{ HoldEndType::Normal };
+		HoldEndType holdEndType{ HoldEndType::Normal };
 
 		float bpm{ 160.0f };
 		int timeSignatureNumerator{ 4 };

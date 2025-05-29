@@ -57,6 +57,15 @@ namespace MikuMikuWorld
 
 	constexpr const char* holdTypes[]{ "normal", "hidden", "guide" };
 
+	enum class HoldEndType : uint8_t
+	{
+		Normal,
+		Trace,
+		Hidden
+	};
+
+	constexpr const char* holdEndTypes[]{ "normal", "trace", "hidden" };
+
 	enum class GuideColor : uint8_t
 	{
 		Neutral,

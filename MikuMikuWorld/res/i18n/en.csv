@@ -141,6 +141,8 @@ ease_type,Ease Type
 flick_type,Flick Type
 hold_type,Hold Type
 fade_type,Fade Type
+hold_start_type, Hold Start Type
+hold_end_type, Hold End Type
 metadata,Metadata
 title,Title
 designer,Designer
