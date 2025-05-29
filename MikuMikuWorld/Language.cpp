@@ -39,9 +39,8 @@ namespace MikuMikuWorld
 			if (!line.size() || startsWith(line, "#") || startsWith(line, ","))
 				continue;
 
-			std::vector<std::string> values = split(line, ",");
-			if (values.size() >= 2)
-				strings[trim(values[0])] = trim(values[1]);
+			std::pair<std::string, std::string> values = split_first(line, ",");
+			strings[trim(values.first)] = trim(values.second);
 		}
 	}
 

@@ -46,6 +46,8 @@ namespace IO
 	bool isDigit(const std::string_view& str);
 	std::string trim(const std::string& line);
 	std::vector<std::string> split(const std::string& line, const std::string& delim);
+	std::pair<std::string, std::string> split_first(const std::string& line,
+	                                                const std::string& delim);
 
 	std::string wideStringToMb(const std::wstring& str);
 	std::string ansiWideStringToMb(const std::wstring& str);

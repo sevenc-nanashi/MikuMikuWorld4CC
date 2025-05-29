@@ -162,6 +162,16 @@ namespace IO
 		return values;
 	}
 
+	std::pair<std::string, std::string> split_first(const std::string& line, const std::string& delim)
+	{
+		std::pair<std::string, std::string> values;
+		size_t firstDelim = line.find_first_of(delim);
+		size_t end = line.length() - 1;
+		values =
+		    std::make_pair(line.substr(0, firstDelim), line.substr(firstDelim + 1));
+		return values;
+	}
+
 	std::string wideStringToMb(const std::wstring& str)
 	{
 		int size = WideCharToMultiByte(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0, NULL, NULL);
