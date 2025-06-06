@@ -1,4 +1,4 @@
-﻿#include "Application.h"
+#include "Application.h"
 #include "ApplicationConfiguration.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"

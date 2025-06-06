@@ -22,9 +22,9 @@
 [submodule "Depends/whereami-cpp"]
 	path = Depends/whereami-cpp
 	url = https://github.com/nabijaczleweli/whereami-cpp.git
-[submodule "Depends/DirectXMath"]
-	path = Depends/DirectXMath
-	url = https://github.com/microsoft/DirectXMath.git
 [submodule "Depends/imgui"]
 	path = Depends/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "Depends/glm"]
+	path = Depends/glm
+	url = https://github.com/g-truc/glm

@@ -101,7 +101,7 @@ namespace MikuMikuWorld
 		for (int offset = 0; offset < 4; ++offset)
 		{
 			buffer[bufferPos + offset].position =
-			    DirectX::XMVector2Transform(q.vertices[offset].position, q.matrix);
+			    q.matrix * q.vertices[offset].position;
 			buffer[bufferPos + offset].color = q.vertices[offset].color;
 			buffer[bufferPos + offset].uv = q.vertices[offset].uv;
 		}

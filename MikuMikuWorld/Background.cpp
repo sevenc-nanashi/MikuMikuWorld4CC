@@ -1,6 +1,9 @@
 #include "Background.h"
 #include "Math.h"
 #include "ResourceManager.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "Rendering/Renderer.h"
 #include "Rendering/Framebuffer.h"
 
@@ -89,7 +92,9 @@ namespace MikuMikuWorld
 
 		Shader* blur = ResourceManager::shaders[s];
 		blur->use();
-		blur->setMatrix4("projection", DirectX::XMMatrixOrthographicRH(w, -h, 0.001f, 100));
+		// Assuming top-left origin, +Y down for orthographic projection
+		glm::mat4 projection = glm::ortho(0.0f, (float)w, (float)h, 0.0f, 0.001f, 100.0f);
+		blur->setMatrix4("projection", glm::transpose(projection)); // Transpose for row-major expectation (common in DX)
 
 		framebuffer->bind();
 		framebuffer->clear();

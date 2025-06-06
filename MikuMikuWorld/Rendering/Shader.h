@@ -1,7 +1,7 @@
 #pragma once
 #include <glad/glad.h>
-#include "DirectXMath.h"
 #include <string>
+#include <glm/glm.hpp>
 #include <unordered_map>
 
 namespace MikuMikuWorld
@@ -27,9 +27,9 @@ namespace MikuMikuWorld
 		void setBool(const std::string& name, bool value);
 		void setInt(const std::string& name, int value);
 		void setFloat(const std::string& name, float value);
-		void setVec2(const std::string& name, DirectX::XMVECTOR v);
-		void setVec3(const std::string& name, DirectX::XMVECTOR v);
-		void setVec4(const std::string& name, DirectX::XMVECTOR v);
-		void setMatrix4(const std::string& name, DirectX::XMMATRIX m);
+		void setVec2(const std::string& name, glm::vec2 v);
+		void setVec3(const std::string& name, glm::vec3 v);
+		void setVec4(const std::string& name, glm::vec4 v);
+		void setMatrix4(const std::string& name, glm::mat4 m);
 	};
 }

@@ -1,14 +1,16 @@
 #pragma once
-#include <DirectXMath.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <array>
 
 namespace MikuMikuWorld
 {
 	struct Vertex
 	{
-		DirectX::XMVECTOR position;
-		DirectX::XMVECTOR color;
-		DirectX::XMVECTOR uv;
+		glm::vec4 position;
+		glm::vec4 color;
+		glm::vec4 uv;
 	};
 
 	struct Quad
@@ -17,21 +19,15 @@ namespace MikuMikuWorld
 		int sprite;
 		int texture;
 		Vertex vertices[4];
-		DirectX::XMMATRIX matrix;
+		glm::mat4 matrix;
 
 		Quad() : zIndex{ 0 }, sprite{ 0 }, texture{ 0 } {}
 
-		Quad(const std::array<Vertex, 4>& v, const DirectX::XMMATRIX& m, int tex, int z = 0)
+		Quad(const std::array<Vertex, 4>& v, const glm::mat4& m, int tex, int z = 0)
 		{
 			sprite = 0;
-			for (int i = 0; i < 4; ++i)
-			{
-				vertices[i].position = v[i].position;
-				vertices[i].color = v[i].color;
-				vertices[i].uv = v[i].uv;
-			}
-
-			matrix = m;
+			std::copy(v.begin(), v.end(), vertices);
+				matrix = m;
 			texture = tex;
 			zIndex = z;
 		}

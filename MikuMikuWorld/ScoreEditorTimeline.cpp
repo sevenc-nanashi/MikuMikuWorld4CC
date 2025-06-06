@@ -953,11 +953,18 @@ namespace MikuMikuWorld
 		// directxmath dies
 		if (size.y < 10 || size.x < 10)
 			return;
+		if (!framebuffer || framebuffer->getWidth() != size.x || framebuffer->getHeight() != size.y)
+		{
+			framebuffer = std::make_unique<Framebuffer>(size.x, size.y);
+			background.resize({ size.x, size.y });
+			background.process(renderer);
+		}
 
 		Shader* shader = ResourceManager::shaders[0];
 		shader->use();
 		shader->setMatrix4("projection", camera.getOffCenterOrthographicProjection(
 		                                     0, size.x, position.y, position.y + size.y));
+		shader->setMatrix4("view", camera.getViewMatrix());
 
 		glEnable(GL_FRAMEBUFFER_SRGB);
 		framebuffer->bind();
@@ -2780,7 +2787,6 @@ namespace MikuMikuWorld
 
 	ScoreEditorTimeline::ScoreEditorTimeline()
 	{
-		framebuffer = std::make_unique<Framebuffer>(1920, 1080);
 		playbackSpeed = 1.0f;
 
 		background.load(config.backgroundImage.empty()

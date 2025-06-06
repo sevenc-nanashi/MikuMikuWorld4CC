@@ -20,7 +20,7 @@ file(GLOB_RECURSE ALL_FILES "${source_dir}/*.cpp" "${source_dir}/*.h"
 add_executable(${PROJECT_NAME} ${ALL_FILES} ${depends_files})
 target_include_directories(
   ${PROJECT_NAME}
-  PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/DirectXMath/Inc;"
+  PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/glm;"
          "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/glad/include;"
          "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/GLFW/include;"
          "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/stb_image;"
@@ -53,7 +53,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "MikuMikuWorld4CC")
 if(EMSCRIPTEN)
   target_compile_options(${PROJECT_NAME} PUBLIC "--use-port=contrib.glfw3")
   target_link_options(${PROJECT_NAME} PUBLIC "--use-port=contrib.glfw3")
-  target_compile_definitions(${PROJECT_NAME} PUBLIC _XM_NO_INTRINSICS_)
 else()
   # Depends: GLFW
   add_subdirectory(Depends/glfw)

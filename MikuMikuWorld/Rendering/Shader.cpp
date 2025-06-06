@@ -1,6 +1,7 @@
 #include "../IO.h"
 #include "Shader.h"
 #include <sstream>
+#include <glm/gtc/type_ptr.hpp>
 #include <fstream>
 #include <iostream>
 
@@ -68,6 +69,7 @@ namespace MikuMikuWorld
 		{
 			glGetShaderInfoLog(vertex, 512, NULL, log);
 			std::cout << "SHADER::VERTEX::COMPILATION_FAILED\n";
+            printf("SHADER::VERTEX::COMPILATION_FAILED: %s\n", log);
 			std::cout << log;
 		}
 
@@ -80,6 +82,7 @@ namespace MikuMikuWorld
 		{
 			glGetShaderInfoLog(fragment, 512, NULL, log);
 			std::cout << "SHADER::FRAGMENT::COMPILATION_FAILED\n";
+            printf("SHADER::FRAGMENT::COMPILATION_FAILED: %s\n", log);
 			std::cout << log;
 		}
 
@@ -93,8 +96,13 @@ namespace MikuMikuWorld
 		{
 			glGetProgramInfoLog(ID, 512, NULL, log);
 			std::cout << "SHADER::PROGRAM::LINKING_FAILED\n";
+            printf("SHADER::PROGRAM::LINKING_FAILED: %s\n", log);
 			std::cout << log;
 		}
+
+        if (success) {
+            printf("SHADER::PROGRAM::LINKED_SUCCESSFULLY: %s\n", name.c_str());
+        }
 
 		glDeleteShader(vertex);
 		glDeleteShader(fragment);
@@ -132,31 +140,24 @@ namespace MikuMikuWorld
 		glUniform1f(getUniformLoc(name), value);
 	}
 
-	void Shader::setVec2(const std::string& name, DirectX::XMVECTOR value)
+	void Shader::setVec2(const std::string& name, glm::vec2 value)
 	{
-		glUniform2fv(getUniformLoc(name), 1, (GLfloat*)&value);
+		glUniform2fv(getUniformLoc(name), 1, glm::value_ptr(value));
 	}
 
-	void Shader::setVec3(const std::string& name, DirectX::XMVECTOR value)
+	void Shader::setVec3(const std::string& name, glm::vec3 value)
 	{
-		glUniform3fv(getUniformLoc(name), 1, (GLfloat*)&value);
+		glUniform3fv(getUniformLoc(name), 1, glm::value_ptr(value));
 	}
 
-	void Shader::setVec4(const std::string& name, DirectX::XMVECTOR value)
+	void Shader::setVec4(const std::string& name, glm::vec4 value)
 	{
-		glUniform4fv(getUniformLoc(name), 1, (GLfloat*)&value);
+		glUniform4fv(getUniformLoc(name), 1, glm::value_ptr(value));
 	}
 
-	void Shader::setMatrix4(const std::string& name, DirectX::XMMATRIX value)
+	void Shader::setMatrix4(const std::string& name, glm::mat4 value)
 	{
-		float r;
-#if CHOC_WINDOWS
-		r = value.r[0].m128_f32[0];
-#else
-		float* p = (float*)&value;
-		r = p[0];
-#endif
-		glUniformMatrix4fv(getUniformLoc(name), 1, GL_FALSE, (GLfloat*)&r);
+		// OpenGL expects column-major, glm is column-major, so no transpose needed here
+		glUniformMatrix4fv(getUniformLoc(name), 1, GL_FALSE, glm::value_ptr(value));
 	}
-
 }

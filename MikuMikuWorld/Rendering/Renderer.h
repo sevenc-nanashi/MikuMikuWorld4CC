@@ -1,6 +1,8 @@
 #pragma once
 #include "Quad.h"
 #include "../Math.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "Texture.h"
 #include "AnchorType.h"
 #include "VertexBuffer.h"
@@ -22,8 +24,8 @@ namespace MikuMikuWorld
 
 		VertexBuffer vBuffer;
 		std::vector<Quad> quads;
-		std::array<DirectX::XMVECTOR, 4> vPos;
-		std::array<DirectX::XMVECTOR, 4> uvCoords;
+		std::array<glm::vec4, 4> vPos;
+		std::array<glm::vec4, 4> uvCoords;
 
 		unsigned int vao, vbo, ebo;
 		int texID;
@@ -52,11 +54,11 @@ namespace MikuMikuWorld
 
 		void setUVCoords(const Texture& tex, float x1, float x2, float y1, float y2);
 		void setAnchor(AnchorType type);
-		DirectX::XMMATRIX getModelMatrix(const Vector2& pos, const float rot, const Vector2& sz);
+		glm::mat4 getModelMatrix(const Vector2& pos, const float rot, const Vector2& sz);
 
-		void pushQuad(const std::array<DirectX::XMVECTOR, 4>& pos,
-		              const std::array<DirectX::XMVECTOR, 4>& uv, const DirectX::XMMATRIX& m,
-		              const DirectX::XMVECTOR& col, int tex, int z);
+		void pushQuad(const std::array<glm::vec4, 4>& pos,
+		              const std::array<glm::vec4, 4>& uv, const glm::mat4& m,
+		              const glm::vec4& col, int tex, int z);
 
 		void bindTexture(int tex);
 		void beginBatch();

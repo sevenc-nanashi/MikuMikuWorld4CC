@@ -1,4 +1,4 @@
-﻿#include "Application.h"
+#include "Application.h"
 #include "ApplicationConfiguration.h"
 #include "Colors.h"
 #include "IO.h"
@@ -306,10 +306,10 @@ namespace MikuMikuWorld
 			}
 		}
 
-		editor->update();
-
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		editor->update();
 
 		imgui->draw(window);
 		glfwSwapBuffers(window);
