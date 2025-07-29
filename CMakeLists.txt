@@ -39,6 +39,8 @@ target_include_directories(
 if(MSVC)
   target_include_directories(
     ${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/_windows;")
+  set(OPENSSL_ROOT_DIR
+	"${CMAKE_CURRENT_SOURCE_DIR}/./Depends/openssl")
 elseif(UNIX)
   target_include_directories(
     ${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/_linux;")
