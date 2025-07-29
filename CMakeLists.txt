@@ -2,12 +2,14 @@ cmake_minimum_required(VERSION 4.0.0 FATAL_ERROR)
 cmake_policy(SET CMP0167 NEW)
 
 if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
-  add_compile_definitions(DEBUG)
+  add_compile_definitions(DEBUG _DEBUG _CRT_SECURE_NO_WARNINGS)
   if(UNIX)
     add_compile_options(-g)
   endif()
 endif()
-set(CMAKE_CXX_STANDARD 20)
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/EHsc>"
+                    "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+add_compile_definitions(_WIN32_WINNT=0x0601)
 
 project(MikuMikuWorld)
 
@@ -18,6 +20,11 @@ set(source_dir "${CMAKE_CURRENT_SOURCE_DIR}/MikuMikuWorld")
 file(GLOB_RECURSE ALL_FILES "${source_dir}/*.cpp" "${source_dir}/*.h"
      "${source_dir}/*.hpp" "${source_dir}/*.c")
 add_executable(${PROJECT_NAME} ${ALL_FILES} ${depends_files})
+set_target_properties(
+  ${PROJECT_NAME}
+  PROPERTIES CXX_STANDARD 23
+             CXX_STANDARD_REQUIRED ON
+             CXX_EXTENSIONS OFF)
 target_include_directories(
   ${PROJECT_NAME}
   PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/glm;"
@@ -27,8 +34,18 @@ target_include_directories(
          "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/miniaudio;"
          "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/json;"
          "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/stb_vorbis;"
-         "${CMAKE_CURRENT_SOURCE_DIR}/./Depends;"
-         "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/openssl/include")
+         "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/openssl/include"
+         "${CMAKE_CURRENT_SOURCE_DIR}/./Depends;")
+if(MSVC)
+  target_include_directories(
+    ${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/_windows;")
+elseif(UNIX)
+  target_include_directories(
+    ${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/_linux;")
+else()
+  target_include_directories(
+    ${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/./Depends/_macos;")
+endif()
 
 target_link_directories(
   ${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../Depends/GLFW/lib;"

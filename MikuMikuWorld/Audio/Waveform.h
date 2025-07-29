@@ -18,6 +18,7 @@ namespace Audio
 		return static_cast<int16_t>((static_cast<int32_t>(a) + static_cast<int32_t>(b)) / 2);
 	}
 
+#undef max
 	constexpr int16_t int16_t_max = std::numeric_limits<int16_t>::max();
 
 	class WaveformMip

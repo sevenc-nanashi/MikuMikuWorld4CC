@@ -1,21 +1,18 @@
 #pragma once
+#include <choc/platform/choc_Platform.h>
 #include <cstdint>
 #include <string>
 #include <vector>
 #include <stdexcept>
 #include <memory>
+#include <string_view>
 #include <fstream>
 
 namespace IO
 {
 	namespace Mode {
-#if CHOC_WINDOWS
-		constexpr const char* read = L"r";
-		constexpr const char* write = L"w";
-#else
 		constexpr const char* read = "r";
 		constexpr const char* write = "w";
-#endif
 	}
 
 	enum class MessageBoxButtons : uint8_t
