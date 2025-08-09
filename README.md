@@ -1,5 +1,9 @@
 **English** / [日本語](./README.ja.md)
 
+> [!WARNING]
+> As Chart Cyanvas ended its service, and I (@sevenc-nanashi) am no longer interested in sekai fanmade community, **this repository is no longer maintained.**
+> You can check the forks of this repo here: <https://github.com/sevenc-nanashi/MikuMikuWorld4CC/forks>
+
 # MikuMikuWorld for Chart Cyanvas
 
 [![](https://byob.yarr.is/sevenc-nanashi/MikuMikuWorld4CC/coverage-en)](./MikuMikuWorld/res/i18n/en.csv)

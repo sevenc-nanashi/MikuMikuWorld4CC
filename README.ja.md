@@ -1,5 +1,9 @@
 [English](./README.md) / **日本語**
 
+> [!WARNING]
+> Chart Cyanvasがサ終し、そして自分（@sevenc-nanashi）の創作譜面界隈への興味がなくなったため、**このリポジトリはメンテナンスされなくなりました。**
+> Forkを参照してください： <https://github.com/sevenc-nanashi/MikuMikuWorld4CC/forks>
+
 # MikuMikuWorld for Chart Cyanvas
 [MikuMikuWorld](https://github.com/crash5band/MikuMikuWorld)の[Chart Cyanvas](https://github.com/sevenc-nanashi/chart_cyanvas)用フォーク。
 
